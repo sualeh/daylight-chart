@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 
 import org.geoname.parser.UnicodeReader;
 
-import com.thoughtworks.xstream.XStream;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 import daylightchart.daylightchart.chart.DaylightChart;
 import daylightchart.options.chart.ChartOptions;
@@ -46,6 +46,8 @@ import daylightchart.options.chart.ChartOptions;
 public final class OptionsDataFile
   extends BaseDataFile<OptionsFileType, Options>
 {
+
+  private static final XmlMapper XML_MAPPER = new XmlMapper();
 
   private static final Logger LOGGER = Logger
     .getLogger(OptionsDataFile.class.getName());
@@ -99,8 +101,7 @@ public final class OptionsDataFile
     try
     {
       reader = new UnicodeReader(input[0], "UTF-8");
-      final XStream xStream = new XStream();
-      data = (Options) xStream.fromXML(reader);
+      data = XML_MAPPER.readValue(reader, Options.class);
     }
     catch (final Exception e)
     {
@@ -159,15 +160,13 @@ public final class OptionsDataFile
         return;
       }
 
-      final XStream xStream = new XStream();
-      xStream.toXML(data, writer);
-
+      XML_MAPPER.writeValue(writer, data);
       writer.flush();
       writer.close();
     }
     catch (final Exception e)
     {
-      LOGGER.log(Level.WARNING, "Could save options to " + getFile(), e);
+      LOGGER.log(Level.WARNING, "Could not save options to " + getFile(), e);
     }
   }
 
