@@ -27,7 +27,7 @@ import java.awt.Paint;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.ui.RectangleInsets;
 
 /**
  * Options for customizing charts.

@@ -36,7 +36,7 @@ import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.title.Title;
 import org.jfree.data.xy.VectorSeries;
 import org.jfree.data.xy.VectorSeriesCollection;
-import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.ui.RectangleInsets;
 
 import daylightchart.daylightchart.chart.ChartConfiguration;
 import daylightchart.options.chart.ChartOptions;
