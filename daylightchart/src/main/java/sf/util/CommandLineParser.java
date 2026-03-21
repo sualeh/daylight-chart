@@ -467,24 +467,6 @@ public final class CommandLineParser {
         continue;
       }
 
-      // // Check if a value is needed
-      // final boolean wantsValue = !(option instanceof BooleanOption);
-      // if (wantsValue)
-      // {
-      // if (valueArg == null)
-      // {
-      // // The next argument is the value argument
-      // position++;
-      // if (position < args.length)
-      // {
-      // valueArg = args[position];
-      // }
-      // }
-      // }
-      // else
-      // {
-      // valueArg = Boolean.TRUE.toString();
-      // }
       // Check if a value is needed
 
       if (valueArg == null) {

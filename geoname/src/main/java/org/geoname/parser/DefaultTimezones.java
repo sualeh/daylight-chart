@@ -236,15 +236,6 @@ public final class DefaultTimezones {
   }
 
   /**
-   * Gets the map of default time zones.
-   *
-   * @return Default time zones map
-   */
-  static Map<Country, List<String>> getMap() {
-    return new HashMap<Country, List<String>>(defaultTimezones);
-  }
-
-  /**
    * Create a STANDARD GMT-based timezone id.
    *
    * @param tzOffsetHours Time zone offset, in hours

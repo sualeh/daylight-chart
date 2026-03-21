@@ -104,16 +104,6 @@ public final class UserPreferences {
   }
 
   /**
-   * Main method. Lists all user preferences.
-   *
-   * @param args Command line arguments
-   * @throws Exception On an exception
-   */
-  public static void main(final String[] args) throws Exception {
-    UserPreferences.clear();
-  }
-
-  /**
    * Options file.
    *
    * @return Options file.
