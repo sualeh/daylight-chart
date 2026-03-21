@@ -54,7 +54,6 @@ public class Options
   private boolean showChartLegend;
   private ChartOptions chartOptions;
   private Path workingDirectory;
-  private boolean slimUi;
 
   /**
    * Default options.
@@ -143,14 +142,6 @@ public class Options
   }
 
   /**
-   * @return the slimUi
-   */
-  public boolean isSlimUi()
-  {
-    return slimUi;
-  }
-
-  /**
    * @param chartOptions
    *        the chartOptions to set
    */
@@ -200,14 +191,15 @@ public class Options
   }
 
   /**
-   * Whether the UI should work in "slim" mode.
+   * Backwards-compatible no-op for persisted options files that still contain
+   * the removed slim UI setting.
    *
    * @param slimUi
-   *        Slim mode setting.
+   *        Ignored legacy setting.
    */
   public void setSlimUi(final boolean slimUi)
   {
-    this.slimUi = slimUi;
+    // Ignore removed slim UI setting
   }
 
   /**
