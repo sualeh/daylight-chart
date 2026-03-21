@@ -40,6 +40,10 @@ public class UserPreferencesService {
     UserPreferences.initialize(null);
   }
 
+  public void initialize(final Path settingsDir) {
+    UserPreferences.initialize(settingsDir);
+  }
+
   public Collection<Location> loadLocations(
       final BaseTypedFile<LocationFileType> locationDataFile) {
     final LocationsDataFile locationsDataFile = new LocationsDataFile(locationDataFile);
