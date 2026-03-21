@@ -23,8 +23,8 @@ package daylightchart.chart;
 
 import daylightchart.chart.data.DaylightBandType;
 import daylightchart.chart.options.ChartOptions;
-import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.options.Options;
+import daylightchart.options.TwilightType;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;

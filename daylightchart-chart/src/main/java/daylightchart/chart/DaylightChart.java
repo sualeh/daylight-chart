@@ -27,7 +27,7 @@ import daylightchart.chart.data.RiseSetYearData;
 import daylightchart.chart.options.ChartOptions;
 import daylightchart.chart.options.ChartOptionsListener;
 import daylightchart.chart.options.ChartOptionsService;
-import daylightchart.daylightchart.chart.ChartOrientation;
+import daylightchart.options.ChartOrientation;
 import daylightchart.options.Options;
 import java.awt.BasicStroke;
 import java.awt.Color;

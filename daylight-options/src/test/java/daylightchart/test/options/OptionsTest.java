@@ -1,11 +1,12 @@
-package daylightchart.options;
+package daylightchart.test.options;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import daylightchart.daylightchart.calculation.TwilightType;
-import daylightchart.daylightchart.chart.ChartOrientation;
-import daylightchart.daylightchart.chart.TimeZoneOption;
+import daylightchart.options.ChartOrientation;
+import daylightchart.options.Options;
+import daylightchart.options.TimeZoneOption;
+import daylightchart.options.TwilightType;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.geoname.data.LocationsSortOrder;
