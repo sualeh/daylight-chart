@@ -74,9 +74,10 @@ public class DaylightChartBand
 
   private XYItemRenderer createDifferenceRenderer(final Color color)
   {
-    XYItemRenderer renderer;
-    renderer = new XYDifferenceRenderer(color, color, false);
-    renderer.setBaseStroke(new BasicStroke(0.1f));
+    final XYDifferenceRenderer renderer = new XYDifferenceRenderer(color,
+                                                                   color,
+                                                                   false);
+    renderer.setDefaultStroke(new BasicStroke(0.1f));
     renderer.setSeriesPaint(0, color);
     renderer.setSeriesPaint(1, color);
     return renderer;
@@ -84,9 +85,9 @@ public class DaylightChartBand
 
   private XYItemRenderer createOutlineRenderer()
   {
-    XYItemRenderer renderer;
-    renderer = new XYLineAndShapeRenderer(true, false);
-    renderer.setBaseStroke(new BasicStroke(0.8f));
+    final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,
+                                                                       false);
+    renderer.setDefaultStroke(new BasicStroke(0.8f));
     renderer.setSeriesPaint(0, Color.white);
     renderer.setSeriesPaint(1, Color.white);
     return renderer;

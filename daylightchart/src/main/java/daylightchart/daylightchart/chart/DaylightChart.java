@@ -39,6 +39,7 @@ import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.DateTickMarkPosition;
 import org.jfree.chart.axis.DateTickUnit;
+import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.IntervalMarker;
 import org.jfree.chart.plot.PlotOrientation;
@@ -47,11 +48,11 @@ import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.title.Title;
-import org.jfree.ui.Layer;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
+import org.jfree.chart.ui.Layer;
+import org.jfree.chart.ui.RectangleAnchor;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.RectangleInsets;
+import org.jfree.chart.ui.TextAnchor;
 
 import daylightchart.daylightchart.calculation.DaylightBand;
 import daylightchart.daylightchart.calculation.RiseSetUtility;
@@ -298,7 +299,7 @@ public class DaylightChart
                                                                   12));
     axis.setDateFormatOverride(ChartConfiguration.monthsFormat);
     axis.setVerticalTickLabels(true);
-    axis.setTickUnit(new DateTickUnit(DateTickUnit.MONTH, 1), true, true);
+    axis.setTickUnit(new DateTickUnit(DateTickUnitType.MONTH, 1), true, true);
     // Fix the axis range for all the months in the year
     final int dateYear = riseSetData.getYear() - 1900;
     axis.setRange(new Date(dateYear, 0, 1), new Date(dateYear, 11, 31));
