@@ -36,8 +36,8 @@ public class UserPreferencesService {
     return loadOptions().getWorkingDirectory();
   }
 
-  public void initialize(final Path settingsDirectory) {
-    UserPreferences.initialize(settingsDirectory);
+  public void initialize() {
+    UserPreferences.initialize(null);
   }
 
   public Collection<Location> loadLocations(

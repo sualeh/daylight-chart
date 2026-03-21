@@ -21,7 +21,6 @@
  */
 package daylightchart.gui;
 
-import daylightchart.daylightchart.chart.ChartConfiguration;
 import daylightchart.daylightchart.layout.DaylightChartReport;
 import daylightchart.gui.actions.AboutAction;
 import daylightchart.gui.actions.ChartOptionsAction;
@@ -51,7 +50,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import org.geoname.data.Location;
-import org.jfree.chart.ChartPanel;
 
 /**
  * Provides an GUI for daylight charts.
@@ -68,15 +66,6 @@ public final class DaylightChartGui extends JFrame implements LocationOperations
 
   /** Creates a new instance of a Daylight Chart main window. */
   public DaylightChartGui() {
-    this(null);
-  }
-
-  /**
-   * Creates a new instance of a Daylight Chart main window.
-   *
-   * @param location Location for a single chart window, or null for the full UI
-   */
-  public DaylightChartGui(final Location location) {
     setIconImage(
         new ImageIcon(DaylightChartGui.class.getResource("/daylightchart.png")) // $NON-NLS-1$
             .getImage());
@@ -84,47 +73,36 @@ public final class DaylightChartGui extends JFrame implements LocationOperations
     setTitle("Daylight Chart"); // $NON-NLS-1$
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    if (location == null) {
-      // Create basic UI
-      locationsTabbedPane = new LocationsTabbedPane();
-      locationsList = new LocationsList(this);
-      final JSplitPane splitPane =
-          new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, locationsList, locationsTabbedPane);
-      splitPane.setOneTouchExpandable(true);
-      getContentPane().add(splitPane);
+    // Create basic UI
+    locationsTabbedPane = new LocationsTabbedPane();
+    locationsList = new LocationsList(this);
+    final JSplitPane splitPane =
+        new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, locationsList, locationsTabbedPane);
+    splitPane.setOneTouchExpandable(true);
+    getContentPane().add(splitPane);
 
-      // Create menus and toolbars
-      final JMenuBar menuBar = new JMenuBar();
-      setJMenuBar(menuBar);
-      final JToolBar toolBar = new JToolBar();
-      toolBar.setRollover(true);
-      add(toolBar, BorderLayout.NORTH);
+    // Create menus and toolbars
+    final JMenuBar menuBar = new JMenuBar();
+    setJMenuBar(menuBar);
+    final JToolBar toolBar = new JToolBar();
+    toolBar.setRollover(true);
+    add(toolBar, BorderLayout.NORTH);
 
-      createFileMenu(menuBar, toolBar);
-      createActions(menuBar, toolBar);
-      createOptionsMenu(menuBar, toolBar);
-      createHelpMenu(menuBar, toolBar);
+    createFileMenu(menuBar, toolBar);
+    createActions(menuBar, toolBar);
+    createOptionsMenu(menuBar, toolBar);
+    createHelpMenu(menuBar, toolBar);
 
-      // Open the first location
-      Location firstTabLocation;
-      final Collection<Location> recentLocations =
-          DaylightApplicationServices.preferences().getRecentLocations();
-      if (recentLocations.size() > 0) {
-        firstTabLocation = recentLocations.iterator().next();
-      } else {
-        firstTabLocation = locationsList.getSelectedLocation();
-      }
-      addLocationTab(firstTabLocation);
+    // Open the first location
+    Location firstTabLocation;
+    final Collection<Location> recentLocations =
+        DaylightApplicationServices.preferences().getRecentLocations();
+    if (recentLocations.size() > 0) {
+      firstTabLocation = recentLocations.iterator().next();
     } else {
-      locationsTabbedPane = null;
-      locationsList = null;
-      final DaylightChartReport daylightChartReport =
-          DaylightApplicationServices.reports()
-              .createReport(location, DaylightApplicationServices.preferences().loadOptions());
-      final ChartPanel chartPanel = new ChartPanel(daylightChartReport.getChart());
-      chartPanel.setPreferredSize(ChartConfiguration.chartDimension);
-      setContentPane(chartPanel);
+      firstTabLocation = locationsList.getSelectedLocation();
     }
+    addLocationTab(firstTabLocation);
 
     pack();
   }
