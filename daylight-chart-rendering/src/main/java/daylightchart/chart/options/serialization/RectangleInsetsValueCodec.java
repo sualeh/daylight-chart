@@ -1,4 +1,4 @@
-package daylightchart.options.chart.serialization;
+package daylightchart.chart.options.serialization;
 
 import org.jfree.chart.ui.RectangleInsets;
 import tools.jackson.core.JsonGenerator;
@@ -13,8 +13,7 @@ public final class RectangleInsetsValueCodec {
 
   public static final class Deserializer extends ValueDeserializer<RectangleInsets> {
     @Override
-    public RectangleInsets deserialize(
-        final JsonParser parser, final DeserializationContext ctxt) {
+    public RectangleInsets deserialize(final JsonParser parser, final DeserializationContext ctxt) {
       return parse(parser.getValueAsString());
     }
   }

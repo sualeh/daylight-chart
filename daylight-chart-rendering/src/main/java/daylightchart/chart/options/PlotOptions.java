@@ -1,8 +1,8 @@
-package daylightchart.options.chart;
+package daylightchart.chart.options;
 
-import daylightchart.options.chart.serialization.PaintValueCodec;
-import daylightchart.options.chart.serialization.RectangleInsetsValueCodec;
-import daylightchart.options.chart.serialization.StrokeValueCodec;
+import daylightchart.chart.options.serialization.PaintValueCodec;
+import daylightchart.chart.options.serialization.RectangleInsetsValueCodec;
+import daylightchart.chart.options.serialization.StrokeValueCodec;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.io.Serial;

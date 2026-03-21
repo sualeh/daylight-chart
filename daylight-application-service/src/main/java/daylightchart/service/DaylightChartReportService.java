@@ -1,9 +1,9 @@
 package daylightchart.service;
 
-import daylightchart.daylightchart.layout.ChartFileType;
-import daylightchart.daylightchart.layout.DaylightChartReport;
+import daylightchart.chart.options.ChartOptions;
+import daylightchart.chart.report.ChartFileType;
+import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.options.Options;
-import daylightchart.options.chart.ChartOptions;
 import java.nio.file.Path;
 import org.geoname.data.Location;
 

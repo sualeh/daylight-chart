@@ -1,6 +1,6 @@
-package daylightchart.options.chart;
+package daylightchart.chart.options;
 
-import daylightchart.options.chart.serialization.PaintValueCodec;
+import daylightchart.chart.options.serialization.PaintValueCodec;
 import java.awt.Paint;
 import java.io.Serial;
 import java.io.Serializable;

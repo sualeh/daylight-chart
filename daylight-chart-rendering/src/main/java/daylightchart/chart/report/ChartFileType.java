@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.layout;
+package daylightchart.chart.report;
 
 import daylightchart.options.FileType;
 
@@ -37,7 +37,7 @@ public enum ChartFileType implements FileType {
   private final String description;
   private final String fileExtension;
 
-  private ChartFileType(final String description, final String fileExtension) {
+  ChartFileType(final String description, final String fileExtension) {
     this.description = description;
     this.fileExtension = fileExtension;
   }

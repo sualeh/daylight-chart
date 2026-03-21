@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import daylightchart.chart.options.ChartOptions;
 import daylightchart.options.Options;
-import daylightchart.options.chart.ChartOptions;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.geoname.data.Location;
@@ -29,9 +29,7 @@ class UserPreferencesServiceTest {
     assertThat(service.loadOptions(), is(notNullValue()));
     assertThat(service.loadChartOptions(), is(notNullValue()));
     assertThat(service.loadOptions().getWorkingDirectory(), is(workingDirectory));
-    assertThat(
-        Files.exists(settingsDirectory.resolve("chart-options.yaml")),
-        is(true));
+    assertThat(Files.exists(settingsDirectory.resolve("chart-options.yaml")), is(true));
     assertThat(service.getLocations().size(), is(greaterThan(0)));
   }
 

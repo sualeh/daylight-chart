@@ -1,6 +1,6 @@
-package daylightchart.options.chart;
+package daylightchart.chart.options;
 
-import daylightchart.daylightchart.chart.DaylightChart;
+import daylightchart.chart.DaylightChart;
 import java.util.Objects;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
@@ -15,8 +15,9 @@ public final class ChartOptionsService {
   public void applyChartOptions(final ChartOptions chartOptions, final JFreeChart chart) {
     Objects.requireNonNull(chart, "Chart must not be null");
 
-    final ChartOptions effectiveChartOptions = chartOptions == null ? new ChartOptions() : chartOptions;
-    if (chart instanceof ChartOptionsListener listener) {
+    final ChartOptions effectiveChartOptions =
+        chartOptions == null ? new ChartOptions() : chartOptions;
+    if (chart instanceof final ChartOptionsListener listener) {
       listener.beforeSettingChartOptions(effectiveChartOptions);
     }
 
@@ -25,7 +26,7 @@ public final class ChartOptionsService {
     applyPlotOptions(effectiveChartOptions.plotOptions(), chart.getPlot());
     applyTitleOptions(effectiveChartOptions.titleOptions(), chart);
 
-    if (chart instanceof ChartOptionsListener listener) {
+    if (chart instanceof final ChartOptionsListener listener) {
       listener.afterSettingChartOptions(effectiveChartOptions);
     }
   }
@@ -148,20 +149,20 @@ public final class ChartOptionsService {
   }
 
   private Axis getDomainAxis(final Plot plot) {
-    if (plot instanceof CategoryPlot categoryPlot) {
+    if (plot instanceof final CategoryPlot categoryPlot) {
       return categoryPlot.getDomainAxis();
     }
-    if (plot instanceof XYPlot xyPlot) {
+    if (plot instanceof final XYPlot xyPlot) {
       return xyPlot.getDomainAxis();
     }
     return null;
   }
 
   private Axis getRangeAxis(final Plot plot) {
-    if (plot instanceof CategoryPlot categoryPlot) {
+    if (plot instanceof final CategoryPlot categoryPlot) {
       return categoryPlot.getRangeAxis();
     }
-    if (plot instanceof XYPlot xyPlot) {
+    if (plot instanceof final XYPlot xyPlot) {
       return xyPlot.getRangeAxis();
     }
     return null;

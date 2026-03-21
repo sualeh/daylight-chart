@@ -21,8 +21,8 @@
  */
 package daylightchart.gui.actions;
 
-import daylightchart.daylightchart.layout.ChartFileType;
-import daylightchart.daylightchart.layout.DaylightChartReport;
+import daylightchart.chart.report.ChartFileType;
+import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.gui.Messages;
 import daylightchart.gui.util.Actions;

@@ -1,4 +1,4 @@
-package daylightchart.options.chart.serialization;
+package daylightchart.chart.options.serialization;
 
 import java.awt.Font;
 import tools.jackson.core.JsonGenerator;

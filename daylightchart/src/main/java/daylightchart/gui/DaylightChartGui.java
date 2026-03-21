@@ -21,7 +21,7 @@
  */
 package daylightchart.gui;
 
-import daylightchart.daylightchart.layout.DaylightChartReport;
+import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.gui.actions.AboutAction;
 import daylightchart.gui.actions.CloseCurrentTabAction;
 import daylightchart.gui.actions.GetCountriesFilesAction;

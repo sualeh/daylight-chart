@@ -19,15 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.layout;
+package daylightchart.chart.report;
 
+import daylightchart.chart.DaylightChart;
+import daylightchart.chart.options.ChartOptions;
+import daylightchart.chart.options.ChartOptionsService;
 import daylightchart.daylightchart.calculation.RiseSetUtility;
 import daylightchart.daylightchart.calculation.RiseSetYearData;
-import daylightchart.daylightchart.chart.DaylightChart;
 import daylightchart.options.FileType;
 import daylightchart.options.Options;
-import daylightchart.options.chart.ChartOptions;
-import daylightchart.options.chart.ChartOptionsService;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -130,14 +130,12 @@ public class DaylightChartReport {
 
     try {
       switch (chartFileType) {
-        case png:
-        case jpg:
+        case png, jpg -> {
           final BufferedImage image =
               chart.createBufferedImage(842, 595, BufferedImage.TYPE_INT_RGB, null);
           ImageIO.write(image, chartFileType.name(), file.toFile());
-          break;
-        default:
-          throw new IllegalArgumentException("Unknown chart file type");
+        }
+        default -> throw new IllegalArgumentException("Unknown chart file type");
       }
     } catch (final IOException e) {
       LOGGER.log(Level.WARNING, "Error generating a report of type " + chartFileType, e);

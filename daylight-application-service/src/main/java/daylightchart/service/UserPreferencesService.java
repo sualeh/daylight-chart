@@ -1,8 +1,8 @@
 package daylightchart.service;
 
+import daylightchart.chart.options.ChartOptions;
 import daylightchart.gui.actions.LocationFileType;
 import daylightchart.options.BaseTypedFile;
-import daylightchart.options.chart.ChartOptions;
 import daylightchart.options.LocationsDataFile;
 import daylightchart.options.Options;
 import daylightchart.options.UserPreferences;

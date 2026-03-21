@@ -1,4 +1,4 @@
-package daylightchart.options.chart.serialization;
+package daylightchart.chart.options.serialization;
 
 import java.awt.Color;
 import java.awt.Paint;
@@ -28,7 +28,7 @@ public final class PaintValueCodec {
   }
 
   static String format(final Paint value) {
-    if (!(value instanceof Color color)) {
+    if (!(value instanceof final Color color)) {
       throw new IllegalArgumentException("Only Color paints are supported");
     }
     return "#%08X".formatted(color.getRGB());

@@ -1,4 +1,4 @@
-package daylightchart.daylightchart.layout;
+package daylightchart.test.chart.report;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
@@ -6,8 +6,10 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import daylightchart.chart.options.ChartOptionsService;
+import daylightchart.chart.report.ChartFileType;
+import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.options.Options;
-import daylightchart.options.chart.ChartOptionsService;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.geoname.data.Location;

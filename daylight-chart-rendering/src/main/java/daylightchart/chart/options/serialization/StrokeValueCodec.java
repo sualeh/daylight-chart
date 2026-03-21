@@ -1,4 +1,4 @@
-package daylightchart.options.chart.serialization;
+package daylightchart.chart.options.serialization;
 
 import java.awt.BasicStroke;
 import java.awt.Stroke;
@@ -28,7 +28,7 @@ public final class StrokeValueCodec {
   }
 
   static String format(final Stroke value) {
-    if (!(value instanceof BasicStroke stroke)) {
+    if (!(value instanceof final BasicStroke stroke)) {
       throw new IllegalArgumentException("Only BasicStroke values are supported");
     }
 

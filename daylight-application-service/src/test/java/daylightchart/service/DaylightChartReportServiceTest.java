@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import daylightchart.daylightchart.layout.ChartFileType;
+import daylightchart.chart.report.ChartFileType;
 import daylightchart.options.Options;
 import java.nio.file.Files;
 import java.nio.file.Path;
