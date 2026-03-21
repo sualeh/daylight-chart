@@ -26,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sf.util.FileUtils;
 
 /**
  * User preferences for the GUI.
@@ -133,7 +132,7 @@ public final class UserPreferences {
 
   private static void validateDirectory(final Path directory) {
     final boolean isDirectoryValid =
-        FileUtils.isDirectoryValid(directory) && Files.isWritable(directory);
+        directory != null && Files.isDirectory(directory) && Files.isWritable(directory);
     if (!isDirectoryValid) {
       throw new IllegalArgumentException("Directory is not writable - " + directory);
     }

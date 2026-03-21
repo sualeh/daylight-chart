@@ -31,7 +31,6 @@ import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
-import sf.util.FileUtils;
 
 /**
  * GUI helper methods.
@@ -82,7 +81,7 @@ public class Actions {
     final int dialogReturnValue = fileDialog.showOpenDialog(parent);
     if (dialogReturnValue == JFileChooser.APPROVE_OPTION) {
       file = getSelectedFileWithExtension(fileDialog);
-      if (!FileUtils.isFileReadable(file)) {
+      if (!Files.isRegularFile(file) || !Files.isReadable(file)) {
         JOptionPane.showMessageDialog(parent, file + "\n" + cannotReadMessage);
         file = null;
       }
