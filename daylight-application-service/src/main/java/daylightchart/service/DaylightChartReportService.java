@@ -1,7 +1,8 @@
 package daylightchart.service;
 
-import daylightchart.daylightchart.layout.ChartFileType;
-import daylightchart.daylightchart.layout.DaylightChartReport;
+import daylightchart.chart.options.ChartOptions;
+import daylightchart.chart.report.ChartFileType;
+import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.options.Options;
 import java.nio.file.Path;
 import org.geoname.data.Location;
@@ -9,8 +10,11 @@ import org.geoname.data.Location;
 /** Service facade for chart report creation and export. */
 public class DaylightChartReportService {
 
+  private final UserPreferencesService userPreferencesService = new UserPreferencesService();
+
   public DaylightChartReport createReport(final Location location, final Options options) {
-    return new DaylightChartReport(location, options);
+    final ChartOptions chartOptions = userPreferencesService.loadChartOptions();
+    return new DaylightChartReport(location, options, chartOptions);
   }
 
   public String createReportFileName(

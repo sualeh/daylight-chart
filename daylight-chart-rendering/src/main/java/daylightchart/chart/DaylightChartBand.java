@@ -1,4 +1,4 @@
-package daylightchart.daylightchart.chart;
+package daylightchart.chart;
 
 import daylightchart.daylightchart.calculation.DaylightBand;
 import daylightchart.daylightchart.calculation.DaylightBandType;

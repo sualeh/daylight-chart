@@ -19,8 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.chart;
+package daylightchart.chart;
 
+import daylightchart.chart.options.ChartOptions;
 import daylightchart.daylightchart.calculation.DaylightBandType;
 import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.options.Options;
@@ -40,9 +41,11 @@ final class DaylightChartLegendItemSource implements LegendItemSource, Serializa
   @Serial private static final long serialVersionUID = -7877379059709945565L;
 
   private final Options options;
+  private final ChartOptions chartOptions;
 
-  DaylightChartLegendItemSource(final Options options) {
+  DaylightChartLegendItemSource(final Options options, final ChartOptions chartOptions) {
     this.options = options;
+    this.chartOptions = chartOptions;
   }
 
   /**
@@ -55,7 +58,11 @@ final class DaylightChartLegendItemSource implements LegendItemSource, Serializa
     final LegendItemCollection legendItemCollection = new LegendItemCollection();
 
     final Paint configuredNightColor =
-        options.getChartOptions().getPlotOptions().getBackgroundPaint();
+        chartOptions != null
+                && chartOptions.getPlotOptions() != null
+                && chartOptions.getPlotOptions().getBackgroundPaint() != null
+            ? chartOptions.getPlotOptions().getBackgroundPaint()
+            : ChartConfiguration.nightColor;
     legendItemCollection.add(
         createLegendItem(resolveLegendLabel(null), configuredNightColor, false));
 
@@ -73,20 +80,20 @@ final class DaylightChartLegendItemSource implements LegendItemSource, Serializa
   private LegendItem createLegendItem(final String label, final Paint paint, final boolean isLine) {
     return new LegendItem(
         label, /* description */
-        null,
-        /* toolTipText */ null, /* urlText */
-        null,
-        /* shapeVisible */ !isLine,
-        /* shape */ new Rectangle(10, 10),
-        /* shapeFilled */ true,
+        null, /* toolTipText */
+        null, /* urlText */
+        null, /* shapeVisible */
+        !isLine, /* shape */
+        new Rectangle(10, 10), /* shapeFilled */
+        true,
         paint,
-        /* shapeOutlineVisible */ true,
-        /* outlinePaint */ Color.black,
-        /* outlineStroke */ new BasicStroke(0.2f),
-        /* lineVisible */ isLine,
-        /* line */ new Rectangle(10, 3),
-        /* lineStroke */ new BasicStroke(0.6f),
-        /* linePaint */ Color.black);
+        /* shapeOutlineVisible */ true, /* outlinePaint */
+        Color.black,
+        /* outlineStroke */ new BasicStroke(0.2f), /* lineVisible */
+        isLine, /* line */
+        new Rectangle(10, 3),
+        /* lineStroke */ new BasicStroke(0.6f), /* linePaint */
+        Color.black);
   }
 
   private LegendItem getLegendItem(final DaylightBandType daylightSavingsMode) {
@@ -115,22 +122,16 @@ final class DaylightChartLegendItemSource implements LegendItemSource, Serializa
           break;
         case twilight:
           final TwilightType twilight = options.getTwilightType();
-          switch (twilight) {
-            case CIVIL:
-              legendLabel =
-                  Messages.getString("DaylightChart.Legend.Twilight.Civil"); // $NON-NLS-1$
-              break;
-            case NAUTICAL:
-              legendLabel =
-                  Messages.getString("DaylightChart.Legend.Twilight.Nautical"); // $NON-NLS-1$
-              break;
-            case ASTRONOMICAL:
-              legendLabel =
-                  Messages.getString("DaylightChart.Legend.Twilight.Astronomical"); // $NON-NLS-1$
-              break;
-            default:
-              legendLabel = Messages.getString("DaylightChart.Legend.Twilight"); // $NON-NLS-1$ ;
-          }
+          legendLabel =
+              switch (twilight) {
+                case CIVIL ->
+                    Messages.getString("DaylightChart.Legend.Twilight.Civil"); // $NON-NLS-1$
+                case NAUTICAL ->
+                    Messages.getString("DaylightChart.Legend.Twilight.Nautical"); // $NON-NLS-1$
+                case ASTRONOMICAL ->
+                    Messages.getString("DaylightChart.Legend.Twilight.Astronomical"); // $NON-NLS-1$
+                default -> Messages.getString("DaylightChart.Legend.Twilight"); // $NON-NLS-1$ ;
+              };
           break;
         default:
           legendLabel = "";

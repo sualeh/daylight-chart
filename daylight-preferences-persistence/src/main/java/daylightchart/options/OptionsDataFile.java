@@ -21,8 +21,6 @@
  */
 package daylightchart.options;
 
-import daylightchart.daylightchart.chart.DaylightChart;
-import daylightchart.options.chart.ChartOptions;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -99,15 +97,9 @@ public final class OptionsDataFile extends BaseDataFile<OptionsFileType, Options
 
   @Override
   protected void loadWithFallback() {
-    // 1. Load from file
     load();
-    // 2. Create default options
     if (data == null) {
-      final ChartOptions chartOptions = new ChartOptions();
-      chartOptions.copyFromChart(new DaylightChart());
-
       data = new Options();
-      data.setChartOptions(chartOptions);
     }
   }
 

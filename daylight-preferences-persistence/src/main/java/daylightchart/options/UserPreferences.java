@@ -41,6 +41,7 @@ public final class UserPreferences {
   private static LocationsDataFile locationsFile;
   private static RecentLocationsDataFile recentLocationsFile;
   private static OptionsDataFile optionsFile;
+  private static ChartOptionsDataFile chartOptionsFile;
 
   static {
     scratchDirectory = Path.of(System.getProperty("java.io.tmpdir"), ".");
@@ -51,6 +52,7 @@ public final class UserPreferences {
 
   /** Clears all user preferences. */
   public static void clear() {
+    chartOptionsFile.delete();
     optionsFile.delete();
     locationsFile.delete();
     recentLocationsFile.delete();
@@ -89,8 +91,18 @@ public final class UserPreferences {
     }
 
     optionsFile = new OptionsDataFile(settingsDirectory);
+    chartOptionsFile = new ChartOptionsDataFile(settingsDirectory);
     locationsFile = new LocationsDataFile(settingsDirectory);
     recentLocationsFile = new RecentLocationsDataFile(settingsDirectory);
+  }
+
+  /**
+   * Chart options file.
+   *
+   * @return Chart options file.
+   */
+  public static ChartOptionsDataFile chartOptionsFile() {
+    return chartOptionsFile;
   }
 
   /**

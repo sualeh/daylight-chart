@@ -21,9 +21,8 @@
  */
 package daylightchart.gui;
 
-import daylightchart.daylightchart.layout.DaylightChartReport;
+import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.gui.actions.AboutAction;
-import daylightchart.gui.actions.ChartOptionsAction;
 import daylightchart.gui.actions.CloseCurrentTabAction;
 import daylightchart.gui.actions.GetCountriesFilesAction;
 import daylightchart.gui.actions.GetUSStatesFilesAction;
@@ -285,16 +284,12 @@ public final class DaylightChartGui extends JFrame implements LocationOperations
     final GuiAction options = new OptionsAction(this);
     menu.add(options);
 
-    final GuiAction chartOptions = new ChartOptionsAction(this);
-    menu.add(chartOptions);
-
     final GuiAction resetAll = new ResetAllAction(this);
     menu.add(resetAll);
 
     menuBar.add(menu);
 
     toolBar.add(options);
-    toolBar.add(chartOptions);
     toolBar.addSeparator();
   }
 }

@@ -24,7 +24,6 @@ package daylightchart.options;
 import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.daylightchart.chart.ChartOrientation;
 import daylightchart.daylightchart.chart.TimeZoneOption;
-import daylightchart.options.chart.ChartOptions;
 import java.io.Serial;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -47,26 +46,15 @@ public class Options implements Serializable {
   private ChartOrientation chartOrientation;
   private TwilightType twilightType;
   private boolean showChartLegend;
-  private ChartOptions chartOptions;
   private Path workingDirectory;
 
   /** Default options. */
   public Options() {
     locationsSortOrder = LocationsSortOrder.BY_NAME;
     timeZoneOption = TimeZoneOption.USE_TIME_ZONE;
-    chartOptions = new ChartOptions();
     chartOrientation = ChartOrientation.STANDARD;
     twilightType = TwilightType.CIVIL;
     showChartLegend = true;
-  }
-
-  /**
-   * Get just the chart options.
-   *
-   * @return Chart options.
-   */
-  public final ChartOptions getChartOptions() {
-    return chartOptions;
   }
 
   /**
@@ -123,14 +111,6 @@ public class Options implements Serializable {
     return showChartLegend;
   }
 
-  /**
-   * @param chartOptions the chartOptions to set
-   */
-  public final void setChartOptions(final ChartOptions chartOptions) {
-    if (chartOptions != null) {
-      this.chartOptions = chartOptions;
-    }
-  }
 
   /**
    * Sets the chart orientation.

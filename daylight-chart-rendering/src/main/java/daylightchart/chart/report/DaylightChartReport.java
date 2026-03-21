@@ -19,14 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.layout;
+package daylightchart.chart.report;
 
+import daylightchart.chart.DaylightChart;
+import daylightchart.chart.options.ChartOptions;
+import daylightchart.chart.options.ChartOptionsService;
 import daylightchart.daylightchart.calculation.RiseSetUtility;
 import daylightchart.daylightchart.calculation.RiseSetYearData;
-import daylightchart.daylightchart.chart.DaylightChart;
 import daylightchart.options.FileType;
 import daylightchart.options.Options;
-import daylightchart.options.chart.ChartOptions;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -47,6 +48,7 @@ import org.geoname.data.Location;
 public class DaylightChartReport {
 
   private static final Logger LOGGER = Logger.getLogger(DaylightChartReport.class.getName());
+  private static final ChartOptionsService CHART_OPTIONS_SERVICE = new ChartOptionsService();
 
   private final Location location;
   private final DaylightChart chart;
@@ -56,23 +58,19 @@ public class DaylightChartReport {
    *
    * @param location Location for the report.
    * @param options Report options.
+   * @param chartOptions Chart options.
    */
-  public DaylightChartReport(final Location location, final Options options) {
+  public DaylightChartReport(
+      final Location location, final Options options, final ChartOptions chartOptions) {
     this.location = location;
-    initializeChartOptions(options);
-    // Calculate rise and set timings for the whole year, and generate
-    // chart
-    final int year = Year.now().getValue();
-    final RiseSetYearData riseSetData = RiseSetUtility.createRiseSetYear(location, year, options);
-    chart = new DaylightChart(riseSetData, options);
-    options.getChartOptions().updateChart(chart);
-  }
+    final Options effectiveOptions = options == null ? new Options() : options;
+    final ChartOptions effectiveChartOptions =
+        chartOptions == null ? CHART_OPTIONS_SERVICE.createDefaultChartOptions() : chartOptions;
 
-  private void initializeChartOptions(final Options options) {
-    final ChartOptions chartOptions = options.getChartOptions();
-    if (chartOptions.getPlotOptions().getBackgroundPaint() == null) {
-      chartOptions.copyFromChart(new DaylightChart());
-    }
+    final int year = Year.now().getValue();
+    final RiseSetYearData riseSetData =
+        RiseSetUtility.createRiseSetYear(location, year, effectiveOptions);
+    chart = new DaylightChart(riseSetData, effectiveOptions, effectiveChartOptions);
   }
 
   /**
@@ -132,14 +130,12 @@ public class DaylightChartReport {
 
     try {
       switch (chartFileType) {
-        case png:
-        case jpg:
+        case png, jpg -> {
           final BufferedImage image =
               chart.createBufferedImage(842, 595, BufferedImage.TYPE_INT_RGB, null);
           ImageIO.write(image, chartFileType.name(), file.toFile());
-          break;
-        default:
-          throw new IllegalArgumentException("Unknown chart file type");
+        }
+        default -> throw new IllegalArgumentException("Unknown chart file type");
       }
     } catch (final IOException e) {
       LOGGER.log(Level.WARNING, "Error generating a report of type " + chartFileType, e);

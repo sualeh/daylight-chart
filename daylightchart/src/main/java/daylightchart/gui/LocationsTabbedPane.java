@@ -21,9 +21,9 @@
  */
 package daylightchart.gui;
 
-import daylightchart.daylightchart.chart.ChartConfiguration;
-import daylightchart.daylightchart.chart.DaylightChart;
-import daylightchart.daylightchart.layout.DaylightChartReport;
+import daylightchart.chart.ChartConfiguration;
+import daylightchart.chart.DaylightChart;
+import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.gui.util.CloseTabIcon;
 import java.io.Serial;
 import javax.swing.JTabbedPane;
