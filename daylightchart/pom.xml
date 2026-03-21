@@ -59,6 +59,31 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>daylightchart</groupId>
+      <artifactId>daylight-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>daylightchart</groupId>
+      <artifactId>daylight-calculation-engine</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>daylightchart</groupId>
+      <artifactId>daylight-chart-rendering</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>daylightchart</groupId>
+      <artifactId>daylight-preferences-persistence</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>daylightchart</groupId>
+      <artifactId>daylight-application-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>us.fatehi</groupId>
       <artifactId>pointlocation6709</artifactId>
       <version>4.1</version>

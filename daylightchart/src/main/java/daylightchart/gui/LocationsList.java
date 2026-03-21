@@ -46,7 +46,7 @@ import org.geoname.parser.LocationFormatter;
 
 import daylightchart.gui.actions.LocationsListOperation;
 import daylightchart.gui.util.GuiAction;
-import daylightchart.options.UserPreferences;
+import daylightchart.service.DaylightApplicationServices;
 
 /**
  * Locations list component.
@@ -148,12 +148,13 @@ class LocationsList
       }
     });
 
-    final Collection<Location> locationsCollection = UserPreferences
-      .locationsFile().getData();
+    final Collection<Location> locationsCollection = DaylightApplicationServices
+      .preferences().getLocations();
     List<Location> locations = new ArrayList<Location>(locationsCollection);
     Collections
       .sort(locations,
-            UserPreferences.optionsFile().getData().getLocationsSortOrder());
+            DaylightApplicationServices.preferences()
+              .loadOptions().getLocationsSortOrder());
     setLocations(locations);
   }
 
@@ -244,11 +245,12 @@ class LocationsList
       List<Location> locations = new ArrayList<Location>(locationsCollection);
       Collections
         .sort(locations,
-              UserPreferences.optionsFile().getData().getLocationsSortOrder());
+              DaylightApplicationServices.preferences()
+                .loadOptions().getLocationsSortOrder());
       this.locations = locations;
       locationsList.setListData(new Vector<Location>(locations));
       locationsList.setSelectedIndex(0);
-      UserPreferences.locationsFile().save(locations);
+      DaylightApplicationServices.preferences().saveLocations(locations);
     }
   }
 

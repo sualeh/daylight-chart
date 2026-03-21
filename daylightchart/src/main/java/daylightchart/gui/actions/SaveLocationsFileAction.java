@@ -39,8 +39,7 @@ import daylightchart.gui.util.Actions;
 import daylightchart.gui.util.ExtensionFileFilter;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.gui.util.SelectedFile;
-import daylightchart.options.LocationsDataFile;
-import daylightchart.options.UserPreferences;
+import daylightchart.service.DaylightApplicationServices;
 
 /**
  * Saves locations into a file.
@@ -76,17 +75,17 @@ public final class SaveLocationsFileAction
         .showSaveDialog(mainWindow,
                         Messages
                           .getString("DaylightChartGui.Menu.File.SaveLocations"),
-                        fileFilters,
-                        new File(UserPreferences.optionsFile().getData()
-                          .getWorkingDirectory().toString(), "locations.data"),
+                         fileFilters,
+                         new File(DaylightApplicationServices.preferences()
+                           .getWorkingDirectory().toString(), "locations.data"),
                         Messages
                           .getString("DaylightChartGui.Message.Confirm.FileOverwrite")); //$NON-NLS-1$
       if (selectedFile.isSelected())
       {
         try
         {
-          final LocationsDataFile locationDataFile = new LocationsDataFile(selectedFile);
-          locationDataFile.save(mainWindow.getLocations());
+          DaylightApplicationServices.preferences()
+            .saveLocations(selectedFile, mainWindow.getLocations());
         }
         catch (final Exception e)
         {

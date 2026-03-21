@@ -32,7 +32,7 @@ import daylightchart.gui.Messages;
 import daylightchart.gui.OptionsDialog;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
-import daylightchart.options.UserPreferences;
+import daylightchart.service.DaylightApplicationServices;
 
 /**
  * Shows options.
@@ -61,9 +61,9 @@ public final class OptionsAction
     @Override
     public void actionPerformed(final ActionEvent actionevent)
     {
-      Options options = UserPreferences.optionsFile().getData();
+      Options options = DaylightApplicationServices.preferences().loadOptions();
       options = OptionsDialog.showOptionsDialog(mainWindow, options);
-      UserPreferences.optionsFile().save(options);
+      DaylightApplicationServices.preferences().saveOptions(options);
       mainWindow.sortLocations();
     }
   }

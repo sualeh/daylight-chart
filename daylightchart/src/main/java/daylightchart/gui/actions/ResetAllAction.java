@@ -30,7 +30,7 @@ import javax.swing.KeyStroke;
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.gui.Messages;
 import daylightchart.gui.util.GuiAction;
-import daylightchart.options.UserPreferences;
+import daylightchart.service.DaylightApplicationServices;
 
 /**
  * Closes current tab.
@@ -60,7 +60,7 @@ public final class ResetAllAction
     public void actionPerformed(final ActionEvent actionevent)
     {
       // Clear all preferences
-      UserPreferences.clear();
+      DaylightApplicationServices.preferences().clear();
 
       final boolean slimUi = mainWindow.isSlimUi();
       restart(mainWindow, slimUi);
