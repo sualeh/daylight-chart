@@ -13,6 +13,13 @@ import org.geoname.data.Location;
 /** Service facade for persisted user preferences and location lists. */
 public class UserPreferencesService {
 
+  private static final UserPreferencesService USER_PREFERENCES_SERVICE =
+      new UserPreferencesService();
+
+  public static UserPreferencesService preferences() {
+    return USER_PREFERENCES_SERVICE;
+  }
+
   public void addRecentLocation(final Location location) {
     UserPreferences.recentLocationsFile().add(location);
   }
@@ -45,6 +52,10 @@ public class UserPreferencesService {
     UserPreferences.initialize(settingsDir);
   }
 
+  public ChartOptions loadChartOptions() {
+    return UserPreferences.chartOptionsFile().getData();
+  }
+
   public Collection<Location> loadLocations(
       final BaseTypedFile<LocationFileType> locationDataFile) {
     final LocationsDataFile locationsDataFile = new LocationsDataFile(locationDataFile);
@@ -56,8 +67,8 @@ public class UserPreferencesService {
     return UserPreferences.optionsFile().getData();
   }
 
-  public ChartOptions loadChartOptions() {
-    return UserPreferences.chartOptionsFile().getData();
+  public void saveChartOptions(final ChartOptions chartOptions) {
+    UserPreferences.chartOptionsFile().save(chartOptions);
   }
 
   public void saveLocations(
@@ -69,10 +80,6 @@ public class UserPreferencesService {
 
   public void saveLocations(final Collection<Location> locations) {
     UserPreferences.locationsFile().save(locations);
-  }
-
-  public void saveChartOptions(final ChartOptions chartOptions) {
-    UserPreferences.chartOptionsFile().save(chartOptions);
   }
 
   public void saveOptions(final Options options) {

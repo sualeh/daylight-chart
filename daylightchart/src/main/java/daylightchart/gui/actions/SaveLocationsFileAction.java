@@ -27,7 +27,7 @@ import daylightchart.gui.util.Actions;
 import daylightchart.gui.util.ExtensionFileFilter;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.gui.util.SelectedFile;
-import daylightchart.service.DaylightApplicationServices;
+import daylightchart.service.UserPreferencesService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -69,12 +69,12 @@ public final class SaveLocationsFileAction extends GuiAction {
               Messages.getString("DaylightChartGui.Menu.File.SaveLocations"),
               fileFilters,
               new File(
-                  DaylightApplicationServices.preferences().getWorkingDirectory().toString(),
+                  UserPreferencesService.preferences().getWorkingDirectory().toString(),
                   "locations.data"),
               Messages.getString("DaylightChartGui.Message.Confirm.FileOverwrite")); // $NON-NLS-1$
       if (selectedFile.isSelected()) {
         try {
-          DaylightApplicationServices.preferences()
+          UserPreferencesService.preferences()
               .saveLocations(selectedFile, mainWindow.getLocations());
         } catch (final Exception e) {
           LOGGER.log(

@@ -23,7 +23,7 @@ package daylightchart.gui;
 
 import daylightchart.gui.actions.LocationsListOperation;
 import daylightchart.gui.util.GuiAction;
-import daylightchart.service.DaylightApplicationServices;
+import daylightchart.service.UserPreferencesService;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
@@ -127,10 +127,10 @@ class LocationsList extends JPanel implements LocationOperations {
         });
 
     final Collection<Location> locationsCollection =
-        DaylightApplicationServices.preferences().getLocations();
+        UserPreferencesService.preferences().getLocations();
     List<Location> locations = new ArrayList<Location>(locationsCollection);
     Collections.sort(
-        locations, DaylightApplicationServices.preferences().loadOptions().getLocationsSortOrder());
+        locations, UserPreferencesService.preferences().loadOptions().getLocationsSortOrder());
     setLocations(locations);
   }
 
@@ -208,12 +208,11 @@ class LocationsList extends JPanel implements LocationOperations {
     if (locationsCollection != null && locationsCollection.size() > 0) {
       List<Location> locations = new ArrayList<Location>(locationsCollection);
       Collections.sort(
-          locations,
-          DaylightApplicationServices.preferences().loadOptions().getLocationsSortOrder());
+          locations, UserPreferencesService.preferences().loadOptions().getLocationsSortOrder());
       this.locations = locations;
       locationsList.setListData(new Vector<Location>(locations));
       locationsList.setSelectedIndex(0);
-      DaylightApplicationServices.preferences().saveLocations(locations);
+      UserPreferencesService.preferences().saveLocations(locations);
     }
   }
 

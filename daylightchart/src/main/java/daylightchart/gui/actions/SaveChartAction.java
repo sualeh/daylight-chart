@@ -21,8 +21,10 @@
  */
 package daylightchart.gui.actions;
 
+import daylightchart.chart.options.ChartOptions;
 import daylightchart.chart.report.ChartFileType;
 import daylightchart.chart.report.DaylightChartReport;
+import daylightchart.chart.report.DaylightChartReportService;
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.gui.Messages;
 import daylightchart.gui.util.Actions;
@@ -30,7 +32,7 @@ import daylightchart.gui.util.ExtensionFileFilter;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.gui.util.SelectedFile;
 import daylightchart.options.Options;
-import daylightchart.service.DaylightApplicationServices;
+import daylightchart.service.UserPreferencesService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serial;
@@ -63,14 +65,15 @@ public final class SaveChartAction extends GuiAction {
      */
     @Override
     public void actionPerformed(final ActionEvent actionevent) {
-      final Options options = DaylightApplicationServices.preferences().loadOptions();
+      final UserPreferencesService preferencesService = UserPreferencesService.preferences();
+      final ChartOptions chartOptions = preferencesService.loadChartOptions();
+      final Options options = preferencesService.loadOptions();
       final DaylightChartReport daylightChartReport =
-          DaylightApplicationServices.reports()
-              .createReport(mainWindow.getSelectedLocation(), options);
-      final List<ExtensionFileFilter<ChartFileType>> fileFilters =
-          new ArrayList<ExtensionFileFilter<ChartFileType>>();
+          DaylightChartReportService.reports()
+              .createReport(mainWindow.getSelectedLocation(), options, chartOptions);
+      final List<ExtensionFileFilter<ChartFileType>> fileFilters = new ArrayList<>();
       for (final ChartFileType chartFileType : ChartFileType.values()) {
-        fileFilters.add(new ExtensionFileFilter<ChartFileType>(chartFileType));
+        fileFilters.add(new ExtensionFileFilter<>(chartFileType));
       }
       final String reportFilename = daylightChartReport.getReportFileName(ChartFileType.png);
       final Path chartFile = Path.of(options.getWorkingDirectory().toString(), reportFilename);

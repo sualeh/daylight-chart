@@ -21,7 +21,9 @@
  */
 package daylightchart.gui;
 
+import daylightchart.chart.options.ChartOptions;
 import daylightchart.chart.report.DaylightChartReport;
+import daylightchart.chart.report.DaylightChartReportService;
 import daylightchart.gui.actions.AboutAction;
 import daylightchart.gui.actions.CloseCurrentTabAction;
 import daylightchart.gui.actions.GetCountriesFilesAction;
@@ -37,7 +39,8 @@ import daylightchart.gui.actions.SaveChartAction;
 import daylightchart.gui.actions.SaveLocationsFileAction;
 import daylightchart.gui.util.ExitAction;
 import daylightchart.gui.util.GuiAction;
-import daylightchart.service.DaylightApplicationServices;
+import daylightchart.options.Options;
+import daylightchart.service.UserPreferencesService;
 import java.awt.BorderLayout;
 import java.io.Serial;
 import java.util.Collection;
@@ -95,7 +98,7 @@ public final class DaylightChartGui extends JFrame implements LocationOperations
     // Open the first location
     Location firstTabLocation;
     final Collection<Location> recentLocations =
-        DaylightApplicationServices.preferences().getRecentLocations();
+        UserPreferencesService.preferences().getRecentLocations();
     if (recentLocations.size() > 0) {
       firstTabLocation = recentLocations.iterator().next();
     } else {
@@ -125,15 +128,16 @@ public final class DaylightChartGui extends JFrame implements LocationOperations
     if (location == null) {
       return;
     }
+    final UserPreferencesService preferencesService = UserPreferencesService.preferences();
+    final ChartOptions chartOptions = preferencesService.loadChartOptions();
+    final Options options = preferencesService.loadOptions();
     final DaylightChartReport daylightChartReport =
-        DaylightApplicationServices.reports()
-            .createReport(location, DaylightApplicationServices.preferences().loadOptions());
+        DaylightChartReportService.reports().createReport(location, options, chartOptions);
     locationsTabbedPane.addLocationTab(daylightChartReport);
 
     // Add to recent locations
-    DaylightApplicationServices.preferences().addRecentLocation(location);
-    final Collection<Location> recentLocations =
-        DaylightApplicationServices.preferences().getRecentLocations();
+    preferencesService.addRecentLocation(location);
+    final Collection<Location> recentLocations = preferencesService.getRecentLocations();
     recentLocationsMenu.removeAll();
     for (final Location recentLocation : recentLocations) {
       recentLocationsMenu.add(
