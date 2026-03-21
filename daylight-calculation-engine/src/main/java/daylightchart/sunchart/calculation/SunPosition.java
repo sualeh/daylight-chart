@@ -2,15 +2,9 @@ package daylightchart.sunchart.calculation;
 
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-
-import org.apache.commons.lang3.builder.CompareToBuilder;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Solar ephemerides at a given date and time.
@@ -26,10 +20,6 @@ public class SunPosition
   private final LocalDateTime dateTime;
   private final double altitude;
   private final double azimuth;
-  private final double declination;
-  private final double equationOfTime;
-  private final double hourAngle;
-  private final double rightAscension;
 
   /**
    * Solar ephemerides at a given date and time.
@@ -37,26 +27,14 @@ public class SunPosition
    * @param dateTime
    * @param altitude
    * @param azimuth
-   * @param declination
-   * @param equationOfTime
-   * @param hourAngle
-   * @param rightAscension
    */
   public SunPosition(final LocalDateTime dateTime,
                      final double altitude,
-                     final double azimuth,
-                     final double declination,
-                     final double equationOfTime,
-                     final double hourAngle,
-                     final double rightAscension)
+                     final double azimuth)
   {
     this.dateTime = dateTime;
     this.altitude = altitude;
     this.azimuth = azimuth;
-    this.declination = declination;
-    this.equationOfTime = equationOfTime;
-    this.hourAngle = hourAngle;
-    this.rightAscension = rightAscension;
   }
 
   /**
@@ -67,7 +45,7 @@ public class SunPosition
   @Override
   public int compareTo(final SunPosition o)
   {
-    return CompareToBuilder.reflectionCompare(this, o);
+    return dateTime.compareTo(o.dateTime);
   }
 
   /**
@@ -78,7 +56,18 @@ public class SunPosition
   @Override
   public boolean equals(final Object obj)
   {
-    return EqualsBuilder.reflectionEquals(this, obj);
+    if (this == obj)
+    {
+      return true;
+    }
+    if (!(obj instanceof SunPosition))
+    {
+      return false;
+    }
+    final SunPosition other = (SunPosition) obj;
+    return Objects.equals(dateTime, other.dateTime)
+           && Double.compare(altitude, other.altitude) == 0
+           && Double.compare(azimuth, other.azimuth) == 0;
   }
 
   /**
@@ -113,34 +102,6 @@ public class SunPosition
     return dateTime;
   }
 
-  public double getDeclination()
-  {
-    return declination;
-  }
-
-  public double getEquationOfTime()
-  {
-    return equationOfTime;
-  }
-
-  public double getHourAngle()
-  {
-    return hourAngle;
-  }
-
-  public double getRightAscension()
-  {
-    return rightAscension;
-  }
-
-  /**
-   * @return the time
-   */
-  public LocalTime getTime()
-  {
-    return dateTime.toLocalTime();
-  }
-
   /**
    * {@inheritDoc}
    *
@@ -149,7 +110,7 @@ public class SunPosition
   @Override
   public int hashCode()
   {
-    return HashCodeBuilder.reflectionHashCode(this);
+    return Objects.hash(dateTime, altitude, azimuth);
   }
 
   /**
@@ -160,8 +121,8 @@ public class SunPosition
   @Override
   public String toString()
   {
-    return ToStringBuilder.reflectionToString(this,
-                                              ToStringStyle.MULTI_LINE_STYLE);
+    return "SunPosition[dateTime=" + dateTime + ", altitude=" + altitude
+           + ", azimuth=" + azimuth + "]";
   }
 
 }

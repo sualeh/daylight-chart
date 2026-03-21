@@ -41,7 +41,6 @@ public final class SunChartYearData
 
   private final Location location;
   private final int year;
-  private boolean usesDaylightTime;
   private final List<SunPositions> sunPositionsList;
 
   SunChartYearData(final Location location, final int year)
@@ -80,27 +79,12 @@ public final class SunChartYearData
   }
 
   /**
-   * Whether the location uses DST rules.
-   *
-   * @return Whether the location uses DST rules.
-   */
-  public boolean usesDaylightTime()
-  {
-    return usesDaylightTime;
-  }
-
-  /**
    * @param sunPositions
    *        the sunPositions to set
    */
   void add(final SunPositions sunPositions)
   {
     sunPositionsList.add(sunPositions);
-  }
-
-  void setUsesDaylightTime(final boolean usesDaylightTime)
-  {
-    this.usesDaylightTime = usesDaylightTime;
   }
 
 }

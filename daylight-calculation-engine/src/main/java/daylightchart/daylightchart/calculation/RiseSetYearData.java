@@ -175,21 +175,6 @@ public final class RiseSetYearData
     twilights.add(riseSet);
   }
 
-  List<RawRiseSet> getRawRiseSets()
-  {
-    return Collections.unmodifiableList(riseSets);
-  }
-
-  /**
-   * Gets a list of twilight timings.
-   *
-   * @return List of rise/ set timings.
-   */
-  List<RawRiseSet> getRawTwilights()
-  {
-    return Collections.unmodifiableList(twilights);
-  }
-
   /**
    * Gets a list of rise/ set timings.
    *
