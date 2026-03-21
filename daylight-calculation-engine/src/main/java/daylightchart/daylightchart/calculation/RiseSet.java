@@ -23,6 +23,7 @@ package daylightchart.daylightchart.calculation;
 
 
 import java.io.PrintWriter;
+import java.io.Serial;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.time.LocalDate;
@@ -49,6 +50,7 @@ public final class RiseSet
 
   static final LocalTime JUST_AFTER_MIDNIGHT = LocalTime.MIDNIGHT.plusNanos(1);
 
+  @Serial
   private static final long serialVersionUID = 3092668888760029582L;
 
   private final RiseSetType riseSetType;

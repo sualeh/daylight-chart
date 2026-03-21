@@ -26,6 +26,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Rectangle;
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.jfree.chart.LegendItem;
@@ -43,6 +44,7 @@ final class DaylightChartLegendItemSource
   /**
    *
    */
+  @Serial
   private static final long serialVersionUID = -7877379059709945565L;
   private final Options options;
 
@@ -84,7 +86,7 @@ final class DaylightChartLegendItemSource
                                       final Paint paint,
                                       final boolean isLine)
   {
-    final LegendItem legendItem = new LegendItem(label, /* description */
+    return new LegendItem(label, /* description */
                                                  null,
                                                  /* toolTipText */null, /* urlText */
                                                  null,
@@ -100,34 +102,22 @@ final class DaylightChartLegendItemSource
                                                  /* line */new Rectangle(10, 3),
                                                  /* lineStroke */new BasicStroke(0.6f),
                                                  /* linePaint */Color.black);
-
-    return legendItem;
   }
 
   private LegendItem getLegendItem(final DaylightBandType daylightSavingsMode)
   {
     final String legendLabel = resolveLegendLabel(daylightSavingsMode);
-    LegendItem legendItem;
-    switch (daylightSavingsMode)
+    return switch (daylightSavingsMode)
     {
-      case with_clock_shift:
-        legendItem = createLegendItem(legendLabel,
+      case with_clock_shift -> createLegendItem(legendLabel,
                                       ChartConfiguration.daylightColor,
                                       false);
-        break;
-      case without_clock_shift:
-        legendItem = createLegendItem(legendLabel, Color.white, true);
-        break;
-      case twilight:
-        legendItem = createLegendItem(legendLabel,
+      case without_clock_shift -> createLegendItem(legendLabel, Color.white, true);
+      case twilight -> createLegendItem(legendLabel,
                                       ChartConfiguration.twilightColor,
                                       false);
-        break;
-      default:
-        legendItem = null;
-        break;
-    }
-    return legendItem;
+      default -> null;
+    };
   }
 
   private String resolveLegendLabel(final DaylightBandType daylightSavingsMode)

@@ -25,6 +25,7 @@ package daylightchart.daylightchart.chart;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.io.Serial;
 import java.time.Year;
 import java.time.ZoneId;
 import java.util.Date;
@@ -71,6 +72,7 @@ public class DaylightChart
   implements ChartOptionsListener
 {
 
+  @Serial
   private static final long serialVersionUID = 1223227216177061127L;
 
   private static final Logger LOGGER = Logger

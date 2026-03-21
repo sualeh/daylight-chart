@@ -22,12 +22,15 @@
 package daylightchart.gui.actions;
 
 
+import java.io.Serial;
+
 import daylightchart.gui.Messages;
 
 public final class GetUSStatesFilesAction
   extends BaseBrowserAction
 {
 
+  @Serial
   private static final long serialVersionUID = 4002590686393404496L;
 
   public GetUSStatesFilesAction()

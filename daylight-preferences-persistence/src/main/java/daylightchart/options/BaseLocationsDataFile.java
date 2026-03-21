@@ -140,24 +140,15 @@ abstract class BaseLocationsDataFile
     {
       for (final InputStream inputStream: inputs)
       {
-        final LocationsParser locationsFileParser;
-        switch (getFileType())
+        final LocationsParser locationsFileParser = switch (getFileType())
         {
-          case data:
-            locationsFileParser = new LocationsListParser(inputStream);
-            break;
+          case data: yield new LocationsListParser(inputStream);
           case gns_country_file:
-          case gns_country_file_zipped:
-            locationsFileParser = new GNSCountryFileParser(inputStream);
-            break;
+          case gns_country_file_zipped: yield new GNSCountryFileParser(inputStream);
           case gnis_state_file:
-          case gnis_state_file_zipped:
-            locationsFileParser = new GNISFileParser(inputStream);
-            break;
-          default:
-            locationsFileParser = null;
-            break;
-        }
+          case gnis_state_file_zipped: yield new GNISFileParser(inputStream);
+          default: yield null;
+        };
         if (locationsFileParser != null)
         {
           data.addAll(locationsFileParser.parseLocations());

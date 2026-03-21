@@ -23,6 +23,7 @@ package daylightchart.options.chart;
 
 
 import java.awt.Paint;
+import java.io.Serial;
 
 import org.jfree.chart.JFreeChart;
 
@@ -40,6 +41,7 @@ public class ChartOptions
   extends BaseChartOptions
 {
 
+  @Serial
   private static final long serialVersionUID = -7527051325325384357L;
 
   private boolean antiAlias;
@@ -132,9 +134,9 @@ public class ChartOptions
   @Override
   public void updateChart(final JFreeChart chart)
   {
-    if (chart instanceof ChartOptionsListener)
+    if (chart instanceof ChartOptionsListener listener)
     {
-      ((ChartOptionsListener) chart).beforeSettingChartOptions(this);
+      listener.beforeSettingChartOptions(this);
     }
     //
     chart.setAntiAlias(antiAlias);
@@ -143,9 +145,9 @@ public class ChartOptions
     plotOptions.updateChart(chart);
     titleOptions.updateChart(chart);
     //
-    if (chart instanceof ChartOptionsListener)
+    if (chart instanceof ChartOptionsListener listener)
     {
-      ((ChartOptionsListener) chart).afterSettingChartOptions(this);
+      listener.afterSettingChartOptions(this);
     }
   }
 

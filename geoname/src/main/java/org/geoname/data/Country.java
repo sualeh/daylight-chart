@@ -22,6 +22,7 @@
 package org.geoname.data;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -36,6 +37,7 @@ public final class Country
   /** Unknown country. */
   public static final Country UNKNOWN = new Country("", "");
 
+  @Serial
   private static final long serialVersionUID = -5625327893850178062L;
 
   private final String name;

@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.Serial;
 import java.util.EnumSet;
 import java.util.Vector;
 
@@ -119,6 +120,7 @@ public class OptionsDialog
 
   }
 
+  @Serial
   private static final long serialVersionUID = -8756602036694384557L;
 
   /**
@@ -234,7 +236,7 @@ public class OptionsDialog
     final Action action = new AbstractAction()
     {
 
-      private static final long serialVersionUID = -180000433351276424L;
+      @Serial private static final long serialVersionUID = -180000433351276424L;
 
       @Override
       public void actionPerformed(final ActionEvent actionEvent)

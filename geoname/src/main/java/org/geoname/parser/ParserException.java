@@ -21,6 +21,8 @@
  */
 package org.geoname.parser;
 
+import java.io.Serial;
+
 
 /**
  * Parser exception.
@@ -31,6 +33,7 @@ public class ParserException
   extends Exception
 {
 
+  @Serial
   private static final long serialVersionUID = -8091140656979529951L;
 
   /**

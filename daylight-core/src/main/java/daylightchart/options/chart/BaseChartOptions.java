@@ -23,6 +23,7 @@ package daylightchart.options.chart;
 
 
 import java.beans.Transient;
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -42,6 +43,7 @@ public abstract class BaseChartOptions
   implements Serializable
 {
 
+  @Serial
   private static final long serialVersionUID = 1329786356991593668L;
 
   private static final JFreeChart chart = createDummyChart();

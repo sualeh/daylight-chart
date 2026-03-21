@@ -22,6 +22,7 @@
 package org.geoname.parser;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
@@ -33,6 +34,7 @@ public final class TimeZoneDisplay
   implements Serializable, Comparable<TimeZoneDisplay>
 {
 
+  @Serial
   private static final long serialVersionUID = 3841508979907339562L;
 
   private final String timeZoneId;

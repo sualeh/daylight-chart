@@ -37,6 +37,6 @@ public enum TwilightType
  /** Nautical twilight */
   NAUTICAL,
  /** Astronomical twilight */
-  ASTRONOMICAL;
+  ASTRONOMICAL
 
 }

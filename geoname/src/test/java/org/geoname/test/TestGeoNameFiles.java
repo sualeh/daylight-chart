@@ -102,7 +102,7 @@ public class TestGeoNameFiles
     }
     zis.close();
 
-    assertThat(String.format("Number of locations in file %s:%s", filename, ze),
+    assertThat("Number of locations in file %s:%s".formatted(filename, ze),
                locations.size(),
                is(numLocations));
   }
@@ -124,7 +124,7 @@ public class TestGeoNameFiles
     }
     zis.close();
 
-    assertThat(String.format("Number of locations in file %s:%s", filename, ze),
+    assertThat("Number of locations in file %s:%s".formatted(filename, ze),
                locations.size(),
                is(numLocations));
   }

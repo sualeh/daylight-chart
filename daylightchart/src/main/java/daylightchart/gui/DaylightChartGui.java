@@ -23,6 +23,7 @@ package daylightchart.gui;
 
 
 import java.awt.BorderLayout;
+import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public final class DaylightChartGui
   implements LocationOperations
 {
 
+  @Serial
   private final static long serialVersionUID = 3760840181833283637L;
 
   private final LocationsList locationsList;

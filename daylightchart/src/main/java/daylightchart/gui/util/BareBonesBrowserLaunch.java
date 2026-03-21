@@ -59,7 +59,7 @@ public class BareBonesBrowserLaunch
       else if (osName.startsWith("Windows"))
       {
         Runtime.getRuntime()
-          .exec("rundll32 url.dll,FileProtocolHandler " + url);
+          .exec(("rundll32 url.dll,FileProtocolHandler " + url).split(" "));
       }
       else
       { // assume Unix or Linux

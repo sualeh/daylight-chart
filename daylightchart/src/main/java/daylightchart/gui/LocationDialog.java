@@ -34,6 +34,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.Serial;
 import java.time.ZoneId;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -134,6 +135,7 @@ public class LocationDialog
     }
   }
 
+  @Serial
   private static final long serialVersionUID = -5161588534167787490L;
 
   private static final Logger LOGGER = Logger
@@ -313,7 +315,7 @@ public class LocationDialog
     final Action action = new AbstractAction()
     {
 
-      private static final long serialVersionUID = -180000433351276424L;
+      @Serial private static final long serialVersionUID = -180000433351276424L;
 
       @Override
       public void actionPerformed(final ActionEvent actionEvent)

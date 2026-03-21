@@ -21,6 +21,8 @@
  */
 package org.geoname.parser;
 
+import java.io.Serial;
+
 
 /**
  * Formatter exception.
@@ -31,6 +33,7 @@ public class FormatterException
   extends Exception
 {
 
+  @Serial
   private static final long serialVersionUID = -8646676654554219081L;
 
   /**

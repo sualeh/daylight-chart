@@ -24,8 +24,8 @@ package daylightchart.gui.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -83,7 +83,7 @@ public final class SaveChartAction
       }
       final String reportFilename = daylightChartReport
         .getReportFileName(ChartFileType.png);
-      final Path chartFile = Paths.get(
+      final Path chartFile = Path.of(
                                        options.getWorkingDirectory().toString(),
                                        reportFilename);
       final SelectedFile<ChartFileType> selectedFile = Actions
@@ -122,6 +122,7 @@ public final class SaveChartAction
     }
   }
 
+  @Serial
   private static final long serialVersionUID = 1173685118494564955L;
 
   private static final Logger LOGGER = Logger

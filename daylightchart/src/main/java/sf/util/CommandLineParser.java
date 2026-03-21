@@ -453,9 +453,9 @@ public final class CommandLineParser
     }
     else
     {
-      if (option instanceof BooleanOption)
+      if (option instanceof BooleanOption booleanOption)
       {
-        optionValue = ((BooleanOption) option).getValue();
+        optionValue = booleanOption.getValue();
       }
     }
     return optionValue;

@@ -33,5 +33,5 @@ enum RiseSetType
  /** All daylight, the sun never sets. */
   all_daylight,
  /** All night time, the sun never rises. */
-  all_nighttime;
+  all_nighttime
 }

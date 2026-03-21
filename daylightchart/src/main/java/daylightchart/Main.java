@@ -22,7 +22,7 @@
 package daylightchart;
 
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,7 +94,7 @@ public final class Main
     if (StringUtils.isNotBlank(preferencesDirectory))
     {
       DaylightApplicationServices.preferences()
-        .initialize(Paths.get(preferencesDirectory));
+        .initialize(Path.of(preferencesDirectory));
     }
 
     // Set UI look and feel

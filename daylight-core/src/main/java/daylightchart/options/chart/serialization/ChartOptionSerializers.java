@@ -76,7 +76,7 @@ public final class ChartOptionSerializers
         throw new IllegalArgumentException("Only Color paints are supported");
       }
       final Color color = (Color) value;
-      gen.writeString(String.format("#%08X", color.getRGB()));
+      gen.writeString("#%08X".formatted(color.getRGB()));
     }
   }
 

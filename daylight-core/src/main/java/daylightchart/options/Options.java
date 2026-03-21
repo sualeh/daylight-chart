@@ -22,10 +22,10 @@
 package daylightchart.options;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -45,6 +45,7 @@ public class Options
   implements Serializable
 {
 
+  @Serial
   private static final long serialVersionUID = 3195704386171200909L;
 
   private LocationsSortOrder locationsSortOrder;
@@ -127,7 +128,7 @@ public class Options
     }
     else
     {
-      return Paths.get(".");
+      return Path.of(".");
     }
   }
 

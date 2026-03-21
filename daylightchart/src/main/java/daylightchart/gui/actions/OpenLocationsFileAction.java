@@ -25,8 +25,8 @@ package daylightchart.gui.actions;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -84,8 +84,8 @@ public final class OpenLocationsFileAction
         .add(new ExtensionFileFilter<LocationFileType>(LocationFileType.gnis_state_file));
       fileFilters
         .add(new ExtensionFileFilter<LocationFileType>(LocationFileType.gnis_state_file_zipped));
-      final Path locationsFile = Paths
-        .get(DaylightApplicationServices.preferences().getWorkingDirectory()
+      final Path locationsFile = Path
+        .of(DaylightApplicationServices.preferences().getWorkingDirectory()
           .toString(), "locations.data");
       final SelectedFile<LocationFileType> selectedFile = Actions
         .showOpenDialog(mainWindow,
@@ -140,6 +140,7 @@ public final class OpenLocationsFileAction
     }
   }
 
+  @Serial
   private static final long serialVersionUID = -177214864870181893L;
 
   private static final Logger LOGGER = Logger

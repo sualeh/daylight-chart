@@ -24,6 +24,7 @@ package daylightchart.gui.util;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
@@ -37,6 +38,7 @@ public final class ExitAction
   extends GuiAction
 {
 
+  @Serial
   private static final long serialVersionUID = 5749903957626188378L;
 
   /**

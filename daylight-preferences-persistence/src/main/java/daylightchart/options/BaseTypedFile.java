@@ -172,11 +172,11 @@ public abstract class BaseTypedFile<T extends FileType>
   {
     if (hasFile())
     {
-      return String.format("%s%n%s", fileType, file);
+      return "%s%n%s".formatted(fileType, file);
     }
     else
     {
-      return String.format("No file [%d]", hashCode());
+      return "No file [%d]".formatted(hashCode());
     }
   }
 

@@ -24,6 +24,7 @@ package org.geoname.data;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
@@ -52,6 +53,7 @@ public final class Location
   implements Serializable, Comparable<Location>
 {
 
+  @Serial
   private static final long serialVersionUID = 7929385835483597186L;
 
   private static final Logger LOGGER = Logger

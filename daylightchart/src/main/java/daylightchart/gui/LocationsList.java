@@ -28,6 +28,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -58,6 +59,7 @@ class LocationsList
   implements LocationOperations
 {
 
+  @Serial
   private static final long serialVersionUID = -6884483130453983685L;
 
   private final DaylightChartGui mainWindow;
@@ -90,7 +92,7 @@ class LocationsList
     add(new JScrollPane(locationsList));
     locationsList.setCellRenderer(new DefaultListCellRenderer()
     {
-      private static final long serialVersionUID = -5892518623547830472L;
+      @Serial private static final long serialVersionUID = -5892518623547830472L;
 
       @Override
       public Component getListCellRendererComponent(final JList list,

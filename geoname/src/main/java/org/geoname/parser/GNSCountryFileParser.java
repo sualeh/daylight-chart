@@ -70,8 +70,8 @@ public final class GNSCountryFileParser
         if (fips10AdministrationDivisionCode > 0)
         {
           fips10AdministrationDivisionName = FIPS10AdministrationDivisions
-            .lookupFips10AdministrationDivisionName(country, String
-              .format("%02d", fips10AdministrationDivisionCode));
+            .lookupFips10AdministrationDivisionName(country, "%02d"
+            .formatted(fips10AdministrationDivisionCode));
         }
         else
         {

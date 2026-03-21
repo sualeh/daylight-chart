@@ -22,6 +22,7 @@
 package org.geoname.data;
 
 
+import java.io.Serial;
 import java.util.Comparator;
 
 import us.fatehi.pointlocation6709.Latitude;
@@ -53,6 +54,7 @@ public enum LocationsSortOrder
     }
   };
 
+  @Serial
   private static final long serialVersionUID = 4483200154586111166L;
 
   private final String description;

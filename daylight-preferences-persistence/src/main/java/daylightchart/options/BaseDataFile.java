@@ -31,7 +31,6 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,7 +103,7 @@ abstract class BaseDataFile<T extends FileType, D>
                final String resource,
                final T fileType)
   {
-    this(Paths.get(settingsDirectory.toString(), resource), fileType);
+    this(Path.of(settingsDirectory.toString(), resource), fileType);
     // Validation
     if (!FileUtils.isDirectoryValid(settingsDirectory))
     {

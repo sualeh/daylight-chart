@@ -100,23 +100,13 @@ public class DaylightChartBand
    */
   private XYItemRenderer getRenderer(final DaylightBandType daylightBandType)
   {
-    XYItemRenderer renderer;
-    switch (daylightBandType)
+    return switch (daylightBandType)
     {
-      case with_clock_shift:
-        renderer = createDifferenceRenderer(ChartConfiguration.daylightColor);
-        break;
-      case without_clock_shift:
-        renderer = createOutlineRenderer();
-        break;
-      case twilight:
-        renderer = createDifferenceRenderer(ChartConfiguration.twilightColor);
-        break;
-      default:
-        renderer = null;
-        break;
-    }
-    return renderer;
+      case with_clock_shift -> createDifferenceRenderer(ChartConfiguration.daylightColor);
+      case without_clock_shift -> createOutlineRenderer();
+      case twilight -> createDifferenceRenderer(ChartConfiguration.twilightColor);
+      default -> null;
+    };
   }
 
   /**

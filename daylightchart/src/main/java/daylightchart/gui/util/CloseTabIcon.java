@@ -102,9 +102,9 @@ public class CloseTabIcon
     // Lazily create a link to the owning JTabbedPane and attach a
     // listener to it, so clicks on the selector tab can be intercepted
     // by this code.
-    if (tabbedPane == null && component instanceof JTabbedPane)
+    if (tabbedPane == null && component instanceof JTabbedPane pane)
     {
-      tabbedPane = (JTabbedPane) component;
+      tabbedPane = pane;
       tabbedPane.addMouseListener(new MouseAdapter()
       {
         @Override

@@ -22,6 +22,8 @@
 package daylightchart.gui;
 
 
+import java.io.Serial;
+
 import javax.swing.JTabbedPane;
 
 import org.geoname.data.Location;
@@ -42,6 +44,7 @@ public class LocationsTabbedPane
   extends JTabbedPane
 {
 
+  @Serial
   private static final long serialVersionUID = -2086804705336786590L;
 
   /**

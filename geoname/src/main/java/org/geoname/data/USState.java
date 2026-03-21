@@ -22,6 +22,7 @@
 package org.geoname.data;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -36,6 +37,7 @@ public final class USState
   implements Serializable, Comparable<USState>
 {
 
+  @Serial
   private static final long serialVersionUID = -5807680114125246988L;
 
   private final String name;

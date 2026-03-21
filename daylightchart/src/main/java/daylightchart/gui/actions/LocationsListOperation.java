@@ -104,25 +104,20 @@ public enum LocationsListOperation
       public void actionPerformed(final ActionEvent event)
       {
         final Location selectedLocation = mainWindow.getSelectedLocation();
-        final Location editedLocation;
-        switch (LocationsListOperation.this)
+        final Location editedLocation = switch (LocationsListOperation.this)
         {
           case add:
             // fall-through
           case edit:
             // fall-through
-          case delete:
-            editedLocation = LocationDialog
+          case delete: yield LocationDialog
               .showLocationDialog(mainWindow, LocationsListOperation.this);
-            break;
           case copy:
             // fall-through
           case paste:
             // fall-through
-          default:
-            editedLocation = null;
-            break;
-        }
+          default: yield null;
+        };
 
         if (editedLocation != null)
         {

@@ -23,6 +23,7 @@ package daylightchart.daylightchart.calculation;
 
 
 import java.io.PrintWriter;
+import java.io.Serial;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public final class DaylightBand
   implements Serializable
 {
 
+  @Serial
   private static final long serialVersionUID = 5875662315368162333L;
 
   private final DaylightBandType bandType;
@@ -150,7 +152,7 @@ public final class DaylightBand
     if (riseSetMap.size() > 0)
     {
       final List<RiseSet> riseSets = getRiseSets();
-      return riseSets.get(0);
+      return riseSets.getFirst();
     }
     else
     {
@@ -163,7 +165,7 @@ public final class DaylightBand
     if (riseSetMap.size() > 0)
     {
       final List<RiseSet> riseSets = getRiseSets();
-      return riseSets.get(riseSets.size() - 1);
+      return riseSets.getLast();
     }
     else
     {

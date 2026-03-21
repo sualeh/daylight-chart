@@ -25,7 +25,6 @@ package daylightchart.options;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,7 +49,7 @@ public final class UserPreferences
 
   static
   {
-    scratchDirectory = Paths.get(System.getProperty("java.io.tmpdir"), ".");
+    scratchDirectory = Path.of(System.getProperty("java.io.tmpdir"), ".");
     validateDirectory(scratchDirectory);
 
     initialize((Path) null);
@@ -89,7 +88,7 @@ public final class UserPreferences
     final Path settingsDirectory;
     if (settingsDir == null)
     {
-      settingsDirectory = Paths.get(System.getProperty("user.home", "."),
+      settingsDirectory = Path.of(System.getProperty("user.home", "."),
                                     ".daylightchart");
     }
     else

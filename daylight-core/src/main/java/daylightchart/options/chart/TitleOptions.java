@@ -24,6 +24,7 @@ package daylightchart.options.chart;
 
 import java.awt.Font;
 import java.awt.Paint;
+import java.io.Serial;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.title.TextTitle;
@@ -44,6 +45,7 @@ public class TitleOptions
   extends BaseChartOptions
 {
 
+  @Serial
   private static final long serialVersionUID = -6096894681186027546L;
 
   private boolean hideTitle;

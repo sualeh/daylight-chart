@@ -23,6 +23,7 @@ package daylightchart.daylightchart.calculation;
 
 
 import java.io.PrintWriter;
+import java.io.Serial;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.time.LocalDate;
@@ -38,6 +39,7 @@ final class RawRiseSet
   implements Serializable, Comparable<RawRiseSet>
 {
 
+  @Serial
   private static final long serialVersionUID = 3946758175409716163L;
 
   private final Location location;

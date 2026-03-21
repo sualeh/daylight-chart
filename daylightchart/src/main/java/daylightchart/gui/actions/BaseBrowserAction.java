@@ -24,6 +24,7 @@ package daylightchart.gui.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 
 import javax.swing.KeyStroke;
 
@@ -36,6 +37,7 @@ abstract class BaseBrowserAction
   extends GuiAction
 {
 
+  @Serial
   private static final long serialVersionUID = 4002590686393404496L;
 
   BaseBrowserAction(final String text, final String url)

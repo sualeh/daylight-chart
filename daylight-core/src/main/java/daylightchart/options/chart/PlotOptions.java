@@ -24,6 +24,7 @@ package daylightchart.options.chart;
 
 import java.awt.Paint;
 import java.awt.Stroke;
+import java.io.Serial;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
@@ -50,6 +51,7 @@ public class PlotOptions
   extends BaseChartOptions
 {
 
+  @Serial
   private static final long serialVersionUID = 6801804849033048049L;
 
   @JsonSerialize(using = PaintSerializer.class)
@@ -94,14 +96,12 @@ public class PlotOptions
     //
     // Update axes
     Axis domainAxis = null;
-    if (plot instanceof CategoryPlot)
+    if (plot instanceof CategoryPlot p)
     {
-      final CategoryPlot p = (CategoryPlot) plot;
       domainAxis = p.getDomainAxis();
     }
-    else if (plot instanceof XYPlot)
+    else if (plot instanceof XYPlot p)
     {
-      final XYPlot p = (XYPlot) plot;
       domainAxis = p.getDomainAxis();
     }
     if (domainAxis != null)
@@ -110,14 +110,12 @@ public class PlotOptions
     }
 
     Axis rangeAxis = null;
-    if (plot instanceof CategoryPlot)
+    if (plot instanceof CategoryPlot p)
     {
-      final CategoryPlot p = (CategoryPlot) plot;
       rangeAxis = p.getRangeAxis();
     }
-    else if (plot instanceof XYPlot)
+    else if (plot instanceof XYPlot p)
     {
-      final XYPlot p = (XYPlot) plot;
       rangeAxis = p.getRangeAxis();
     }
     if (rangeAxis != null)
@@ -230,14 +228,12 @@ public class PlotOptions
 
     // Update axes
     Axis domainAxis = null;
-    if (plot instanceof CategoryPlot)
+    if (plot instanceof CategoryPlot p)
     {
-      final CategoryPlot p = (CategoryPlot) plot;
       domainAxis = p.getDomainAxis();
     }
-    else if (plot instanceof XYPlot)
+    else if (plot instanceof XYPlot p)
     {
-      final XYPlot p = (XYPlot) plot;
       domainAxis = p.getDomainAxis();
     }
     if (domainAxis != null)
@@ -246,14 +242,12 @@ public class PlotOptions
     }
 
     Axis rangeAxis = null;
-    if (plot instanceof CategoryPlot)
+    if (plot instanceof CategoryPlot p)
     {
-      final CategoryPlot p = (CategoryPlot) plot;
       rangeAxis = p.getRangeAxis();
     }
-    else if (plot instanceof XYPlot)
+    else if (plot instanceof XYPlot p)
     {
-      final XYPlot p = (XYPlot) plot;
       rangeAxis = p.getRangeAxis();
     }
     if (rangeAxis != null)

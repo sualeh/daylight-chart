@@ -25,6 +25,7 @@ package daylightchart.gui.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -113,6 +114,7 @@ public final class SaveLocationsFileAction
     }
   }
 
+  @Serial
   private static final long serialVersionUID = 1173685118494564955L;
 
   private static final Logger LOGGER = Logger

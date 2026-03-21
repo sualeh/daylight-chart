@@ -340,9 +340,8 @@ public final class RiseSetUtility
 
     final boolean usesDaylightSavings = !zoneId.getRules()
       .getTransitionRules().isEmpty();
-    if (sunriseResult instanceof SunriseResult.RegularDay)
+    if (sunriseResult instanceof SunriseResult.RegularDay regularDay)
     {
-      final SunriseResult.RegularDay regularDay = (SunriseResult.RegularDay) sunriseResult;
       return new RawRiseSet(location,
                             date,
                             usesDaylightSavings && inDaylightSavings,

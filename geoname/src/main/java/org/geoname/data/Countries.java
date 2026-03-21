@@ -166,7 +166,7 @@ public final class Countries
     try (final BufferedReader reader = new BufferedReader(new UnicodeReader(Countries.class
                                                                               .getClassLoader()
                                                                               .getResourceAsStream(dataResource),
-                                                                            "UTF-8"));)
+                                                                            "UTF-8")))
     {
       reader.lines().map(line -> line.split(","))
         .filter(fields -> fields.length == 3)
@@ -217,7 +217,7 @@ public final class Countries
                                                                                   .getClassLoader()
                                                                                   .getResourceAsStream(dataResource),
                                                                                 Charset
-                                                                                  .forName("UTF8")));)
+                                                                                  .forName("UTF8"))))
     {
       reader.lines().map(line -> line.split(","))
         .filter(fields -> fields.length == 2)

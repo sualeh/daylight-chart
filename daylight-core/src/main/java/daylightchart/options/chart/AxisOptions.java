@@ -24,6 +24,7 @@ package daylightchart.options.chart;
 
 import java.awt.Font;
 import java.awt.Paint;
+import java.io.Serial;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
@@ -47,6 +48,7 @@ public class AxisOptions
   extends BaseChartOptions
 {
 
+  @Serial
   private static final long serialVersionUID = 7658976939630828679L;
 
   private String label;

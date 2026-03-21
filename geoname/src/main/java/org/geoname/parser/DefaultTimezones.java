@@ -79,7 +79,7 @@ public final class DefaultTimezones
     }
 
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(DefaultTimezones.class
-      .getClassLoader().getResourceAsStream("default.timezones.data")));)
+      .getClassLoader().getResourceAsStream("default.timezones.data"))))
     {
       reader
         .lines()
@@ -343,7 +343,7 @@ public final class DefaultTimezones
     }
     if (country.getCode().equals("US") && locationParts.size() >= 2)
     {
-      final String stateString = locationParts.get(locationParts.size() - 1);
+      final String stateString = locationParts.getLast();
       final USState state = USStates.lookupUSState(stateString);
       if (state != null)
       {
@@ -360,9 +360,9 @@ public final class DefaultTimezones
     {
       final String timeZoneId = entry.getKey();
       final List<String> timeZoneParts = entry.getValue();
-      final String locationPart1 = locationParts.get(0)
+      final String locationPart1 = locationParts.getFirst()
         .toLowerCase(Locale.ENGLISH);
-      final String timeZonePart1 = timeZoneParts.get(0)
+      final String timeZonePart1 = timeZoneParts.getFirst()
         .toLowerCase(Locale.ENGLISH);
       if (locationPart1.equals(timeZonePart1))
       {
@@ -396,11 +396,11 @@ public final class DefaultTimezones
     timeZoneParts.addAll(Arrays.asList(timeZoneId.split("/")));
     // If the first part is not a country, it is a continent, so
     // remove it
-    final String firstPart = timeZoneParts.get(0);
+    final String firstPart = timeZoneParts.getFirst();
     final Country country = Countries.lookupCountry(firstPart);
     if (country == null)
     {
-      timeZoneParts.remove(0); // Remove the continent
+      timeZoneParts.removeFirst(); // Remove the continent
     }
     Collections.reverse(timeZoneParts);
     return timeZoneParts;
