@@ -34,8 +34,8 @@ import daylightchart.gui.DaylightChartGui;
 import daylightchart.gui.Messages;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
-import daylightchart.options.UserPreferences;
 import daylightchart.options.chart.ChartOptions;
+import daylightchart.service.DaylightApplicationServices;
 
 /**
  * Shows Chart options.
@@ -64,7 +64,8 @@ public final class ChartOptionsAction
     @Override
     public void actionPerformed(final ActionEvent actionevent)
     {
-      final Options options = UserPreferences.optionsFile().getData();
+      final Options options = DaylightApplicationServices.preferences()
+        .loadOptions();
       final ChartOptions chartOptions = options.getChartOptions();
 
       final ChartEditor chartEditor = chartOptions.getChartEditor();
@@ -80,7 +81,7 @@ public final class ChartOptionsAction
         // Get chart options from the editor
         chartOptions.copyFromChartEditor(chartEditor);
         // Save preferences
-        UserPreferences.optionsFile().save(options);
+        DaylightApplicationServices.preferences().saveOptions(options);
       }
     }
   }

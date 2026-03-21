@@ -33,8 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import daylightchart.options.FileType;
-import daylightchart.options.Options;
-import daylightchart.options.UserPreferences;
+import daylightchart.service.DaylightApplicationServices;
 import sf.util.FileUtils;
 
 /**
@@ -53,9 +52,8 @@ public class Actions
    */
   public static void setWorkingDirectory(final Path workingDirectory)
   {
-    final Options options = UserPreferences.optionsFile().getData();
-    options.setWorkingDirectory(workingDirectory);
-    UserPreferences.optionsFile().save(options);
+    DaylightApplicationServices.preferences()
+      .saveWorkingDirectory(workingDirectory);
   }
 
   /**

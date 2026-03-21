@@ -65,7 +65,7 @@ import daylightchart.gui.util.BareBonesBrowserLaunch;
 import daylightchart.gui.util.ExitAction;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
-import daylightchart.options.UserPreferences;
+import daylightchart.service.DaylightApplicationServices;
 
 /**
  * Provides an GUI for daylight charts.
@@ -151,8 +151,8 @@ public final class DaylightChartGui
 
       // Open the first location
       Location firstTabLocation;
-      final Collection<Location> recentLocations = UserPreferences
-        .recentLocationsFile().getData();
+      final Collection<Location> recentLocations = DaylightApplicationServices
+        .preferences().getRecentLocations();
       if (recentLocations.size() > 0)
       {
         firstTabLocation = recentLocations.iterator().next();
@@ -167,10 +167,10 @@ public final class DaylightChartGui
     {
       locationsTabbedPane = null;
       locationsList = null;
-      final DaylightChartReport daylightChartReport = new DaylightChartReport(location,
-                                                                              UserPreferences
-                                                                                .optionsFile()
-                                                                                .getData());
+      final DaylightChartReport daylightChartReport = DaylightApplicationServices
+        .reports()
+        .createReport(location,
+                      DaylightApplicationServices.preferences().loadOptions());
       final ChartPanel chartPanel = new ChartPanel(daylightChartReport
         .getChart());
       chartPanel.setPreferredSize(ChartConfiguration.chartDimension);
@@ -203,14 +203,15 @@ public final class DaylightChartGui
     {
       return;
     }
-    final DaylightChartReport daylightChartReport = new DaylightChartReport(location,
-                                                                            UserPreferences
-                                                                              .optionsFile()
-                                                                              .getData());
+    final DaylightChartReport daylightChartReport = DaylightApplicationServices
+      .reports()
+      .createReport(location,
+                    DaylightApplicationServices.preferences().loadOptions());
     if (slimUi)
     {
       final Path reportFile = Paths
-        .get(UserPreferences.getScratchDirectory().toString(),
+        .get(DaylightApplicationServices.preferences().getScratchDirectory()
+          .toString(),
              daylightChartReport.getReportFileName(ChartFileType.png));
       daylightChartReport.write(reportFile, ChartFileType.png);
       try
@@ -230,9 +231,9 @@ public final class DaylightChartGui
     }
 
     // Add to recent locations
-    UserPreferences.recentLocationsFile().add(location);
-    final Collection<Location> recentLocations = UserPreferences
-      .recentLocationsFile().getData();
+    DaylightApplicationServices.preferences().addRecentLocation(location);
+    final Collection<Location> recentLocations = DaylightApplicationServices
+      .preferences().getRecentLocations();
     recentLocationsMenu.removeAll();
     for (final Location recentLocation: recentLocations)
     {
@@ -435,9 +436,10 @@ public final class DaylightChartGui
       public void itemStateChanged(final ItemEvent e)
       {
         final boolean slimUi = e.getStateChange() == ItemEvent.SELECTED;
-        final Options options = UserPreferences.optionsFile().getData();
+        final Options options = DaylightApplicationServices.preferences()
+          .loadOptions();
         options.setSlimUi(slimUi);
-        UserPreferences.optionsFile().save(options);
+        DaylightApplicationServices.preferences().saveOptions(options);
         ResetAllAction.restart(DaylightChartGui.this, slimUi);
       }
     });

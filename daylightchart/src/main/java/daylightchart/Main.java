@@ -37,8 +37,8 @@ import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.theme.LightGray;
 
 import daylightchart.gui.DaylightChartGui;
+import daylightchart.service.DaylightApplicationServices;
 import daylightchart.options.Options;
-import daylightchart.options.UserPreferences;
 import sf.util.CommandLineParser;
 import sf.util.CommandLineParser.BooleanOption;
 import sf.util.CommandLineParser.Option;
@@ -98,7 +98,8 @@ public final class Main
 
     if (StringUtils.isNotBlank(preferencesDirectory))
     {
-      UserPreferences.initialize(Paths.get(preferencesDirectory));
+      DaylightApplicationServices.preferences()
+        .initialize(Paths.get(preferencesDirectory));
     }
 
     // Set UI look and feel
@@ -112,13 +113,14 @@ public final class Main
       LOGGER.log(Level.WARNING, "Cannot set look and feel");
     }
 
-    final Options options = UserPreferences.optionsFile().getData();
+    final Options options = DaylightApplicationServices.preferences()
+      .loadOptions();
     if (!slimUi)
     {
       slimUi = options.isSlimUi();
     }
     options.setSlimUi(slimUi);
-    UserPreferences.optionsFile().save(options);
+    DaylightApplicationServices.preferences().saveOptions(options);
     new DaylightChartGui(location, slimUi).setVisible(true);
 
   }

@@ -42,7 +42,8 @@ import daylightchart.gui.util.Actions;
 import daylightchart.gui.util.ExtensionFileFilter;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.gui.util.SelectedFile;
-import daylightchart.options.UserPreferences;
+import daylightchart.options.Options;
+import daylightchart.service.DaylightApplicationServices;
 
 /**
  * Saves locations into a file.
@@ -71,8 +72,10 @@ public final class SaveChartAction
     @Override
     public void actionPerformed(final ActionEvent actionevent)
     {
-      final DaylightChartReport daylightChartReport = new DaylightChartReport(mainWindow
-        .getSelectedLocation(), UserPreferences.optionsFile().getData());
+      final Options options = DaylightApplicationServices.preferences()
+        .loadOptions();
+      final DaylightChartReport daylightChartReport = DaylightApplicationServices
+        .reports().createReport(mainWindow.getSelectedLocation(), options);
       final List<ExtensionFileFilter<ChartFileType>> fileFilters = new ArrayList<ExtensionFileFilter<ChartFileType>>();
       for (final ChartFileType chartFileType: ChartFileType.values())
       {
@@ -81,8 +84,7 @@ public final class SaveChartAction
       final String reportFilename = daylightChartReport
         .getReportFileName(ChartFileType.png);
       final Path chartFile = Paths.get(
-                                       UserPreferences.optionsFile().getData()
-                                         .getWorkingDirectory().toString(),
+                                       options.getWorkingDirectory().toString(),
                                        reportFilename);
       final SelectedFile<ChartFileType> selectedFile = Actions
         .showSaveDialog(mainWindow,
