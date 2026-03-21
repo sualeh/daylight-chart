@@ -8,8 +8,8 @@
     <version>4.1.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>daylight-core</artifactId>
-  <name>Daylight Core</name>
+  <artifactId>daylight-options</artifactId>
+  <name>Daylight Chart Options</name>
   <dependencies>
     <dependency>
       <groupId>geoname</groupId>
