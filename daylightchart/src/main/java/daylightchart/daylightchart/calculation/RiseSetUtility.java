@@ -32,10 +32,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,8 +52,9 @@ import org.geoname.parser.LocationsListParser;
 
 import daylightchart.daylightchart.chart.TimeZoneOption;
 import daylightchart.options.Options;
-import us.fatehi.calculation.SunPositionAlgorithm;
-import us.fatehi.calculation.SunPositionAlgorithmFactory;
+import net.e175.klaus.solarpositioning.DeltaT;
+import net.e175.klaus.solarpositioning.SPA;
+import net.e175.klaus.solarpositioning.SunriseResult;
 
 /**
  * Calculator for sunrise and sunset times for a year.
@@ -63,9 +66,6 @@ public final class RiseSetUtility
 
   private static final Logger LOGGER = Logger
     .getLogger(RiseSetUtility.class.getName());
-
-  private static final SunPositionAlgorithm sunAlgorithm = SunPositionAlgorithmFactory
-    .getInstance();
 
   /**
    * Calculator for sunrise and sunset times for a year.
@@ -133,7 +133,7 @@ public final class RiseSetUtility
 
       final RawRiseSet riseSet = calculateRiseSet(location,
                                                   date,
-                                                  useDaylightTime,
+                                                  zoneId,
                                                   inDaylightSavings,
                                                   TwilightType.NO);
       riseSetYear.addRiseSet(riseSet);
@@ -142,7 +142,7 @@ public final class RiseSetUtility
       {
         final RawRiseSet twilights = calculateRiseSet(location,
                                                       date,
-                                                      useDaylightTime,
+                                                      zoneId,
                                                       inDaylightSavings,
                                                       twilight);
         riseSetYear.addTwilight(twilights);
@@ -379,45 +379,82 @@ public final class RiseSetUtility
   @SuppressWarnings("boxing")
   private static RawRiseSet calculateRiseSet(final Location location,
                                              final LocalDate date,
-                                             final boolean useDaylightTime,
+                                             final ZoneId zoneId,
                                              final boolean inDaylightSavings,
                                              final TwilightType twilight)
   {
-    if (location != null)
+    final ZonedDateTime dayStart = date.atStartOfDay(zoneId);
+    final double latitude;
+    final double longitude;
+    if (location == null)
     {
-      sunAlgorithm
-        .setLocation(location.getDescription(),
-                     location.getPointLocation().getLatitude().getDegrees(),
-                     location.getPointLocation().getLongitude().getDegrees());
-      sunAlgorithm.setTimeZoneOffset(DefaultTimezones
-        .getStandardTimeZoneOffsetHours(location.getTimeZoneId()));
+      latitude = 0D;
+      longitude = 0D;
     }
-    sunAlgorithm.setDate(date.getYear(),
-                         date.getMonthValue(),
-                         date.getDayOfMonth());
-    final double[] sunriseSunset = sunAlgorithm
-      .calcRiseSet(twilight.getHorizon());
-
-    if (useDaylightTime && inDaylightSavings)
+    else
     {
-      if (!Double.isInfinite(sunriseSunset[0]))
-      {
-        sunriseSunset[0] = sunriseSunset[0] + 1;
-      }
-      if (!Double.isInfinite(sunriseSunset[1]))
-      {
-        sunriseSunset[1] = sunriseSunset[1] + 1;
-      }
+      latitude = location.getPointLocation().getLatitude().getDegrees();
+      longitude = location.getPointLocation().getLongitude().getDegrees();
+    }
+    final SunriseResult sunriseResult = SPA
+      .calculateSunriseTransitSet(dayStart,
+                                  latitude,
+                                  longitude,
+                                  DeltaT.estimate(date),
+                                  toHorizon(twilight));
+
+    final boolean usesDaylightSavings = !zoneId.getRules()
+      .getTransitionRules().isEmpty();
+    if (sunriseResult instanceof SunriseResult.RegularDay)
+    {
+      final SunriseResult.RegularDay regularDay = (SunriseResult.RegularDay) sunriseResult;
+      return new RawRiseSet(location,
+                            date,
+                            usesDaylightSavings && inDaylightSavings,
+                            toHour(dayStart, regularDay.sunrise()),
+                            toHour(dayStart, regularDay.sunset()));
+    }
+    else if (sunriseResult instanceof SunriseResult.AllDay)
+    {
+      return new RawRiseSet(location,
+                            date,
+                            usesDaylightSavings && inDaylightSavings,
+                            Double.POSITIVE_INFINITY,
+                            Double.POSITIVE_INFINITY);
+    }
+    else
+    {
+      return new RawRiseSet(location,
+                            date,
+                            usesDaylightSavings && inDaylightSavings,
+                            Double.NEGATIVE_INFINITY,
+                            Double.NEGATIVE_INFINITY);
     }
 
-    final RawRiseSet riseSet = new RawRiseSet(location,
-                                              date,
-                                              useDaylightTime
-                                                    && inDaylightSavings,
-                                              sunriseSunset[0],
-                                              sunriseSunset[1]);
-    return riseSet;
+  }
 
+  private static SPA.Horizon toHorizon(final TwilightType twilight)
+  {
+    if (twilight == null || twilight == TwilightType.NO)
+    {
+      return SPA.Horizon.SUNRISE_SUNSET;
+    }
+    switch (twilight)
+    {
+      case ASTRONOMICAL:
+        return SPA.Horizon.ASTRONOMICAL_TWILIGHT;
+      case NAUTICAL:
+        return SPA.Horizon.NAUTICAL_TWILIGHT;
+      case CIVIL:
+      default:
+        return SPA.Horizon.CIVIL_TWILIGHT;
+    }
+  }
+
+  private static double toHour(final ZonedDateTime dayStart,
+                               final ZonedDateTime eventTime)
+  {
+    return Duration.between(dayStart, eventTime).getSeconds() / 3600D;
   }
 
   /**

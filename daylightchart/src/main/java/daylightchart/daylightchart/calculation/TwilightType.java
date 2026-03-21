@@ -58,9 +58,4 @@ public enum TwilightType
            + name().substring(1).toLowerCase() + " twilight";
   }
 
-  double getHorizon()
-  {
-    return horizon;
-  }
-
 }
