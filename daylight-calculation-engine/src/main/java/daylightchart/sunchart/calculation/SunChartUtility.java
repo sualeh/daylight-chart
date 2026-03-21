@@ -22,15 +22,11 @@
 package daylightchart.sunchart.calculation;
 
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,69 +86,12 @@ public final class SunChartUtility
                                                         90D
                                                             - solarPosition
                                                               .zenithAngle(),
-                                                        solarPosition.azimuth(),
-                                                        timeDependent
-                                                          .deltaDegrees(),
-                                                        Double.NaN,
-                                                        normalizeHourAngle(
-                                                                           timeDependent
-                                                                             .nuDegrees()
-                                                                           + longitude
-                                                                           - timeDependent
-                                                                             .alphaDegrees()),
-                                                        timeDependent
-                                                          .alphaDegrees());
+                                                        solarPosition.azimuth());
         sunPositions.add(sunPosition);
       }
       sunChartYear.add(sunPositions);
     }
     return sunChartYear;
-  }
-
-  /**
-   * Writes calculations to a writer.
-   *
-   * @param location
-   * @param writer
-   */
-  public static void writeCalculations(final Location location,
-                                       final Writer writer)
-  {
-    if (writer == null || location == null)
-    {
-      return;
-    }
-
-    final DecimalFormat format = new DecimalFormat("+000.000;-000.000");
-    format.setMaximumFractionDigits(3);
-
-    final int year = Year.now().getValue();
-    final SunChartYearData sunChartYear = createSunChartYear(location, year);
-
-    final PrintWriter printWriter = new PrintWriter(writer, true);
-    // Header
-    printWriter.printf("Location\t%s%nDate\t%s%n%n", location, year);
-    // Data rows
-    final List<SunPositions> sunPositionsList = sunChartYear
-      .getSunPositionsList();
-    for (final SunPositions sunPositions: sunPositionsList)
-    {
-      printWriter
-        .println("Date      \tTime\tAltitude\tAzimuth  \tHour Angle\tEqn of Time  \tDeclination");
-      for (final SunPosition sunPosition: sunPositions)
-      {
-        printWriter.printf("%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
-                           sunPosition.getDateTime().toLocalDate(),
-                           sunPosition.getDateTime().toLocalTime()
-                             .format(DateTimeFormatter.ofPattern("HH:mm")),
-                           format.format(sunPosition.getAltitude()),
-                           format.format(sunPosition.getAzimuth()),
-                           format.format(sunPosition.getHourAngle()),
-                           format.format(sunPosition.getEquationOfTime()),
-                           format.format(sunPosition.getDeclination()));
-      }
-      printWriter.println();
-    }
   }
 
   /**
@@ -214,20 +153,6 @@ public final class SunChartUtility
       return ZoneId.systemDefault();
     }
     return ZoneId.of(location.getTimeZoneId());
-  }
-
-  private static double normalizeHourAngle(final double hourAngle)
-  {
-    double normalized = hourAngle % 360D;
-    if (normalized > 180D)
-    {
-      normalized = normalized - 360D;
-    }
-    else if (normalized < -180D)
-    {
-      normalized = normalized + 360D;
-    }
-    return normalized;
   }
 
   private SunChartUtility()
