@@ -22,7 +22,7 @@
 package daylightchart.gui.util;
 
 import daylightchart.options.FileType;
-import daylightchart.service.DaylightApplicationServices;
+import daylightchart.service.UserPreferencesService;
 import java.awt.Component;
 import java.io.File;
 import java.nio.file.Files;
@@ -45,7 +45,7 @@ public class Actions {
    * @param workingDirectory Working directory
    */
   public static void setWorkingDirectory(final Path workingDirectory) {
-    DaylightApplicationServices.preferences().saveWorkingDirectory(workingDirectory);
+    UserPreferencesService.preferences().saveWorkingDirectory(workingDirectory);
   }
 
   /**

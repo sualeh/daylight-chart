@@ -26,7 +26,7 @@ import daylightchart.gui.Messages;
 import daylightchart.gui.OptionsDialog;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
-import daylightchart.service.DaylightApplicationServices;
+import daylightchart.service.UserPreferencesService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serial;
@@ -53,9 +53,9 @@ public final class OptionsAction extends GuiAction {
      */
     @Override
     public void actionPerformed(final ActionEvent actionevent) {
-      Options options = DaylightApplicationServices.preferences().loadOptions();
+      Options options = UserPreferencesService.preferences().loadOptions();
       options = OptionsDialog.showOptionsDialog(mainWindow, options);
-      DaylightApplicationServices.preferences().saveOptions(options);
+      UserPreferencesService.preferences().saveOptions(options);
       mainWindow.sortLocations();
     }
   }

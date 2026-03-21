@@ -27,7 +27,7 @@ import daylightchart.gui.util.Actions;
 import daylightchart.gui.util.ExtensionFileFilter;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.gui.util.SelectedFile;
-import daylightchart.service.DaylightApplicationServices;
+import daylightchart.service.UserPreferencesService;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,7 +74,7 @@ public final class OpenLocationsFileAction extends GuiAction {
           new ExtensionFileFilter<LocationFileType>(LocationFileType.gnis_state_file_zipped));
       final Path locationsFile =
           Path.of(
-              DaylightApplicationServices.preferences().getWorkingDirectory().toString(),
+              UserPreferencesService.preferences().getWorkingDirectory().toString(),
               "locations.data");
       final SelectedFile<LocationFileType> selectedFile =
           Actions.showOpenDialog(
@@ -90,7 +90,7 @@ public final class OpenLocationsFileAction extends GuiAction {
         boolean loadedLocations = false;
         try {
           final Collection<Location> locations =
-              DaylightApplicationServices.preferences().loadLocations(selectedFile);
+              UserPreferencesService.preferences().loadLocations(selectedFile);
           if (locations != null && !locations.isEmpty()) {
             loadedLocations = true;
             mainWindow.setLocations(locations);

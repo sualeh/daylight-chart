@@ -24,7 +24,7 @@ package daylightchart;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.theme.LightGray;
 import daylightchart.gui.DaylightChartGui;
-import daylightchart.service.DaylightApplicationServices;
+import daylightchart.service.UserPreferencesService;
 import java.util.Enumeration;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -52,7 +52,7 @@ public final class Main {
   public static void main(final String[] args) {
 
     configureLogLevel();
-    DaylightApplicationServices.preferences().initialize();
+    UserPreferencesService.preferences().initialize();
 
     // Set UI look and feel
     try {

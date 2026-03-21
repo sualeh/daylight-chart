@@ -40,7 +40,6 @@ import daylightchart.gui.actions.SaveLocationsFileAction;
 import daylightchart.gui.util.ExitAction;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
-import daylightchart.service.DaylightApplicationServices;
 import daylightchart.service.UserPreferencesService;
 import java.awt.BorderLayout;
 import java.io.Serial;
@@ -99,7 +98,7 @@ public final class DaylightChartGui extends JFrame implements LocationOperations
     // Open the first location
     Location firstTabLocation;
     final Collection<Location> recentLocations =
-        DaylightApplicationServices.preferences().getRecentLocations();
+        UserPreferencesService.preferences().getRecentLocations();
     if (recentLocations.size() > 0) {
       firstTabLocation = recentLocations.iterator().next();
     } else {
@@ -129,7 +128,7 @@ public final class DaylightChartGui extends JFrame implements LocationOperations
     if (location == null) {
       return;
     }
-    final UserPreferencesService preferencesService = DaylightApplicationServices.preferences();
+    final UserPreferencesService preferencesService = UserPreferencesService.preferences();
     final ChartOptions chartOptions = preferencesService.loadChartOptions();
     final Options options = preferencesService.loadOptions();
     final DaylightChartReport daylightChartReport =

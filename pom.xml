@@ -37,7 +37,6 @@
     <module>daylight-core</module>
     <module>daylight-preferences-persistence</module>
     <module>daylightchart-chart</module>
-    <module>daylight-application-service</module>
     <module>daylightchart</module>
   </modules>
   <properties>
