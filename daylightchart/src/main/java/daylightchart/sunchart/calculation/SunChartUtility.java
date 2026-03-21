@@ -33,7 +33,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.geoname.data.Location;
 
@@ -48,9 +47,6 @@ import net.e175.klaus.solarpositioning.SolarPosition;
  */
 public final class SunChartUtility
 {
-
-  private static final Logger LOGGER = Logger
-    .getLogger(SunChartUtility.class.getName());
 
   /**
    * Calculator for sunrise and sunset times for a year.
@@ -166,7 +162,7 @@ public final class SunChartUtility
    */
   private static List<LocalDate> getYearsDates(final int year)
   {
-    final List<LocalDate> dates = new ArrayList<LocalDate>();
+    final List<LocalDate> dates = new ArrayList<>();
     for (int month = 1; month <= 12; month++)
     {
       LocalDate date;

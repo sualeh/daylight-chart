@@ -31,31 +31,12 @@ public enum TwilightType
 {
 
  /** No twilight */
-  NO(-5D / 6D),
+  NO,
  /** Civil twilight */
-  CIVIL(-6D),
+  CIVIL,
  /** Nautical twilight */
-  NAUTICAL(-12D),
+  NAUTICAL,
  /** Astronomical twilight */
-  ASTRONOMICAL(-18D);
-
-  private final double horizon;
-
-  private TwilightType(final double horizon)
-  {
-    this.horizon = horizon;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Enum#toString()
-   */
-  @Override
-  public String toString()
-  {
-    return name().substring(0, 1).toUpperCase()
-           + name().substring(1).toLowerCase() + " twilight";
-  }
+  ASTRONOMICAL;
 
 }
