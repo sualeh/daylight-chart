@@ -26,17 +26,16 @@ import com.jgoodies.looks.plastic.theme.LightGray;
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.service.DaylightApplicationServices;
 import java.nio.file.Path;
+import java.util.Enumeration;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import org.apache.commons.lang3.StringUtils;
 import org.geoname.data.Location;
 import org.geoname.parser.LocationsListParser;
 import org.geoname.parser.ParserException;
-import sf.util.CommandLineParser;
-import sf.util.CommandLineParser.Option;
-import sf.util.CommandLineParser.StringOption;
-import sf.util.CommandLineUtility;
 
 /**
  * Main window.
@@ -47,6 +46,7 @@ public final class Main {
 
   private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
+  private static final String ENV_LOG_LEVEL = "DAYLIGHTCHART_LOG_LEVEL";
   private static final String OPTION_PREFERENCES = "prefs";
   private static final String OPTION_LOCATION = "location";
 
@@ -57,15 +57,10 @@ public final class Main {
    */
   public static void main(final String[] args) {
 
-    CommandLineUtility.setLogLevel(args);
+    configureLogLevel();
 
-    // Parse command line
-    final CommandLineParser parser = new CommandLineParser();
-    parser.addOption(new StringOption(Option.NO_SHORT_FORM, OPTION_PREFERENCES, null));
-    parser.addOption(new StringOption(Option.NO_SHORT_FORM, OPTION_LOCATION, null));
-    parser.parse(args);
-    final String preferencesDirectory = parser.getStringOptionValue(OPTION_PREFERENCES);
-    final String locationString = parser.getStringOptionValue(OPTION_LOCATION);
+    final String preferencesDirectory = getOptionValue(args, OPTION_PREFERENCES);
+    final String locationString = getOptionValue(args, OPTION_LOCATION);
     Location location = null;
     if (locationString != null) {
       try {
@@ -88,6 +83,59 @@ public final class Main {
     }
 
     new DaylightChartGui(location).setVisible(true);
+  }
+
+  private static void configureLogLevel() {
+    final String logLevelString = System.getenv(ENV_LOG_LEVEL);
+    if (StringUtils.isBlank(logLevelString)) {
+      return;
+    }
+
+    try {
+      setApplicationLogLevel(Level.parse(logLevelString.trim().toUpperCase()));
+    } catch (final IllegalArgumentException e) {
+      LOGGER.log(Level.WARNING,
+                 "Ignoring invalid log level in " + ENV_LOG_LEVEL + ": " + logLevelString);
+    }
+  }
+
+  private static String getOptionValue(final String[] args, final String optionName) {
+    final String singleDashOption = "-" + optionName;
+    final String doubleDashOption = "--" + optionName;
+    for (int i = 0; i < args.length; i++) {
+      final String arg = args[i];
+      if (arg.startsWith(singleDashOption + "=")) {
+        return arg.substring(singleDashOption.length() + 1);
+      }
+      if (arg.startsWith(doubleDashOption + "=")) {
+        return arg.substring(doubleDashOption.length() + 1);
+      }
+      if (arg.equals(singleDashOption) || arg.equals(doubleDashOption)) {
+        if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
+          return args[i + 1];
+        }
+        return null;
+      }
+    }
+    return null;
+  }
+
+  private static void setApplicationLogLevel(final Level logLevel) {
+    final LogManager logManager = LogManager.getLogManager();
+    for (final Enumeration<String> loggerNames = logManager.getLoggerNames();
+         loggerNames.hasMoreElements();) {
+      final String loggerName = loggerNames.nextElement();
+      final Logger logger = logManager.getLogger(loggerName);
+      if (logger == null) {
+        continue;
+      }
+      logger.setLevel(null);
+      for (final Handler handler: logger.getHandlers()) {
+        handler.setLevel(logLevel);
+      }
+    }
+
+    Logger.getLogger("").setLevel(logLevel);
   }
 
   private Main() {

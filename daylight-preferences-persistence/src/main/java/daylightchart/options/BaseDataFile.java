@@ -33,7 +33,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sf.util.FileUtils;
 
 /**
  * Represents a data file, with data.
@@ -85,7 +84,7 @@ abstract class BaseDataFile<T extends FileType, D> extends BaseTypedFile<T> {
   BaseDataFile(final Path settingsDirectory, final String resource, final T fileType) {
     this(Path.of(settingsDirectory.toString(), resource), fileType);
     // Validation
-    if (!FileUtils.isDirectoryValid(settingsDirectory)) {
+    if (settingsDirectory == null || !Files.isDirectory(settingsDirectory)) {
       throw new IllegalArgumentException("Settings directory is not a directory");
     }
     // Load
