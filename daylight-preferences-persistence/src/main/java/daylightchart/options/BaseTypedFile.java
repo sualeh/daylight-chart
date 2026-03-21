@@ -26,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sf.util.FileUtils;
 
 /**
  * Selected file.
@@ -73,7 +72,7 @@ public abstract class BaseTypedFile<T extends FileType> {
     if (!hasFile()) {
       return false;
     } else {
-      return FileUtils.isFileReadable(file);
+      return Files.isRegularFile(file) && Files.isReadable(file);
     }
   }
 
