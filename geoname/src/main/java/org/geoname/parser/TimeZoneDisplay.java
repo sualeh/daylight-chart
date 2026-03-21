@@ -21,35 +21,27 @@
  */
 package org.geoname.parser;
 
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.Locale;
-
 import org.apache.commons.lang3.StringUtils;
 
-public final class TimeZoneDisplay
-  implements Serializable, Comparable<TimeZoneDisplay>
-{
+public final class TimeZoneDisplay implements Serializable, Comparable<TimeZoneDisplay> {
 
-  @Serial
-  private static final long serialVersionUID = 3841508979907339562L;
+  @Serial private static final long serialVersionUID = 3841508979907339562L;
 
   private final String timeZoneId;
   private final String timeZoneDisplayName;
   private final String description;
 
-  public TimeZoneDisplay(final ZoneId zoneId)
-  {
-    if (zoneId == null)
-    {
+  public TimeZoneDisplay(final ZoneId zoneId) {
+    if (zoneId == null) {
       throw new IllegalArgumentException("Cannot use null time zone");
     }
     timeZoneId = zoneId.getId();
-    timeZoneDisplayName = zoneId.getDisplayName(TextStyle.FULL,
-                                                Locale.getDefault());
+    timeZoneDisplayName = zoneId.getDisplayName(TextStyle.FULL, Locale.getDefault());
     description = createDescription();
   }
 
@@ -59,15 +51,12 @@ public final class TimeZoneDisplay
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
   @Override
-  public int compareTo(final TimeZoneDisplay other)
-  {
+  public int compareTo(final TimeZoneDisplay other) {
     int compareTo = 0;
-    if (compareTo == 0)
-    {
+    if (compareTo == 0) {
       compareTo = timeZoneDisplayName.compareTo(other.timeZoneDisplayName);
     }
-    if (compareTo == 0)
-    {
+    if (compareTo == 0) {
       compareTo = timeZoneId.compareTo(other.timeZoneId);
     }
     return compareTo;
@@ -79,41 +68,29 @@ public final class TimeZoneDisplay
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(final Object obj)
-  {
-    if (this == obj)
-    {
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (obj == null)
-    {
+    if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass())
-    {
+    if (getClass() != obj.getClass()) {
       return false;
     }
     final TimeZoneDisplay other = (TimeZoneDisplay) obj;
-    if (timeZoneDisplayName == null)
-    {
-      if (other.timeZoneDisplayName != null)
-      {
+    if (timeZoneDisplayName == null) {
+      if (other.timeZoneDisplayName != null) {
         return false;
       }
-    }
-    else if (!timeZoneDisplayName.equals(other.timeZoneDisplayName))
-    {
+    } else if (!timeZoneDisplayName.equals(other.timeZoneDisplayName)) {
       return false;
     }
-    if (timeZoneId == null)
-    {
-      if (other.timeZoneId != null)
-      {
+    if (timeZoneId == null) {
+      if (other.timeZoneId != null) {
         return false;
       }
-    }
-    else if (!timeZoneId.equals(other.timeZoneId))
-    {
+    } else if (!timeZoneId.equals(other.timeZoneId)) {
       return false;
     }
     return true;
@@ -124,8 +101,7 @@ public final class TimeZoneDisplay
    *
    * @return Time zone display name
    */
-  public String getTimeZoneDisplayName()
-  {
+  public String getTimeZoneDisplayName() {
     return timeZoneDisplayName;
   }
 
@@ -134,8 +110,7 @@ public final class TimeZoneDisplay
    *
    * @return Time zone id
    */
-  public String getTimeZoneId()
-  {
+  public String getTimeZoneId() {
     return timeZoneId;
   }
 
@@ -145,13 +120,11 @@ public final class TimeZoneDisplay
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result
-             + (timeZoneDisplayName == null? 0: timeZoneDisplayName.hashCode());
-    result = prime * result + (timeZoneId == null? 0: timeZoneId.hashCode());
+    result = prime * result + (timeZoneDisplayName == null ? 0 : timeZoneDisplayName.hashCode());
+    result = prime * result + (timeZoneId == null ? 0 : timeZoneId.hashCode());
     return result;
   }
 
@@ -161,16 +134,13 @@ public final class TimeZoneDisplay
    * @see java.lang.Object#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
 
-  private String createDescription()
-  {
+  private String createDescription() {
     String string = timeZoneDisplayName;
-    if (string.contains("("))
-    {
+    if (string.contains("(")) {
       string = string.substring(0, string.indexOf('('));
       string = string.trim();
     }
@@ -178,5 +148,4 @@ public final class TimeZoneDisplay
     string = StringUtils.abbreviate(string, 50);
     return string;
   }
-
 }

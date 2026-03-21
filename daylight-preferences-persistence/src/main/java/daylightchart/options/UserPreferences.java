@@ -21,13 +21,11 @@
  */
 package daylightchart.options;
 
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import sf.util.FileUtils;
 
 /**
@@ -35,11 +33,9 @@ import sf.util.FileUtils;
  *
  * @author Sualeh Fatehi
  */
-public final class UserPreferences
-{
+public final class UserPreferences {
 
-  private static final Logger LOGGER = Logger
-    .getLogger(UserPreferences.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(UserPreferences.class.getName());
 
   private static final Path scratchDirectory;
 
@@ -47,19 +43,15 @@ public final class UserPreferences
   private static RecentLocationsDataFile recentLocationsFile;
   private static OptionsDataFile optionsFile;
 
-  static
-  {
+  static {
     scratchDirectory = Path.of(System.getProperty("java.io.tmpdir"), ".");
     validateDirectory(scratchDirectory);
 
     initialize((Path) null);
   }
 
-  /**
-   * Clears all user preferences.
-   */
-  public static void clear()
-  {
+  /** Clears all user preferences. */
+  public static void clear() {
     optionsFile.delete();
     locationsFile.delete();
     recentLocationsFile.delete();
@@ -72,41 +64,29 @@ public final class UserPreferences
    *
    * @return Gets the scratch directory
    */
-  public static Path getScratchDirectory()
-  {
+  public static Path getScratchDirectory() {
     return scratchDirectory;
   }
 
   /**
    * Set the location of the settings directory.
    *
-   * @param settingsDir
-   *        Location of the settings directory
+   * @param settingsDir Location of the settings directory
    */
-  public static void initialize(final Path settingsDir)
-  {
+  public static void initialize(final Path settingsDir) {
     final Path settingsDirectory;
-    if (settingsDir == null)
-    {
-      settingsDirectory = Path.of(System.getProperty("user.home", "."),
-                                    ".daylightchart");
-    }
-    else
-    {
+    if (settingsDir == null) {
+      settingsDirectory = Path.of(System.getProperty("user.home", "."), ".daylightchart");
+    } else {
       settingsDirectory = settingsDir;
     }
 
-    try
-    {
+    try {
       Files.createDirectories(settingsDirectory);
       validateDirectory(settingsDirectory);
       LOGGER.fine("Created settings directory " + settingsDirectory);
-    }
-    catch (final IOException e)
-    {
-      LOGGER.log(Level.SEVERE,
-                 "Cannot create settings directory " + settingsDirectory,
-                 e);
+    } catch (final IOException e) {
+      LOGGER.log(Level.SEVERE, "Cannot create settings directory " + settingsDirectory, e);
     }
 
     optionsFile = new OptionsDataFile(settingsDirectory);
@@ -119,22 +99,17 @@ public final class UserPreferences
    *
    * @return Locations file.
    */
-  public static LocationsDataFile locationsFile()
-  {
+  public static LocationsDataFile locationsFile() {
     return locationsFile;
   }
 
   /**
    * Main method. Lists all user preferences.
    *
-   * @param args
-   *        Command line arguments
-   * @throws Exception
-   *         On an exception
+   * @param args Command line arguments
+   * @throws Exception On an exception
    */
-  public static void main(final String[] args)
-    throws Exception
-  {
+  public static void main(final String[] args) throws Exception {
     UserPreferences.clear();
   }
 
@@ -143,8 +118,7 @@ public final class UserPreferences
    *
    * @return Options file.
    */
-  public static OptionsDataFile optionsFile()
-  {
+  public static OptionsDataFile optionsFile() {
     return optionsFile;
   }
 
@@ -153,25 +127,19 @@ public final class UserPreferences
    *
    * @return Recent locations file.
    */
-  public static RecentLocationsDataFile recentLocationsFile()
-  {
+  public static RecentLocationsDataFile recentLocationsFile() {
     return recentLocationsFile;
   }
 
-  private static void validateDirectory(final Path directory)
-  {
-    final boolean isDirectoryValid = FileUtils.isDirectoryValid(directory)
-                                     && Files.isWritable(directory);
-    if (!isDirectoryValid)
-    {
-      throw new IllegalArgumentException("Directory is not writable - "
-                                         + directory);
+  private static void validateDirectory(final Path directory) {
+    final boolean isDirectoryValid =
+        FileUtils.isDirectoryValid(directory) && Files.isWritable(directory);
+    if (!isDirectoryValid) {
+      throw new IllegalArgumentException("Directory is not writable - " + directory);
     }
   }
 
-  private UserPreferences()
-  {
+  private UserPreferences() {
     // Prevent external instantiation
   }
-
 }

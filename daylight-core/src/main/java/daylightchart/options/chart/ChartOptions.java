@@ -21,14 +21,11 @@
  */
 package daylightchart.options.chart;
 
-
-import java.awt.Paint;
-import java.io.Serial;
-
-import org.jfree.chart.JFreeChart;
-
 import daylightchart.options.chart.serialization.ChartOptionSerializers.PaintDeserializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.PaintSerializer;
+import java.awt.Paint;
+import java.io.Serial;
+import org.jfree.chart.JFreeChart;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 
@@ -37,26 +34,22 @@ import tools.jackson.databind.annotation.JsonSerialize;
  *
  * @author sfatehi
  */
-public class ChartOptions
-  extends BaseChartOptions
-{
+public class ChartOptions extends BaseChartOptions {
 
-  @Serial
-  private static final long serialVersionUID = -7527051325325384357L;
+  @Serial private static final long serialVersionUID = -7527051325325384357L;
 
   private boolean antiAlias;
+
   @JsonSerialize(using = PaintSerializer.class)
   @JsonDeserialize(using = PaintDeserializer.class)
   private Paint backgroundPaint;
+
   //
   private final PlotOptions plotOptions;
   private final TitleOptions titleOptions;
 
-  /**
-   * Constructor.
-   */
-  public ChartOptions()
-  {
+  /** Constructor. */
+  public ChartOptions() {
     plotOptions = new PlotOptions();
     titleOptions = new TitleOptions();
   }
@@ -67,8 +60,7 @@ public class ChartOptions
    * @see BaseChartOptions#copyFromChart(org.jfree.chart.JFreeChart)
    */
   @Override
-  public void copyFromChart(final JFreeChart chart)
-  {
+  public void copyFromChart(final JFreeChart chart) {
     antiAlias = chart.getAntiAlias();
     backgroundPaint = chart.getBackgroundPaint();
     //
@@ -79,50 +71,42 @@ public class ChartOptions
   /**
    * @return the backgroundPaint
    */
-  public final Paint getBackgroundPaint()
-  {
+  public final Paint getBackgroundPaint() {
     return backgroundPaint;
   }
 
   /**
    * @return the plotOptions
    */
-  public final PlotOptions getPlotOptions()
-  {
+  public final PlotOptions getPlotOptions() {
     return plotOptions;
   }
 
   /**
    * @return the titleOptions
    */
-  public final TitleOptions getTitleOptions()
-  {
+  public final TitleOptions getTitleOptions() {
     return titleOptions;
   }
 
   /**
    * @return the antiAlias
    */
-  public final boolean isAntiAlias()
-  {
+  public final boolean isAntiAlias() {
     return antiAlias;
   }
 
   /**
-   * @param antiAlias
-   *        the antiAlias to set
+   * @param antiAlias the antiAlias to set
    */
-  public final void setAntiAlias(final boolean antiAlias)
-  {
+  public final void setAntiAlias(final boolean antiAlias) {
     this.antiAlias = antiAlias;
   }
 
   /**
-   * @param backgroundPaint
-   *        the backgroundPaint to set
+   * @param backgroundPaint the backgroundPaint to set
    */
-  public final void setBackgroundPaint(final Paint backgroundPaint)
-  {
+  public final void setBackgroundPaint(final Paint backgroundPaint) {
     this.backgroundPaint = backgroundPaint;
   }
 
@@ -132,10 +116,8 @@ public class ChartOptions
    * @see BaseChartOptions#updateChart(org.jfree.chart.JFreeChart)
    */
   @Override
-  public void updateChart(final JFreeChart chart)
-  {
-    if (chart instanceof ChartOptionsListener listener)
-    {
+  public void updateChart(final JFreeChart chart) {
+    if (chart instanceof ChartOptionsListener listener) {
       listener.beforeSettingChartOptions(this);
     }
     //
@@ -145,10 +127,8 @@ public class ChartOptions
     plotOptions.updateChart(chart);
     titleOptions.updateChart(chart);
     //
-    if (chart instanceof ChartOptionsListener listener)
-    {
+    if (chart instanceof ChartOptionsListener listener) {
       listener.afterSettingChartOptions(this);
     }
   }
-
 }

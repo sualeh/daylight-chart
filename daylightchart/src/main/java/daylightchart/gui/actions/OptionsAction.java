@@ -21,36 +21,28 @@
  */
 package daylightchart.gui.actions;
 
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.Serial;
-
-import javax.swing.KeyStroke;
-
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.gui.Messages;
 import daylightchart.gui.OptionsDialog;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
 import daylightchart.service.DaylightApplicationServices;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+import javax.swing.KeyStroke;
 
 /**
  * Shows options.
  *
  * @author sfatehi
  */
-public final class OptionsAction
-  extends GuiAction
-{
+public final class OptionsAction extends GuiAction {
 
-  private static final class GuiActionListener
-    implements ActionListener
-  {
+  private static final class GuiActionListener implements ActionListener {
     private final DaylightChartGui mainWindow;
 
-    private GuiActionListener(final DaylightChartGui mainWindow)
-    {
+    private GuiActionListener(final DaylightChartGui mainWindow) {
       this.mainWindow = mainWindow;
     }
 
@@ -60,8 +52,7 @@ public final class OptionsAction
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
-    public void actionPerformed(final ActionEvent actionevent)
-    {
+    public void actionPerformed(final ActionEvent actionevent) {
       Options options = DaylightApplicationServices.preferences().loadOptions();
       options = OptionsDialog.showOptionsDialog(mainWindow, options);
       DaylightApplicationServices.preferences().saveOptions(options);
@@ -69,22 +60,19 @@ public final class OptionsAction
     }
   }
 
-  @Serial
-  private static final long serialVersionUID = 4002590686393404496L;
+  @Serial private static final long serialVersionUID = 4002590686393404496L;
 
   /**
    * Shows Help-About.
    *
-   * @param mainWindow
-   *        Main window.
+   * @param mainWindow Main window.
    */
-  public OptionsAction(final DaylightChartGui mainWindow)
-  {
-    super(Messages.getString("DaylightChartGui.Menu.Options.Options"), //$NON-NLS-1$
-          "/icons/options.gif" //$NON-NLS-1$
-    );
+  public OptionsAction(final DaylightChartGui mainWindow) {
+    super(
+        Messages.getString("DaylightChartGui.Menu.Options.Options"), // $NON-NLS-1$
+        "/icons/options.gif" //$NON-NLS-1$
+        );
     setShortcutKey(KeyStroke.getKeyStroke("control alt O"));
     addActionListener(new GuiActionListener(mainWindow));
   }
-
 }

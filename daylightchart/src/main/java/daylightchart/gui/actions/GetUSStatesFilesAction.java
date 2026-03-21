@@ -21,23 +21,17 @@
  */
 package daylightchart.gui.actions;
 
-
+import daylightchart.gui.Messages;
 import java.io.Serial;
 
-import daylightchart.gui.Messages;
+public final class GetUSStatesFilesAction extends BaseBrowserAction {
 
-public final class GetUSStatesFilesAction
-  extends BaseBrowserAction
-{
+  @Serial private static final long serialVersionUID = 4002590686393404496L;
 
-  @Serial
-  private static final long serialVersionUID = 4002590686393404496L;
-
-  public GetUSStatesFilesAction()
-  {
-    super(Messages.getString("DaylightChartGui.Menu.Actions.GetUSStatesFiles"), //$NON-NLS-1$
-          "http://geonames.usgs.gov/domestic/download_data.htm" //$NON-NLS-1$
-    );
+  public GetUSStatesFilesAction() {
+    super(
+        Messages.getString("DaylightChartGui.Menu.Actions.GetUSStatesFiles"), // $NON-NLS-1$
+        "http://geonames.usgs.gov/domestic/download_data.htm" //$NON-NLS-1$
+        );
   }
-
 }

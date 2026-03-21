@@ -21,14 +21,12 @@
  */
 package daylightchart.options;
 
-
 /**
  * Defines a type of file, with a given file extension.
  *
  * @author sfatehi
  */
-public interface FileType
-{
+public interface FileType {
 
   /**
    * The description of the file type.
@@ -43,5 +41,4 @@ public interface FileType
    * @return File extension
    */
   String getFileExtension();
-
 }

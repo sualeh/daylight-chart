@@ -21,23 +21,17 @@
  */
 package daylightchart.gui.actions;
 
-
+import daylightchart.gui.Messages;
 import java.io.Serial;
 
-import daylightchart.gui.Messages;
+public final class GetCountriesFilesAction extends BaseBrowserAction {
 
-public final class GetCountriesFilesAction
-  extends BaseBrowserAction
-{
+  @Serial private static final long serialVersionUID = 4002590686393404496L;
 
-  @Serial
-  private static final long serialVersionUID = 4002590686393404496L;
-
-  public GetCountriesFilesAction()
-  {
-    super(Messages.getString("DaylightChartGui.Menu.Actions.GetCountriesFiles"), //$NON-NLS-1$
-          "http://geonames.nga.mil/gns/html/namefiles.html" //$NON-NLS-1$
-    );
+  public GetCountriesFilesAction() {
+    super(
+        Messages.getString("DaylightChartGui.Menu.Actions.GetCountriesFiles"), // $NON-NLS-1$
+        "http://geonames.nga.mil/gns/html/namefiles.html" //$NON-NLS-1$
+        );
   }
-
 }

@@ -21,29 +21,24 @@
  */
 package daylightchart.options.chart;
 
-
 /**
  * Allows a chart to act on chart options being set.
  *
  * @author sfatehi
  */
-public interface ChartOptionsListener
-{
+public interface ChartOptionsListener {
 
   /**
    * Called after setting chart options.
    *
-   * @param chartOptions
-   *        Chart options
+   * @param chartOptions Chart options
    */
   void afterSettingChartOptions(ChartOptions chartOptions);
 
   /**
    * Called before setting chart options.
    *
-   * @param chartOptions
-   *        Chart options
+   * @param chartOptions Chart options
    */
   void beforeSettingChartOptions(ChartOptions chartOptions);
-
 }

@@ -21,7 +21,6 @@
  */
 package daylightchart.daylightchart.layout;
 
-
 import daylightchart.options.FileType;
 
 /**
@@ -29,19 +28,16 @@ import daylightchart.options.FileType;
  *
  * @author Sualeh Fatehi
  */
-public enum ChartFileType
-    implements FileType
-{
- /** Portable Network Graphics */
+public enum ChartFileType implements FileType {
+  /** Portable Network Graphics */
   png("Portable Network Graphics", ".png"),
- /** JPEG */
+  /** JPEG */
   jpg("JPEG", ".jpg");
 
   private final String description;
   private final String fileExtension;
 
-  private ChartFileType(final String description, final String fileExtension)
-  {
+  private ChartFileType(final String description, final String fileExtension) {
     this.description = description;
     this.fileExtension = fileExtension;
   }
@@ -52,8 +48,7 @@ public enum ChartFileType
    * @see daylightchart.options.FileType#getDescription()
    */
   @Override
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
   }
 
@@ -63,8 +58,7 @@ public enum ChartFileType
    * @see daylightchart.options.FileType#getFileExtension()
    */
   @Override
-  public String getFileExtension()
-  {
+  public String getFileExtension() {
     return fileExtension;
   }
 
@@ -74,9 +68,7 @@ public enum ChartFileType
    * @see java.lang.Enum#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return description + " (*" + fileExtension + ")";
   }
-
 }

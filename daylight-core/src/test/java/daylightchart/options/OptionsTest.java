@@ -1,26 +1,21 @@
 package daylightchart.options;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import org.geoname.data.LocationsSortOrder;
-import org.junit.jupiter.api.Test;
-
 import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.daylightchart.chart.ChartOrientation;
 import daylightchart.daylightchart.chart.TimeZoneOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.geoname.data.LocationsSortOrder;
+import org.junit.jupiter.api.Test;
 
-class OptionsTest
-{
+class OptionsTest {
 
   @Test
-  void shouldProvideStableDefaultOptions()
-  {
+  void shouldProvideStableDefaultOptions() {
     final Options options = new Options();
 
     assertThat(options.getChartOptions(), is(notNullValue()));
@@ -32,9 +27,7 @@ class OptionsTest
   }
 
   @Test
-  void shouldOnlyAcceptExistingWorkingDirectories()
-    throws Exception
-  {
+  void shouldOnlyAcceptExistingWorkingDirectories() throws Exception {
     final Options options = new Options();
     final Path workingDirectory = Files.createTempDirectory("daylight-core-options");
 
@@ -44,5 +37,4 @@ class OptionsTest
     options.setWorkingDirectory(workingDirectory.resolve("missing"));
     assertThat(options.getWorkingDirectory(), is(workingDirectory));
   }
-
 }

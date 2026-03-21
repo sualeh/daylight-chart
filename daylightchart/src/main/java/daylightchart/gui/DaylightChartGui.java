@@ -21,24 +21,7 @@
  */
 package daylightchart.gui;
 
-
-import java.awt.BorderLayout;
-import java.io.Serial;
-import java.util.Collection;
-import java.util.List;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
-
-import org.geoname.data.Location;
-import org.jfree.chart.ChartPanel;
-
 import daylightchart.daylightchart.chart.ChartConfiguration;
-import daylightchart.daylightchart.layout.ChartFileType;
 import daylightchart.daylightchart.layout.DaylightChartReport;
 import daylightchart.gui.actions.AboutAction;
 import daylightchart.gui.actions.ChartOptionsAction;
@@ -57,55 +40,56 @@ import daylightchart.gui.actions.SaveLocationsFileAction;
 import daylightchart.gui.util.ExitAction;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.service.DaylightApplicationServices;
+import java.awt.BorderLayout;
+import java.io.Serial;
+import java.util.Collection;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
+import org.geoname.data.Location;
+import org.jfree.chart.ChartPanel;
 
 /**
  * Provides an GUI for daylight charts.
  *
  * @author Sualeh Fatehi
  */
-public final class DaylightChartGui
-  extends JFrame
-  implements LocationOperations
-{
+public final class DaylightChartGui extends JFrame implements LocationOperations {
 
-  @Serial
-  private final static long serialVersionUID = 3760840181833283637L;
+  @Serial private static final long serialVersionUID = 3760840181833283637L;
 
   private final LocationsList locationsList;
   private JMenu recentLocationsMenu;
   private final LocationsTabbedPane locationsTabbedPane;
 
-  /**
-   * Creates a new instance of a Daylight Chart main window.
-   */
-  public DaylightChartGui()
-  {
+  /** Creates a new instance of a Daylight Chart main window. */
+  public DaylightChartGui() {
     this(null);
   }
 
   /**
    * Creates a new instance of a Daylight Chart main window.
    *
-   * @param location
-   *        Location for a single chart window, or null for the full UI
+   * @param location Location for a single chart window, or null for the full UI
    */
-  public DaylightChartGui(final Location location)
-  {
-    setIconImage(new ImageIcon(DaylightChartGui.class
-      .getResource("/daylightchart.png")) //$NON-NLS-1$
-        .getImage());
+  public DaylightChartGui(final Location location) {
+    setIconImage(
+        new ImageIcon(DaylightChartGui.class.getResource("/daylightchart.png")) // $NON-NLS-1$
+            .getImage());
 
-    setTitle("Daylight Chart"); //$NON-NLS-1$
+    setTitle("Daylight Chart"); // $NON-NLS-1$
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    if (location == null)
-    {
+    if (location == null) {
       // Create basic UI
       locationsTabbedPane = new LocationsTabbedPane();
       locationsList = new LocationsList(this);
-      final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                                                  locationsList,
-                                                  locationsTabbedPane);
+      final JSplitPane splitPane =
+          new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, locationsList, locationsTabbedPane);
       splitPane.setOneTouchExpandable(true);
       getContentPane().add(splitPane);
 
@@ -123,28 +107,21 @@ public final class DaylightChartGui
 
       // Open the first location
       Location firstTabLocation;
-      final Collection<Location> recentLocations = DaylightApplicationServices
-        .preferences().getRecentLocations();
-      if (recentLocations.size() > 0)
-      {
+      final Collection<Location> recentLocations =
+          DaylightApplicationServices.preferences().getRecentLocations();
+      if (recentLocations.size() > 0) {
         firstTabLocation = recentLocations.iterator().next();
-      }
-      else
-      {
+      } else {
         firstTabLocation = locationsList.getSelectedLocation();
       }
       addLocationTab(firstTabLocation);
-    }
-    else
-    {
+    } else {
       locationsTabbedPane = null;
       locationsList = null;
-      final DaylightChartReport daylightChartReport = DaylightApplicationServices
-        .reports()
-        .createReport(location,
-                      DaylightApplicationServices.preferences().loadOptions());
-      final ChartPanel chartPanel = new ChartPanel(daylightChartReport
-        .getChart());
+      final DaylightChartReport daylightChartReport =
+          DaylightApplicationServices.reports()
+              .createReport(location, DaylightApplicationServices.preferences().loadOptions());
+      final ChartPanel chartPanel = new ChartPanel(daylightChartReport.getChart());
       chartPanel.setPreferredSize(ChartConfiguration.chartDimension);
       setContentPane(chartPanel);
     }
@@ -158,40 +135,32 @@ public final class DaylightChartGui
    * @see daylightchart.gui.LocationOperations#addLocation(org.geoname.data.Location)
    */
   @Override
-  public void addLocation(final Location location)
-  {
+  public void addLocation(final Location location) {
     locationsList.addLocation(location);
   }
 
   /**
    * Add a new location tab.
    *
-   * @param location
-   *        Location
+   * @param location Location
    */
-  public void addLocationTab(final Location location)
-  {
-    if (location == null)
-    {
+  public void addLocationTab(final Location location) {
+    if (location == null) {
       return;
     }
-    final DaylightChartReport daylightChartReport = DaylightApplicationServices
-      .reports()
-      .createReport(location,
-                    DaylightApplicationServices.preferences().loadOptions());
+    final DaylightChartReport daylightChartReport =
+        DaylightApplicationServices.reports()
+            .createReport(location, DaylightApplicationServices.preferences().loadOptions());
     locationsTabbedPane.addLocationTab(daylightChartReport);
 
     // Add to recent locations
     DaylightApplicationServices.preferences().addRecentLocation(location);
-    final Collection<Location> recentLocations = DaylightApplicationServices
-      .preferences().getRecentLocations();
+    final Collection<Location> recentLocations =
+        DaylightApplicationServices.preferences().getRecentLocations();
     recentLocationsMenu.removeAll();
-    for (final Location recentLocation: recentLocations)
-    {
-      recentLocationsMenu
-        .add(new OpenLocationTabAction(this,
-                                       recentLocation,
-                                       recentLocationsMenu.getItemCount()));
+    for (final Location recentLocation : recentLocations) {
+      recentLocationsMenu.add(
+          new OpenLocationTabAction(this, recentLocation, recentLocationsMenu.getItemCount()));
     }
   }
 
@@ -201,8 +170,7 @@ public final class DaylightChartGui
    * @see daylightchart.gui.LocationOperations#getLocations()
    */
   @Override
-  public List<Location> getLocations()
-  {
+  public List<Location> getLocations() {
     return locationsList.getLocations();
   }
 
@@ -212,8 +180,7 @@ public final class DaylightChartGui
    * @return Currently selected location.
    */
   @Override
-  public Location getSelectedLocation()
-  {
+  public Location getSelectedLocation() {
     return locationsList.getSelectedLocation();
   }
 
@@ -223,8 +190,7 @@ public final class DaylightChartGui
    * @see daylightchart.gui.LocationOperations#removeLocation(org.geoname.data.Location)
    */
   @Override
-  public void removeLocation(final Location location)
-  {
+  public void removeLocation(final Location location) {
     locationsList.removeLocation(location);
   }
 
@@ -232,50 +198,39 @@ public final class DaylightChartGui
    * {@inheritDoc}
    *
    * @see daylightchart.gui.LocationOperations#replaceLocation(org.geoname.data.Location,
-   *      org.geoname.data.Location)
+   *     org.geoname.data.Location)
    */
   @Override
-  public void replaceLocation(final Location selectedLocation,
-                              final Location editedLocation)
-  {
+  public void replaceLocation(final Location selectedLocation, final Location editedLocation) {
     locationsList.replaceLocation(selectedLocation, editedLocation);
   }
 
   /**
    * Sets the locations list on the GUI.
    *
-   * @param locations
-   *        Locations
+   * @param locations Locations
    */
   @Override
-  public void setLocations(final Collection<Location> locations)
-  {
-    if (locations != null && locations.size() > 0)
-    {
+  public void setLocations(final Collection<Location> locations) {
+    if (locations != null && locations.size() > 0) {
       locationsList.setLocations(locations);
       this.repaint();
     }
   }
 
-  /**
-   * Sorts the locations list on the GUI.
-   */
+  /** Sorts the locations list on the GUI. */
   @Override
-  public void sortLocations()
-  {
+  public void sortLocations() {
     locationsList.sortLocations();
     this.repaint();
   }
 
-  private void createActions(final JMenuBar menuBar, final JToolBar toolBar)
-  {
-    final JMenu menu = new JMenu(Messages
-      .getString("DaylightChartGui.Menu.Actions")); //$NON-NLS-1$
+  private void createActions(final JMenuBar menuBar, final JToolBar toolBar) {
+    final JMenu menu =
+        new JMenu(Messages.getString("DaylightChartGui.Menu.Actions")); // $NON-NLS-1$
     menu.setMnemonic('A');
 
-    for (final LocationsListOperation operation: LocationsListOperation
-      .values())
-    {
+    for (final LocationsListOperation operation : LocationsListOperation.values()) {
       final GuiAction action = operation.getAction(this);
       menu.add(action);
     }
@@ -290,24 +245,21 @@ public final class DaylightChartGui
     menuBar.add(menu);
   }
 
-  private void createFileMenu(final JMenuBar menuBar, final JToolBar toolBar)
-  {
+  private void createFileMenu(final JMenuBar menuBar, final JToolBar toolBar) {
 
     final GuiAction openLocationsFile = new OpenLocationsFileAction(this);
     final GuiAction saveLocationsFile = new SaveLocationsFileAction(this);
     final GuiAction saveChart = new SaveChartAction(this);
     final GuiAction printChart = new PrintChartAction(locationsTabbedPane);
 
-    final ExitAction exit = new ExitAction(this,
-                                           Messages
-                                             .getString("DaylightChartGui.Menu.File.Exit")); //$NON-NLS-1$
+    final ExitAction exit =
+        new ExitAction(this, Messages.getString("DaylightChartGui.Menu.File.Exit")); // $NON-NLS-1$
 
-    final JMenu menu = new JMenu(Messages
-      .getString("DaylightChartGui.Menu.File")); //$NON-NLS-1$
+    final JMenu menu = new JMenu(Messages.getString("DaylightChartGui.Menu.File")); // $NON-NLS-1$
     menu.setMnemonic('F');
 
-    recentLocationsMenu = new JMenu(Messages
-      .getString("DaylightChartGui.Menu.File.RecentLocations")); //$NON-NLS-1$
+    recentLocationsMenu =
+        new JMenu(Messages.getString("DaylightChartGui.Menu.File.RecentLocations")); // $NON-NLS-1$
     menu.setMnemonic('R');
 
     menu.add(openLocationsFile);
@@ -327,17 +279,15 @@ public final class DaylightChartGui
     toolBar.add(saveChart);
     toolBar.add(printChart);
     toolBar.addSeparator();
-
   }
 
-  private void createHelpMenu(final JMenuBar menuBar, final JToolBar toolBar)
-  {
+  private void createHelpMenu(final JMenuBar menuBar, final JToolBar toolBar) {
 
     final GuiAction onlineHelp = new OnlineHelpAction();
     final GuiAction about = new AboutAction(DaylightChartGui.this);
 
-    final JMenu menuHelp = new JMenu(Messages
-      .getString("DaylightChartGui.Menu.Help")); //$NON-NLS-1$
+    final JMenu menuHelp =
+        new JMenu(Messages.getString("DaylightChartGui.Menu.Help")); // $NON-NLS-1$
     menuHelp.setMnemonic('H');
 
     menuHelp.add(onlineHelp);
@@ -346,14 +296,12 @@ public final class DaylightChartGui
 
     toolBar.addSeparator();
     toolBar.add(onlineHelp);
-
   }
 
-  private void createOptionsMenu(final JMenuBar menuBar, final JToolBar toolBar)
-  {
+  private void createOptionsMenu(final JMenuBar menuBar, final JToolBar toolBar) {
 
-    final JMenu menu = new JMenu(Messages
-      .getString("DaylightChartGui.Menu.Options")); //$NON-NLS-1$
+    final JMenu menu =
+        new JMenu(Messages.getString("DaylightChartGui.Menu.Options")); // $NON-NLS-1$
     menu.setMnemonic('O');
 
     final GuiAction options = new OptionsAction(this);
@@ -371,5 +319,4 @@ public final class DaylightChartGui
     toolBar.add(chartOptions);
     toolBar.addSeparator();
   }
-
 }

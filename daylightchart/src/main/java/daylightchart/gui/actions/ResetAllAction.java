@@ -21,34 +21,26 @@
  */
 package daylightchart.gui.actions;
 
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.Serial;
-
-import javax.swing.KeyStroke;
-
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.gui.Messages;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.service.DaylightApplicationServices;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+import javax.swing.KeyStroke;
 
 /**
  * Closes current tab.
  *
  * @author sfatehi
  */
-public final class ResetAllAction
-  extends GuiAction
-{
+public final class ResetAllAction extends GuiAction {
 
-  private static final class GuiActionListener
-    implements ActionListener
-  {
+  private static final class GuiActionListener implements ActionListener {
     private final DaylightChartGui mainWindow;
 
-    private GuiActionListener(final DaylightChartGui mainWindow)
-    {
+    private GuiActionListener(final DaylightChartGui mainWindow) {
       this.mainWindow = mainWindow;
     }
 
@@ -58,27 +50,21 @@ public final class ResetAllAction
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
-    public void actionPerformed(final ActionEvent actionevent)
-    {
+    public void actionPerformed(final ActionEvent actionevent) {
       // Clear all preferences
       DaylightApplicationServices.preferences().clear();
       restart(mainWindow);
     }
-
   }
 
-  @Serial
-  private static final long serialVersionUID = 4002590686393404496L;
+  @Serial private static final long serialVersionUID = 4002590686393404496L;
 
   /**
-   * Restarts the program, by closing and opening the main window, and
-   * re-reading the preferences.
+   * Restarts the program, by closing and opening the main window, and re-reading the preferences.
    *
-   * @param mainWindow
-   *        Main window.
+   * @param mainWindow Main window.
    */
-  public static void restart(final DaylightChartGui mainWindow)
-  {
+  public static void restart(final DaylightChartGui mainWindow) {
     // Dispose this window
     mainWindow.setVisible(false);
     mainWindow.dispose();
@@ -90,15 +76,13 @@ public final class ResetAllAction
   /**
    * Closes current tab.
    *
-   * @param mainWindow
-   *        Main window
+   * @param mainWindow Main window
    */
-  public ResetAllAction(final DaylightChartGui mainWindow)
-  {
-    super(Messages.getString("DaylightChartGui.Menu.Options.ResetAll"), //$NON-NLS-1$
-          "/icons/reset_all.gif"); //$NON-NLS-1$
+  public ResetAllAction(final DaylightChartGui mainWindow) {
+    super(
+        Messages.getString("DaylightChartGui.Menu.Options.ResetAll"), // $NON-NLS-1$
+        "/icons/reset_all.gif"); //$NON-NLS-1$
     setShortcutKey(KeyStroke.getKeyStroke("control shift alt R"));
     addActionListener(new GuiActionListener(mainWindow));
   }
-
 }

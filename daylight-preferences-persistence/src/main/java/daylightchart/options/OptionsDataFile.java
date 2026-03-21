@@ -21,7 +21,8 @@
  */
 package daylightchart.options;
 
-
+import daylightchart.daylightchart.chart.DaylightChart;
+import daylightchart.options.chart.ChartOptions;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -30,58 +31,41 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.geoname.parser.UnicodeReader;
-
 import tools.jackson.dataformat.yaml.YAMLMapper;
-
-import daylightchart.daylightchart.chart.DaylightChart;
-import daylightchart.options.chart.ChartOptions;
 
 /**
  * Represents a location file, with data.
  *
  * @author sfatehi
  */
-public final class OptionsDataFile
-  extends BaseDataFile<OptionsFileType, Options>
-{
+public final class OptionsDataFile extends BaseDataFile<OptionsFileType, Options> {
 
   private static final YAMLMapper YAML_MAPPER = new YAMLMapper();
 
-  private static final Logger LOGGER = Logger
-    .getLogger(OptionsDataFile.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(OptionsDataFile.class.getName());
 
   /**
    * Constructor.
    *
-   * @param settingsDirectory
-   *        Settings directory
+   * @param settingsDirectory Settings directory
    */
-  public OptionsDataFile(final Path settingsDirectory)
-  {
+  public OptionsDataFile(final Path settingsDirectory) {
     super(settingsDirectory, "options.yaml", new OptionsFileType());
   }
 
-  /**
-   * Loads options from a file.
-   */
+  /** Loads options from a file. */
   @Override
-  protected void load()
-  {
-    if (!exists())
-    {
+  protected void load() {
+    if (!exists()) {
       LOGGER.log(Level.WARNING, "No options file provided");
       return;
     }
     InputStream input;
     final Path file = getFile();
-    try
-    {
+    try {
       input = Files.newInputStream(file);
-    }
-    catch (final IOException e)
-    {
+    } catch (final IOException e) {
       LOGGER.log(Level.WARNING, "Could not open options file, " + file, e);
       return;
     }
@@ -90,34 +74,23 @@ public final class OptionsDataFile
   }
 
   @Override
-  protected void load(final InputStream... input)
-  {
-    if (input == null || input.length == 0)
-    {
+  protected void load(final InputStream... input) {
+    if (input == null || input.length == 0) {
       return;
     }
 
     Reader reader = null;
-    try
-    {
+    try {
       reader = new UnicodeReader(input[0], "UTF-8");
       data = YAML_MAPPER.readValue(reader, Options.class);
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not read options", e);
       data = null;
-    }
-    finally
-    {
-      if (reader != null)
-      {
-        try
-        {
+    } finally {
+      if (reader != null) {
+        try {
           reader.close();
-        }
-        catch (final IOException e)
-        {
+        } catch (final IOException e) {
           LOGGER.log(Level.WARNING, "Could not close stream", e);
         }
       }
@@ -125,13 +98,11 @@ public final class OptionsDataFile
   }
 
   @Override
-  protected void loadWithFallback()
-  {
+  protected void loadWithFallback() {
     // 1. Load from file
     load();
     // 2. Create default options
-    if (data == null)
-    {
+    if (data == null) {
       final ChartOptions chartOptions = new ChartOptions();
       chartOptions.copyFromChart(new DaylightChart());
 
@@ -143,31 +114,22 @@ public final class OptionsDataFile
   /**
    * Saves options to a file.
    *
-   * @param file
-   *        File to write
-   * @param options
-   *        Options
+   * @param file File to write
+   * @param options Options
    */
   @Override
-  protected void save()
-  {
-    try
-    {
+  protected void save() {
+    try {
       delete();
-      try (Writer writer = getFileWriter(getFile()))
-      {
-        if (writer == null)
-        {
+      try (Writer writer = getFileWriter(getFile())) {
+        if (writer == null) {
           return;
         }
 
         YAML_MAPPER.writeValue(writer, data);
       }
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not save options to " + getFile(), e);
     }
   }
-
 }

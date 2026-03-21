@@ -21,59 +21,47 @@
  */
 package daylightchart.options;
 
-
+import daylightchart.gui.actions.LocationFileType;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.geoname.data.Location;
-
-import daylightchart.gui.actions.LocationFileType;
 
 /**
  * Represents a location file, with data.
  *
  * @author sfatehi
  */
-public final class RecentLocationsDataFile
-  extends BaseLocationsDataFile
-{
+public final class RecentLocationsDataFile extends BaseLocationsDataFile {
 
   private static final int NUMBER_RECENT_LOCATIONS = 9;
 
   /**
    * Constructor.
    *
-   * @param settingsDirectory
-   *        Settings directory
+   * @param settingsDirectory Settings directory
    */
-  public RecentLocationsDataFile(final Path settingsDirectory)
-  {
+  public RecentLocationsDataFile(final Path settingsDirectory) {
     super(settingsDirectory, "recent.locations.data", LocationFileType.data);
   }
 
   /**
    * Adds a recent location.
    *
-   * @param location
-   *        Location
+   * @param location Location
    */
-  public void add(final Location location)
-  {
-    if (location == null)
-    {
+  public void add(final Location location) {
+    if (location == null) {
       return;
     }
 
     List<Location> data = new ArrayList<>(this.data);
-    if (data.contains(location))
-    {
+    if (data.contains(location)) {
       data.remove(location);
     }
     data.add(location);
 
-    if (data.size() > NUMBER_RECENT_LOCATIONS)
-    {
+    if (data.size() > NUMBER_RECENT_LOCATIONS) {
       data = data.subList(0, NUMBER_RECENT_LOCATIONS);
     }
     this.data = data;
@@ -82,13 +70,10 @@ public final class RecentLocationsDataFile
   }
 
   @Override
-  protected void loadWithFallback()
-  {
+  protected void loadWithFallback() {
     load();
-    if (data == null)
-    {
+    if (data == null) {
       data = new ArrayList<Location>();
     }
   }
-
 }

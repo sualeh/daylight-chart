@@ -21,17 +21,15 @@
  */
 package daylightchart.daylightchart.calculation;
 
-
-enum RiseSetType
-{
- /** Normal day. */
+enum RiseSetType {
+  /** Normal day. */
   normal,
- /** Partial day - the sun never rises or never sets. */
+  /** Partial day - the sun never rises or never sets. */
   partial,
- /** Partial day due to a split. */
+  /** Partial day due to a split. */
   split,
- /** All daylight, the sun never sets. */
+  /** All daylight, the sun never sets. */
   all_daylight,
- /** All night time, the sun never rises. */
+  /** All night time, the sun never rises. */
   all_nighttime
 }

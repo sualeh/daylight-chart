@@ -21,7 +21,7 @@
  */
 package daylightchart.options;
 
-
+import daylightchart.gui.actions.LocationFileType;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
@@ -36,7 +36,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
 import org.geoname.data.Location;
 import org.geoname.parser.GNISFileParser;
 import org.geoname.parser.GNSCountryFileParser;
@@ -44,59 +43,41 @@ import org.geoname.parser.LocationFormatter;
 import org.geoname.parser.LocationsListParser;
 import org.geoname.parser.LocationsParser;
 
-import daylightchart.gui.actions.LocationFileType;
-
 /**
  * Represents a location file, with data.
  *
  * @author sfatehi
  */
-abstract class BaseLocationsDataFile
-  extends BaseDataFile<LocationFileType, Collection<Location>>
-{
+abstract class BaseLocationsDataFile extends BaseDataFile<LocationFileType, Collection<Location>> {
 
-  private static final Logger LOGGER = Logger
-    .getLogger(BaseLocationsDataFile.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(BaseLocationsDataFile.class.getName());
 
   /**
    * Constructor.
    *
-   * @param file
-   *        File
-   * @param fileType
-   *        Location file type
+   * @param file File
+   * @param fileType Location file type
    */
-  protected BaseLocationsDataFile(final Path file,
-                                  final LocationFileType fileType)
-  {
+  protected BaseLocationsDataFile(final Path file, final LocationFileType fileType) {
     super(file, fileType);
   }
 
   /**
    * Constructor.
    *
-   * @param settingsDirectory
-   *        Settings directory
-   * @param resource
-   *        Resource
-   * @param fileType
-   *        File type
+   * @param settingsDirectory Settings directory
+   * @param resource Resource
+   * @param fileType File type
    */
-  protected BaseLocationsDataFile(final Path settingsDirectory,
-                                  final String resource,
-                                  final LocationFileType fileType)
-  {
+  protected BaseLocationsDataFile(
+      final Path settingsDirectory, final String resource, final LocationFileType fileType) {
     super(settingsDirectory, resource, fileType);
   }
 
-  /**
-   * Loads a list of locations from a file of a given format.
-   */
+  /** Loads a list of locations from a file of a given format. */
   @Override
-  public final void load()
-  {
-    if (!exists())
-    {
+  public final void load() {
+    if (!exists()) {
       LOGGER.log(Level.WARNING, "No locations file provided");
       data = null;
       return;
@@ -104,10 +85,8 @@ abstract class BaseLocationsDataFile
 
     final List<InputStream> inputs = new ArrayList<InputStream>();
     final Path file = getFile();
-    try
-    {
-      switch (getFileType())
-      {
+    try {
+      switch (getFileType()) {
         case data:
         case gns_country_file:
         case gnis_state_file:
@@ -116,15 +95,12 @@ abstract class BaseLocationsDataFile
         case gns_country_file_zipped:
         case gnis_state_file_zipped:
           final ZipFile zipFile = new ZipFile(file.toFile());
-          for (final ZipEntry zipEntry: Collections.list(zipFile.entries()))
-          {
+          for (final ZipEntry zipEntry : Collections.list(zipFile.entries())) {
             inputs.add(zipFile.getInputStream(zipEntry));
           }
           break;
       }
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not read locations from " + file, e);
       data = null;
     }
@@ -133,86 +109,67 @@ abstract class BaseLocationsDataFile
   }
 
   @Override
-  protected final void load(final InputStream... inputs)
-  {
+  protected final void load(final InputStream... inputs) {
     data = new HashSet<Location>();
-    try
-    {
-      for (final InputStream inputStream: inputs)
-      {
-        final LocationsParser locationsFileParser = switch (getFileType())
-        {
-          case data: yield new LocationsListParser(inputStream);
-          case gns_country_file:
-          case gns_country_file_zipped: yield new GNSCountryFileParser(inputStream);
-          case gnis_state_file:
-          case gnis_state_file_zipped: yield new GNISFileParser(inputStream);
-          default: yield null;
-        };
-        if (locationsFileParser != null)
-        {
+    try {
+      for (final InputStream inputStream : inputs) {
+        final LocationsParser locationsFileParser =
+            switch (getFileType()) {
+              case data:
+                yield new LocationsListParser(inputStream);
+              case gns_country_file:
+              case gns_country_file_zipped:
+                yield new GNSCountryFileParser(inputStream);
+              case gnis_state_file:
+              case gnis_state_file_zipped:
+                yield new GNISFileParser(inputStream);
+              default:
+                yield null;
+            };
+        if (locationsFileParser != null) {
           data.addAll(locationsFileParser.parseLocations());
         }
       }
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not read locations", e);
       data = null;
-    }
-    finally
-    {
-      for (final InputStream inputStream: inputs)
-      {
-        if (inputStream != null)
-        {
-          try
-          {
+    } finally {
+      for (final InputStream inputStream : inputs) {
+        if (inputStream != null) {
+          try {
             inputStream.close();
-          }
-          catch (final IOException e)
-          {
+          } catch (final IOException e) {
             LOGGER.log(Level.WARNING, "Could not close input stream", e);
           }
         }
       }
     }
 
-    if (data.isEmpty())
-    {
+    if (data.isEmpty()) {
       data = null;
     }
   }
 
-  /**
-   * Saves locations to a file.
-   */
+  /** Saves locations to a file. */
   @Override
-  protected final void save()
-  {
+  protected final void save() {
     final Path file = getFile();
-    if (file == null)
-    {
+    if (file == null) {
       LOGGER.log(Level.WARNING, "No locations file provided");
       return;
     }
 
-    try
-    {
+    try {
       Files.deleteIfExists(file);
 
       final Writer writer = getFileWriter(file);
-      if (writer == null)
-      {
+      if (writer == null) {
         return;
       }
 
       LocationFormatter.formatLocations(data, writer);
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not save locations to " + file, e);
     }
   }
-
 }

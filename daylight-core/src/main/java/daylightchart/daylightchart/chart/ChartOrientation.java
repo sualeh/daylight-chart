@@ -21,20 +21,18 @@
  */
 package daylightchart.daylightchart.chart;
 
-
 /**
  * Orientation of the chart.
  *
  * @author Sualeh Fatehi
  */
-public enum ChartOrientation
-{
+public enum ChartOrientation {
 
- /** Standard */
+  /** Standard */
   STANDARD,
- /** Conventional */
+  /** Conventional */
   CONVENTIONAL,
- /** Vertical */
+  /** Vertical */
   VERTICAL;
 
   /**
@@ -43,10 +41,7 @@ public enum ChartOrientation
    * @see java.lang.Enum#toString()
    */
   @Override
-  public String toString()
-  {
-    return name().substring(0, 1).toUpperCase()
-           + name().substring(1).toLowerCase();
+  public String toString() {
+    return name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
   }
-
 }

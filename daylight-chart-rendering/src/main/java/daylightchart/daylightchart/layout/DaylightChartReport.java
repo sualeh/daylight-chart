@@ -21,7 +21,12 @@
  */
 package daylightchart.daylightchart.layout;
 
-
+import daylightchart.daylightchart.calculation.RiseSetUtility;
+import daylightchart.daylightchart.calculation.RiseSetYearData;
+import daylightchart.daylightchart.chart.DaylightChart;
+import daylightchart.options.FileType;
+import daylightchart.options.Options;
+import daylightchart.options.chart.ChartOptions;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -31,28 +36,17 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.imageio.ImageIO;
-
 import org.geoname.data.Location;
-
-import daylightchart.daylightchart.calculation.RiseSetUtility;
-import daylightchart.daylightchart.calculation.RiseSetYearData;
-import daylightchart.daylightchart.chart.DaylightChart;
-import daylightchart.options.FileType;
-import daylightchart.options.Options;
-import daylightchart.options.chart.ChartOptions;
 
 /**
  * The Daylight Chart report that can be written to a file.
  *
  * @author sfatehi
  */
-public class DaylightChartReport
-{
+public class DaylightChartReport {
 
-  private static final Logger LOGGER = Logger
-    .getLogger(DaylightChartReport.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(DaylightChartReport.class.getName());
 
   private final Location location;
   private final DaylightChart chart;
@@ -60,29 +54,23 @@ public class DaylightChartReport
   /**
    * Constructor.
    *
-   * @param location
-   *        Location for the report.
-   * @param options
-   *        Report options.
+   * @param location Location for the report.
+   * @param options Report options.
    */
-  public DaylightChartReport(final Location location, final Options options)
-  {
+  public DaylightChartReport(final Location location, final Options options) {
     this.location = location;
     initializeChartOptions(options);
     // Calculate rise and set timings for the whole year, and generate
     // chart
     final int year = Year.now().getValue();
-    final RiseSetYearData riseSetData = RiseSetUtility
-      .createRiseSetYear(location, year, options);
+    final RiseSetYearData riseSetData = RiseSetUtility.createRiseSetYear(location, year, options);
     chart = new DaylightChart(riseSetData, options);
     options.getChartOptions().updateChart(chart);
   }
 
-  private void initializeChartOptions(final Options options)
-  {
+  private void initializeChartOptions(final Options options) {
     final ChartOptions chartOptions = options.getChartOptions();
-    if (chartOptions.getPlotOptions().getBackgroundPaint() == null)
-    {
+    if (chartOptions.getPlotOptions().getBackgroundPaint() == null) {
       chartOptions.copyFromChart(new DaylightChart());
     }
   }
@@ -92,8 +80,7 @@ public class DaylightChartReport
    *
    * @return Chart
    */
-  public DaylightChart getChart()
-  {
+  public DaylightChart getChart() {
     return chart;
   }
 
@@ -102,81 +89,60 @@ public class DaylightChartReport
    *
    * @return Location
    */
-  public Location getLocation()
-  {
+  public Location getLocation() {
     return location;
   }
 
   /**
    * Filename for the generated report.
    *
-   * @param chartFileType
-   *        Type of chart file.
+   * @param chartFileType Type of chart file.
    * @return Report file name
    */
-  public String getReportFileName(final FileType chartFileType)
-  {
-    final String timeStamp = LocalDateTime.now()
-      .format(DateTimeFormatter.ofPattern("yyyy_MMM_dd_hh_mm_ss"));
+  public String getReportFileName(final FileType chartFileType) {
+    final String timeStamp =
+        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MMM_dd_hh_mm_ss"));
     String locationDescription = "";
-    try
-    {
-      locationDescription = new String(location.getDescription()
-        .getBytes("ASCII"), "ASCII");
+    try {
+      locationDescription = new String(location.getDescription().getBytes("ASCII"), "ASCII");
       locationDescription = locationDescription.replaceAll("\\?", "~");
       locationDescription = locationDescription.replaceAll(", ", "_");
       locationDescription = locationDescription.replaceAll(" ", "_");
-    }
-    catch (final UnsupportedEncodingException e)
-    {
+    } catch (final UnsupportedEncodingException e) {
       locationDescription = "";
     }
-    return locationDescription + "_" + timeStamp
-           + chartFileType.getFileExtension();
+    return locationDescription + "_" + timeStamp + chartFileType.getFileExtension();
   }
 
   /**
    * Write the Daylight Chart report to a file.
    *
-   * @param file
-   *        File to write to.
-   * @param chartFileType
-   *        Type of chart file.
+   * @param file File to write to.
+   * @param chartFileType Type of chart file.
    */
-  public void write(final Path file, final ChartFileType chartFileType)
-  {
-    if (chartFileType == null)
-    {
-      LOGGER
-        .warning("Cannot write report file, since no chart file type was specified");
+  public void write(final Path file, final ChartFileType chartFileType) {
+    if (chartFileType == null) {
+      LOGGER.warning("Cannot write report file, since no chart file type was specified");
       return;
     }
-    if (file == null)
-    {
+    if (file == null) {
       LOGGER.warning("Cannot write report file, since no file was specified");
       return;
     }
 
-    try
-    {
-      switch (chartFileType)
-      {
+    try {
+      switch (chartFileType) {
         case png:
         case jpg:
-          final BufferedImage image = chart
-            .createBufferedImage(842, 595, BufferedImage.TYPE_INT_RGB, null);
+          final BufferedImage image =
+              chart.createBufferedImage(842, 595, BufferedImage.TYPE_INT_RGB, null);
           ImageIO.write(image, chartFileType.name(), file.toFile());
           break;
         default:
           throw new IllegalArgumentException("Unknown chart file type");
       }
-    }
-    catch (final IOException e)
-    {
-      LOGGER.log(Level.WARNING,
-                 "Error generating a report of type " + chartFileType,
-                 e);
+    } catch (final IOException e) {
+      LOGGER.log(Level.WARNING, "Error generating a report of type " + chartFileType, e);
     }
   }
-
 }

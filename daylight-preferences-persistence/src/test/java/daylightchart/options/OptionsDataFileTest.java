@@ -1,26 +1,19 @@
 package daylightchart.options;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import org.junit.jupiter.api.Test;
 
-class OptionsDataFileTest
-{
+class OptionsDataFileTest {
 
   @Test
-  void shouldLoadFallbackAndPersistOptions()
-    throws Exception
-  {
-    final Path settingsDirectory = Files
-      .createTempDirectory("daylight-persistence-options");
-    final Path workingDirectory = Files.createTempDirectory(settingsDirectory,
-                                                           "work");
+  void shouldLoadFallbackAndPersistOptions() throws Exception {
+    final Path settingsDirectory = Files.createTempDirectory("daylight-persistence-options");
+    final Path workingDirectory = Files.createTempDirectory(settingsDirectory, "work");
 
     final OptionsDataFile optionsDataFile = new OptionsDataFile(settingsDirectory);
     final Options options = optionsDataFile.getData();
@@ -32,5 +25,4 @@ class OptionsDataFileTest
     assertThat(reloaded.getData(), is(notNullValue()));
     assertThat(reloaded.getData().getWorkingDirectory(), is(workingDirectory));
   }
-
 }

@@ -21,21 +21,18 @@
  */
 package daylightchart.options.chart;
 
-
-import java.awt.Font;
-import java.awt.Paint;
-import java.io.Serial;
-
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.Axis;
-import org.jfree.chart.ui.RectangleInsets;
-
 import daylightchart.options.chart.serialization.ChartOptionSerializers.FontDeserializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.FontSerializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.PaintDeserializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.PaintSerializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.RectangleInsetsDeserializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.RectangleInsetsSerializer;
+import java.awt.Font;
+import java.awt.Paint;
+import java.io.Serial;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.Axis;
+import org.jfree.chart.ui.RectangleInsets;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 
@@ -44,33 +41,37 @@ import tools.jackson.databind.annotation.JsonSerialize;
  *
  * @author sfatehi
  */
-public class AxisOptions
-  extends BaseChartOptions
-{
+public class AxisOptions extends BaseChartOptions {
 
-  @Serial
-  private static final long serialVersionUID = 7658976939630828679L;
+  @Serial private static final long serialVersionUID = 7658976939630828679L;
 
   private String label;
+
   @JsonSerialize(using = FontSerializer.class)
   @JsonDeserialize(using = FontDeserializer.class)
   private Font labelFont;
+
   @JsonSerialize(using = RectangleInsetsSerializer.class)
   @JsonDeserialize(using = RectangleInsetsDeserializer.class)
   private RectangleInsets labelInsets;
+
   @JsonSerialize(using = PaintSerializer.class)
   @JsonDeserialize(using = PaintDeserializer.class)
   private Paint labelPaint;
+
   //
   @JsonSerialize(using = FontSerializer.class)
   @JsonDeserialize(using = FontDeserializer.class)
   private Font tickLabelFont;
+
   @JsonSerialize(using = RectangleInsetsSerializer.class)
   @JsonDeserialize(using = RectangleInsetsDeserializer.class)
   private RectangleInsets tickLabelInsets;
+
   @JsonSerialize(using = PaintSerializer.class)
   @JsonDeserialize(using = PaintDeserializer.class)
   private Paint tickLabelPaint;
+
   private boolean tickLabelsVisible;
   private boolean tickMarksVisible;
 
@@ -80,8 +81,7 @@ public class AxisOptions
    * @see BaseChartOptions#copyFromChart(org.jfree.chart.JFreeChart)
    */
   @Override
-  public void copyFromChart(final JFreeChart chart)
-  {
+  public void copyFromChart(final JFreeChart chart) {
     // We do not know which axis to work from
     throw new UnsupportedOperationException();
   }
@@ -89,153 +89,126 @@ public class AxisOptions
   /**
    * @return the label
    */
-  public String getLabel()
-  {
+  public String getLabel() {
     return label;
   }
 
   /**
    * @return the labelFont
    */
-  public Font getLabelFont()
-  {
+  public Font getLabelFont() {
     return labelFont;
   }
 
   /**
    * @return the labelInsets
    */
-  public RectangleInsets getLabelInsets()
-  {
+  public RectangleInsets getLabelInsets() {
     return labelInsets;
   }
 
   /**
    * @return the labelPaint
    */
-  public Paint getLabelPaint()
-  {
+  public Paint getLabelPaint() {
     return labelPaint;
   }
 
   /**
    * @return the tickLabelFont
    */
-  public Font getTickLabelFont()
-  {
+  public Font getTickLabelFont() {
     return tickLabelFont;
   }
 
   /**
    * @return the tickLabelInsets
    */
-  public RectangleInsets getTickLabelInsets()
-  {
+  public RectangleInsets getTickLabelInsets() {
     return tickLabelInsets;
   }
 
   /**
    * @return the tickLabelPaint
    */
-  public Paint getTickLabelPaint()
-  {
+  public Paint getTickLabelPaint() {
     return tickLabelPaint;
   }
 
   /**
    * @return the tickLabelsVisible
    */
-  public boolean isTickLabelsVisible()
-  {
+  public boolean isTickLabelsVisible() {
     return tickLabelsVisible;
   }
 
   /**
    * @return the tickMarksVisible
    */
-  public boolean isTickMarksVisible()
-  {
+  public boolean isTickMarksVisible() {
     return tickMarksVisible;
   }
 
   /**
-   * @param label
-   *        the label to set
+   * @param label the label to set
    */
-  public void setLabel(final String label)
-  {
+  public void setLabel(final String label) {
     this.label = label;
   }
 
   /**
-   * @param labelFont
-   *        the labelFont to set
+   * @param labelFont the labelFont to set
    */
-  public void setLabelFont(final Font labelFont)
-  {
+  public void setLabelFont(final Font labelFont) {
     this.labelFont = labelFont;
   }
 
   /**
-   * @param labelInsets
-   *        the labelInsets to set
+   * @param labelInsets the labelInsets to set
    */
-  public void setLabelInsets(final RectangleInsets labelInsets)
-  {
+  public void setLabelInsets(final RectangleInsets labelInsets) {
     this.labelInsets = labelInsets;
   }
 
   /**
-   * @param labelPaint
-   *        the labelPaint to set
+   * @param labelPaint the labelPaint to set
    */
-  public void setLabelPaint(final Paint labelPaint)
-  {
+  public void setLabelPaint(final Paint labelPaint) {
     this.labelPaint = labelPaint;
   }
 
   /**
-   * @param tickLabelFont
-   *        the tickLabelFont to set
+   * @param tickLabelFont the tickLabelFont to set
    */
-  public void setTickLabelFont(final Font tickLabelFont)
-  {
+  public void setTickLabelFont(final Font tickLabelFont) {
     this.tickLabelFont = tickLabelFont;
   }
 
   /**
-   * @param tickLabelInsets
-   *        the tickLabelInsets to set
+   * @param tickLabelInsets the tickLabelInsets to set
    */
-  public void setTickLabelInsets(final RectangleInsets tickLabelInsets)
-  {
+  public void setTickLabelInsets(final RectangleInsets tickLabelInsets) {
     this.tickLabelInsets = tickLabelInsets;
   }
 
   /**
-   * @param tickLabelPaint
-   *        the tickLabelPaint to set
+   * @param tickLabelPaint the tickLabelPaint to set
    */
-  public void setTickLabelPaint(final Paint tickLabelPaint)
-  {
+  public void setTickLabelPaint(final Paint tickLabelPaint) {
     this.tickLabelPaint = tickLabelPaint;
   }
 
   /**
-   * @param tickLabelsVisible
-   *        the tickLabelsVisible to set
+   * @param tickLabelsVisible the tickLabelsVisible to set
    */
-  public void setTickLabelsVisible(final boolean tickLabelsVisible)
-  {
+  public void setTickLabelsVisible(final boolean tickLabelsVisible) {
     this.tickLabelsVisible = tickLabelsVisible;
   }
 
   /**
-   * @param tickMarksVisible
-   *        the tickMarksVisible to set
+   * @param tickMarksVisible the tickMarksVisible to set
    */
-  public void setTickMarksVisible(final boolean tickMarksVisible)
-  {
+  public void setTickMarksVisible(final boolean tickMarksVisible) {
     this.tickMarksVisible = tickMarksVisible;
   }
 
@@ -245,21 +218,17 @@ public class AxisOptions
    * @see BaseChartOptions#updateChart(org.jfree.chart.JFreeChart)
    */
   @Override
-  public void updateChart(final JFreeChart chart)
-  {
+  public void updateChart(final JFreeChart chart) {
     // We do not know which axis to update
     throw new UnsupportedOperationException();
   }
 
   /**
-   * Gets the properties of the specified axis to match the properties
-   * defined on this panel.
+   * Gets the properties of the specified axis to match the properties defined on this panel.
    *
-   * @param axis
-   *        the axis.
+   * @param axis the axis.
    */
-  void getAxisProperties(final Axis axis)
-  {
+  void getAxisProperties(final Axis axis) {
     label = axis.getLabel();
     labelFont = axis.getLabelFont();
     labelPaint = axis.getLabelPaint();
@@ -273,42 +242,32 @@ public class AxisOptions
   }
 
   /**
-   * Sets the properties of the specified axis to match the properties
-   * defined on this panel.
+   * Sets the properties of the specified axis to match the properties defined on this panel.
    *
-   * @param axis
-   *        the axis.
+   * @param axis the axis.
    */
-  void setAxisProperties(final Axis axis)
-  {
+  void setAxisProperties(final Axis axis) {
     axis.setLabel(label);
-    if (labelFont != null)
-    {
+    if (labelFont != null) {
       axis.setLabelFont(labelFont);
     }
-    if (labelPaint != null)
-    {
+    if (labelPaint != null) {
       axis.setLabelPaint(labelPaint);
     }
-    if (labelInsets != null)
-    {
+    if (labelInsets != null) {
       axis.setLabelInsets(labelInsets);
     }
     //
     axis.setTickMarksVisible(tickMarksVisible);
     axis.setTickLabelsVisible(tickLabelsVisible);
-    if (tickLabelFont != null)
-    {
+    if (tickLabelFont != null) {
       axis.setTickLabelFont(tickLabelFont);
     }
-    if (tickLabelPaint != null)
-    {
+    if (tickLabelPaint != null) {
       axis.setTickLabelPaint(tickLabelPaint);
     }
-    if (tickLabelInsets != null)
-    {
+    if (tickLabelInsets != null) {
       axis.setTickLabelInsets(tickLabelInsets);
     }
   }
-
 }

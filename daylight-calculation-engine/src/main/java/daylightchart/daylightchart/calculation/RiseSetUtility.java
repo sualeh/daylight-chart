@@ -21,7 +21,8 @@
  */
 package daylightchart.daylightchart.calculation;
 
-
+import daylightchart.daylightchart.chart.TimeZoneOption;
+import daylightchart.options.Options;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,105 +30,72 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.geoname.data.Location;
-import org.geoname.parser.DefaultTimezones;
-
-import daylightchart.daylightchart.chart.TimeZoneOption;
-import daylightchart.options.Options;
 import net.e175.klaus.solarpositioning.DeltaT;
 import net.e175.klaus.solarpositioning.SPA;
 import net.e175.klaus.solarpositioning.SunriseResult;
+import org.geoname.data.Location;
+import org.geoname.parser.DefaultTimezones;
 
 /**
  * Calculator for sunrise and sunset times for a year.
  *
  * @author Sualeh Fatehi
  */
-public final class RiseSetUtility
-{
+public final class RiseSetUtility {
 
   /**
    * Calculator for sunrise and sunset times for a year.
    *
-   * @param location
-   *        Location
-   * @param year
-   *        Year
-   * @param options
-   *        Options
+   * @param location Location
+   * @param year Year
+   * @param options Options
    * @return Full years sunset and sunrise times for a location
    */
-  public static RiseSetYearData createRiseSetYear(final Location location,
-                                                  final int year,
-                                                  final Options options)
-  {
+  public static RiseSetYearData createRiseSetYear(
+      final Location location, final int year, final Options options) {
     final TimeZoneOption timeZoneOption = options.getTimeZoneOption();
     final ZoneId zoneId;
-    if (location != null)
-    {
+    if (location != null) {
       final String timeZoneId;
-      if (timeZoneOption != null
-          && timeZoneOption == TimeZoneOption.USE_TIME_ZONE)
-      {
+      if (timeZoneOption != null && timeZoneOption == TimeZoneOption.USE_TIME_ZONE) {
         timeZoneId = location.getTimeZoneId();
-      }
-      else
-      {
-        timeZoneId = DefaultTimezones
-          .createGMTTimeZoneId(location.getPointLocation().getLongitude());
+      } else {
+        timeZoneId =
+            DefaultTimezones.createGMTTimeZoneId(location.getPointLocation().getLongitude());
       }
       zoneId = ZoneId.of(timeZoneId);
-    }
-    else
-    {
+    } else {
       zoneId = ZoneId.systemDefault();
     }
-    final boolean timeZoneUsesDaylightTime = !zoneId.getRules()
-      .getTransitionRules().isEmpty();
-    final boolean useDaylightTime = timeZoneUsesDaylightTime
-                                    && timeZoneOption != TimeZoneOption.USE_LOCAL_TIME;
+    final boolean timeZoneUsesDaylightTime = !zoneId.getRules().getTransitionRules().isEmpty();
+    final boolean useDaylightTime =
+        timeZoneUsesDaylightTime && timeZoneOption != TimeZoneOption.USE_LOCAL_TIME;
     boolean wasDaylightSavings = false;
 
     final TwilightType twilight = options.getTwilightType();
-    final RiseSetYearData riseSetYear = new RiseSetYearData(location,
-                                                            twilight,
-                                                            year);
+    final RiseSetYearData riseSetYear = new RiseSetYearData(location, twilight, year);
     riseSetYear.setUsesDaylightTime(useDaylightTime);
-    for (final LocalDate date: getYearsDates(year))
-    {
-      final boolean inDaylightSavings = zoneId.getRules()
-        .isDaylightSavings(date.atStartOfDay().atZone(zoneId).toInstant());
-      if (wasDaylightSavings != inDaylightSavings)
-      {
-        if (!wasDaylightSavings)
-        {
+    for (final LocalDate date : getYearsDates(year)) {
+      final boolean inDaylightSavings =
+          zoneId.getRules().isDaylightSavings(date.atStartOfDay().atZone(zoneId).toInstant());
+      if (wasDaylightSavings != inDaylightSavings) {
+        if (!wasDaylightSavings) {
           riseSetYear.setDstStart(date);
-        }
-        else
-        {
+        } else {
           riseSetYear.setDstEnd(date);
         }
       }
       wasDaylightSavings = inDaylightSavings;
 
-      final RawRiseSet riseSet = calculateRiseSet(location,
-                                                  date,
-                                                  zoneId,
-                                                  inDaylightSavings,
-                                                  TwilightType.NO);
+      final RawRiseSet riseSet =
+          calculateRiseSet(location, date, zoneId, inDaylightSavings, TwilightType.NO);
       riseSetYear.addRiseSet(riseSet);
 
-      if (twilight != null)
-      {
-        final RawRiseSet twilights = calculateRiseSet(location,
-                                                      date,
-                                                      zoneId,
-                                                      inDaylightSavings,
-                                                      twilight);
+      if (twilight != null) {
+        final RawRiseSet twilights =
+            calculateRiseSet(location, date, zoneId, inDaylightSavings, twilight);
         riseSetYear.addTwilight(twilights);
       }
-
     }
 
     // Create band for twilight, clock-shift taken into account
@@ -138,23 +106,18 @@ public final class RiseSetUtility
     createBands(riseSetYear, DaylightBandType.without_clock_shift);
 
     return riseSetYear;
-
   }
 
-  static void createBands(final RiseSetYearData riseSetYear,
-                          final DaylightBandType daylightSavingsMode)
-  {
+  static void createBands(
+      final RiseSetYearData riseSetYear, final DaylightBandType daylightSavingsMode) {
     final List<DaylightBand> bands;
-    if (daylightSavingsMode == DaylightBandType.twilight)
-    {
-      bands = RiseSetUtility.createDaylightBands(riseSetYear.getTwilights(),
-                                                 daylightSavingsMode);
-    }
-    else
-    {
-      bands = RiseSetUtility.createDaylightBands(riseSetYear
-        .getRiseSets(daylightSavingsMode.isAdjustedForDaylightSavings()),
-                                                 daylightSavingsMode);
+    if (daylightSavingsMode == DaylightBandType.twilight) {
+      bands = RiseSetUtility.createDaylightBands(riseSetYear.getTwilights(), daylightSavingsMode);
+    } else {
+      bands =
+          RiseSetUtility.createDaylightBands(
+              riseSetYear.getRiseSets(daylightSavingsMode.isAdjustedForDaylightSavings()),
+              daylightSavingsMode);
     }
 
     riseSetYear.addDaylightBands(bands);
@@ -163,46 +126,37 @@ public final class RiseSetUtility
   /**
    * Creates daylight bands for plotting.
    *
-   * @param riseSetData
-   *        Rise/ set data for the year
-   * @param daylightSavingsMode
-   *        The daylight savings mode
+   * @param riseSetData Rise/ set data for the year
+   * @param daylightSavingsMode The daylight savings mode
    * @return List of daylight bands
    */
-  static List<DaylightBand> createDaylightBands(final List<RiseSet> riseSetData,
-                                                final DaylightBandType daylightSavingsMode)
-  {
+  static List<DaylightBand> createDaylightBands(
+      final List<RiseSet> riseSetData, final DaylightBandType daylightSavingsMode) {
     final List<DaylightBand> bands = new ArrayList<DaylightBand>();
 
     DaylightBand baseBand = null;
     DaylightBand wrapBand = null;
 
-    for (int i = 0; i < riseSetData.size(); i++)
-    {
+    for (int i = 0; i < riseSetData.size(); i++) {
       final RiseSet riseSet = riseSetData.get(i);
       RiseSet riseSetYesterday = null;
-      if (i > 0)
-      {
+      if (i > 0) {
         riseSetYesterday = riseSetData.get(i - 1);
       }
       RiseSet riseSetTomorrow = null;
-      if (i < riseSetData.size() - 1)
-      {
+      if (i < riseSetData.size() - 1) {
         riseSetTomorrow = riseSetData.get(i + 1);
       }
 
       final RiseSet[] riseSets = splitAtMidnight(riseSet);
-      if (riseSets.length == 2)
-      {
+      if (riseSets.length == 2) {
         // Create a new wrap band if necessary
-        if (wrapBand == null)
-        {
+        if (wrapBand == null) {
           wrapBand = new DaylightBand(daylightSavingsMode, bands.size());
           bands.add(wrapBand);
         }
 
-        if (baseBand == null)
-        {
+        if (baseBand == null) {
           baseBand = new DaylightBand(daylightSavingsMode, bands.size());
           bands.add(baseBand);
         }
@@ -214,167 +168,123 @@ public final class RiseSetUtility
         // Add a special "smoothing" value to the wrap band, if
         // necessary
         if (riseSetYesterday != null
-            && riseSetYesterday.getRiseSetType() == RiseSetType.all_daylight)
-        {
-          wrapBand
-            .add(riseSets[1].withNewRiseSetDate(riseSetYesterday.getDate()));
+            && riseSetYesterday.getRiseSetType() == RiseSetType.all_daylight) {
+          wrapBand.add(riseSets[1].withNewRiseSetDate(riseSetYesterday.getDate()));
         }
-      }
-      else if (riseSets.length == 1)
-      {
+      } else if (riseSets.length == 1) {
         // End the wrap band, if necessary
-        if (wrapBand != null)
-        {
+        if (wrapBand != null) {
           // Add a special "smoothing" value to the wrap band, if
           // necessary
           if (riseSetTomorrow != null
               && riseSetTomorrow.getRiseSetType() == RiseSetType.all_daylight
-              && wrapBand.size() > 0)
-          {
-            wrapBand.add(wrapBand.getLastRiseSet()
-              .withNewRiseSetDate(riseSetTomorrow.getDate()));
+              && wrapBand.size() > 0) {
+            wrapBand.add(wrapBand.getLastRiseSet().withNewRiseSetDate(riseSetTomorrow.getDate()));
           }
           wrapBand = null;
         }
 
         // Create a new band if we are entering a period of
         // all-night-time from a period where there was daylight
-        if (baseBand == null
-            && riseSet.getRiseSetType() != RiseSetType.all_nighttime)
-        {
+        if (baseBand == null && riseSet.getRiseSetType() != RiseSetType.all_nighttime) {
           baseBand = new DaylightBand(daylightSavingsMode, bands.size());
           bands.add(baseBand);
-        }
-        else
+        } else
         // Close the band if we are entering a period of all-night-time
-        if (baseBand != null
-            && riseSet.getRiseSetType() == RiseSetType.all_nighttime)
-        {
+        if (baseBand != null && riseSet.getRiseSetType() == RiseSetType.all_nighttime) {
           baseBand = null;
         }
 
         // Add sunset and sunrise as usual
-        if (baseBand != null)
-        {
+        if (baseBand != null) {
           baseBand.add(riseSet);
         }
       }
     }
 
     return bands;
-
   }
 
   /**
    * Splits the given rise/ set at midnight.
    *
-   * @param riseSet
-   *        Rise/ set to split
+   * @param riseSet Rise/ set to split
    * @return Split RiseSet(s)
    */
-  static RiseSet[] splitAtMidnight(final RiseSet riseSet)
-  {
-    if (riseSet == null)
-    {
+  static RiseSet[] splitAtMidnight(final RiseSet riseSet) {
+    if (riseSet == null) {
       return new RiseSet[0];
     }
 
     final LocalDateTime sunrise = riseSet.getSunrise();
     final LocalDateTime sunset = riseSet.getSunset();
 
-    if (riseSet.getRiseSetType() != RiseSetType.partial && sunset.getHour() < 9)
-    {
+    if (riseSet.getRiseSetType() != RiseSetType.partial && sunset.getHour() < 9) {
       return new RiseSet[] {
-                             riseSet.withNewRiseSetTimes(sunrise
-                               .toLocalTime(), RiseSet.JUST_BEFORE_MIDNIGHT),
-                             riseSet.withNewRiseSetTimes(
-                                                         RiseSet.JUST_AFTER_MIDNIGHT,
-                                                         sunset.toLocalTime())
+        riseSet.withNewRiseSetTimes(sunrise.toLocalTime(), RiseSet.JUST_BEFORE_MIDNIGHT),
+        riseSet.withNewRiseSetTimes(RiseSet.JUST_AFTER_MIDNIGHT, sunset.toLocalTime())
       };
-    }
-    else if (riseSet.getRiseSetType() != RiseSetType.partial
-             && sunrise.getHour() > 15)
-    {
+    } else if (riseSet.getRiseSetType() != RiseSetType.partial && sunrise.getHour() > 15) {
       return new RiseSet[] {
-                             riseSet.withNewRiseSetTimes(
-                                                         RiseSet.JUST_AFTER_MIDNIGHT,
-                                                         sunset.toLocalTime()),
-                             riseSet.withNewRiseSetTimes(sunrise
-                               .toLocalTime(), RiseSet.JUST_BEFORE_MIDNIGHT)
+        riseSet.withNewRiseSetTimes(RiseSet.JUST_AFTER_MIDNIGHT, sunset.toLocalTime()),
+        riseSet.withNewRiseSetTimes(sunrise.toLocalTime(), RiseSet.JUST_BEFORE_MIDNIGHT)
       };
-    }
-    else
-    {
-      return new RiseSet[] {
-                             riseSet
-      };
+    } else {
+      return new RiseSet[] {riseSet};
     }
   }
 
   @SuppressWarnings("boxing")
-  private static RawRiseSet calculateRiseSet(final Location location,
-                                             final LocalDate date,
-                                             final ZoneId zoneId,
-                                             final boolean inDaylightSavings,
-                                             final TwilightType twilight)
-  {
+  private static RawRiseSet calculateRiseSet(
+      final Location location,
+      final LocalDate date,
+      final ZoneId zoneId,
+      final boolean inDaylightSavings,
+      final TwilightType twilight) {
     final ZonedDateTime dayStart = date.atStartOfDay(zoneId);
     final double latitude;
     final double longitude;
-    if (location == null)
-    {
+    if (location == null) {
       latitude = 0D;
       longitude = 0D;
-    }
-    else
-    {
+    } else {
       latitude = location.getPointLocation().getLatitude().getDegrees();
       longitude = location.getPointLocation().getLongitude().getDegrees();
     }
-    final SunriseResult sunriseResult = SPA
-      .calculateSunriseTransitSet(dayStart,
-                                  latitude,
-                                  longitude,
-                                  DeltaT.estimate(date),
-                                  toHorizon(twilight));
+    final SunriseResult sunriseResult =
+        SPA.calculateSunriseTransitSet(
+            dayStart, latitude, longitude, DeltaT.estimate(date), toHorizon(twilight));
 
-    final boolean usesDaylightSavings = !zoneId.getRules()
-      .getTransitionRules().isEmpty();
-    if (sunriseResult instanceof SunriseResult.RegularDay regularDay)
-    {
-      return new RawRiseSet(location,
-                            date,
-                            usesDaylightSavings && inDaylightSavings,
-                            toHour(dayStart, regularDay.sunrise()),
-                            toHour(dayStart, regularDay.sunset()));
+    final boolean usesDaylightSavings = !zoneId.getRules().getTransitionRules().isEmpty();
+    if (sunriseResult instanceof SunriseResult.RegularDay regularDay) {
+      return new RawRiseSet(
+          location,
+          date,
+          usesDaylightSavings && inDaylightSavings,
+          toHour(dayStart, regularDay.sunrise()),
+          toHour(dayStart, regularDay.sunset()));
+    } else if (sunriseResult instanceof SunriseResult.AllDay) {
+      return new RawRiseSet(
+          location,
+          date,
+          usesDaylightSavings && inDaylightSavings,
+          Double.POSITIVE_INFINITY,
+          Double.POSITIVE_INFINITY);
+    } else {
+      return new RawRiseSet(
+          location,
+          date,
+          usesDaylightSavings && inDaylightSavings,
+          Double.NEGATIVE_INFINITY,
+          Double.NEGATIVE_INFINITY);
     }
-    else if (sunriseResult instanceof SunriseResult.AllDay)
-    {
-      return new RawRiseSet(location,
-                            date,
-                            usesDaylightSavings && inDaylightSavings,
-                            Double.POSITIVE_INFINITY,
-                            Double.POSITIVE_INFINITY);
-    }
-    else
-    {
-      return new RawRiseSet(location,
-                            date,
-                            usesDaylightSavings && inDaylightSavings,
-                            Double.NEGATIVE_INFINITY,
-                            Double.NEGATIVE_INFINITY);
-    }
-
   }
 
-  private static SPA.Horizon toHorizon(final TwilightType twilight)
-  {
-    if (twilight == null || twilight == TwilightType.NO)
-    {
+  private static SPA.Horizon toHorizon(final TwilightType twilight) {
+    if (twilight == null || twilight == TwilightType.NO) {
       return SPA.Horizon.SUNRISE_SUNSET;
     }
-    switch (twilight)
-    {
+    switch (twilight) {
       case ASTRONOMICAL:
         return SPA.Horizon.ASTRONOMICAL_TWILIGHT;
       case NAUTICAL:
@@ -385,27 +295,21 @@ public final class RiseSetUtility
     }
   }
 
-  private static double toHour(final ZonedDateTime dayStart,
-                               final ZonedDateTime eventTime)
-  {
+  private static double toHour(final ZonedDateTime dayStart, final ZonedDateTime eventTime) {
     return Duration.between(dayStart, eventTime).getSeconds() / 3600D;
   }
 
-  private static List<LocalDate> getYearsDates(final int year)
-  {
+  private static List<LocalDate> getYearsDates(final int year) {
     final List<LocalDate> dates = new ArrayList<LocalDate>();
     LocalDate date = LocalDate.of(year, 1, 1);
-    do
-    {
+    do {
       dates.add(date);
       date = date.plusDays(1);
     } while (!(date.getMonthValue() == 1 && date.getDayOfMonth() == 1));
     return dates;
   }
 
-  private RiseSetUtility()
-  {
+  private RiseSetUtility() {
     // Prevent instantiation
   }
-
 }

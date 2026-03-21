@@ -21,11 +21,9 @@
  */
 package daylightchart.gui.util;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serial;
-
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
@@ -34,35 +32,28 @@ import javax.swing.KeyStroke;
  *
  * @author sfatehi
  */
-public final class ExitAction
-  extends GuiAction
-{
+public final class ExitAction extends GuiAction {
 
-  @Serial
-  private static final long serialVersionUID = 5749903957626188378L;
+  @Serial private static final long serialVersionUID = 5749903957626188378L;
 
   /**
    * Exits an application
    *
-   * @param frame
-   *        Main window
-   * @param text
-   *        Text for the action
+   * @param frame Main window
+   * @param text Text for the action
    */
-  public ExitAction(final JFrame frame, final String text)
-  {
-    super(text, "/icons/exit.gif" //$NON-NLS-1$
-    );
+  public ExitAction(final JFrame frame, final String text) {
+    super(
+        text, "/icons/exit.gif" // $NON-NLS-1$
+        );
     setShortcutKey(KeyStroke.getKeyStroke("control Q"));
-    addActionListener(new ActionListener()
-    {
-      @Override
-      public void actionPerformed(final ActionEvent actionevent)
-      {
-        frame.dispose();
-        System.exit(0);
-      }
-    });
+    addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(final ActionEvent actionevent) {
+            frame.dispose();
+            System.exit(0);
+          }
+        });
   }
-
 }

@@ -21,7 +21,6 @@
  */
 package daylightchart.daylightchart.calculation;
 
-
 import java.io.PrintWriter;
 import java.io.Serial;
 import java.io.Serializable;
@@ -34,17 +33,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * One daylight band, consisting of a sunrise series and a sunset
- * series.
+ * One daylight band, consisting of a sunrise series and a sunset series.
  *
  * @author sfatehi
  */
-public final class DaylightBand
-  implements Serializable
-{
+public final class DaylightBand implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = 5875662315368162333L;
+  @Serial private static final long serialVersionUID = 5875662315368162333L;
 
   private final DaylightBandType bandType;
   private final int bandNumber;
@@ -53,11 +48,9 @@ public final class DaylightBand
   /**
    * Create a new daylight band.
    *
-   * @param name
-   *        Name of the band.
+   * @param name Name of the band.
    */
-  DaylightBand(final DaylightBandType bandType, final int bandNumber)
-  {
+  DaylightBand(final DaylightBandType bandType, final int bandNumber) {
     this.bandType = bandType;
     this.bandNumber = bandNumber;
     riseSetMap = new HashMap<LocalDate, RiseSet>();
@@ -68,8 +61,7 @@ public final class DaylightBand
    *
    * @return Type
    */
-  public DaylightBandType getDaylightBandType()
-  {
+  public DaylightBandType getDaylightBandType() {
     return bandType;
   }
 
@@ -78,8 +70,7 @@ public final class DaylightBand
    *
    * @return Name
    */
-  public String getName()
-  {
+  public String getName() {
     return bandType + ", #" + bandNumber;
   }
 
@@ -88,8 +79,7 @@ public final class DaylightBand
    *
    * @return Rise/ sets list
    */
-  public List<RiseSet> getRiseSets()
-  {
+  public List<RiseSet> getRiseSets() {
     final List<RiseSet> riseSets = new ArrayList<RiseSet>(riseSetMap.values());
     Collections.sort(riseSets);
     return riseSets;
@@ -100,8 +90,7 @@ public final class DaylightBand
    *
    * @return Size of the band
    */
-  public int size()
-  {
+  public int size() {
     return riseSetMap.size();
   }
 
@@ -111,17 +100,14 @@ public final class DaylightBand
    * @see java.lang.Object#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     final StringWriter writer = new StringWriter();
     final PrintWriter printWriter = new PrintWriter(writer, true);
 
     printWriter.printf("%s", getName());
-    if (riseSetMap.size() > 0)
-    {
-      printWriter.printf(", starting %s ending %s",
-                         getFirstRiseSet().getDate(),
-                         getLastRiseSet().getDate());
+    if (riseSetMap.size() > 0) {
+      printWriter.printf(
+          ", starting %s ending %s", getFirstRiseSet().getDate(), getLastRiseSet().getDate());
     }
     return writer.toString();
   }
@@ -129,48 +115,36 @@ public final class DaylightBand
   /**
    * Add a sunrise and sunset point to the band.
    *
-   * @param riseSet
-   *        Sunrise and sunset time
+   * @param riseSet Sunrise and sunset time
    */
-  void add(final RiseSet riseSet)
-  {
-    if (riseSet != null && riseSet.getSunrise().isBefore(riseSet.getSunset())
+  void add(final RiseSet riseSet) {
+    if (riseSet != null
+        && riseSet.getSunrise().isBefore(riseSet.getSunset())
         && riseSet.getRiseSetType() != RiseSetType.all_nighttime
-        && riseSet.getRiseSetType() != RiseSetType.partial)
-    {
+        && riseSet.getRiseSetType() != RiseSetType.partial) {
       riseSetMap.put(riseSet.getDate(), riseSet);
     }
   }
 
-  RiseSet get(final LocalDate date)
-  {
+  RiseSet get(final LocalDate date) {
     return riseSetMap.get(date);
   }
 
-  RiseSet getFirstRiseSet()
-  {
-    if (riseSetMap.size() > 0)
-    {
+  RiseSet getFirstRiseSet() {
+    if (riseSetMap.size() > 0) {
       final List<RiseSet> riseSets = getRiseSets();
       return riseSets.getFirst();
-    }
-    else
-    {
+    } else {
       return null;
     }
   }
 
-  RiseSet getLastRiseSet()
-  {
-    if (riseSetMap.size() > 0)
-    {
+  RiseSet getLastRiseSet() {
+    if (riseSetMap.size() > 0) {
       final List<RiseSet> riseSets = getRiseSets();
       return riseSets.getLast();
-    }
-    else
-    {
+    } else {
       return null;
     }
   }
-
 }

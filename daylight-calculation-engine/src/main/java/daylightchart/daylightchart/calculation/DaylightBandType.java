@@ -21,28 +21,24 @@
  */
 package daylightchart.daylightchart.calculation;
 
-
 /**
  * Band type.
  *
  * @author sfatehi
  */
-public enum DaylightBandType
-{
+public enum DaylightBandType {
 
- /** With clock shift. */
+  /** With clock shift. */
   with_clock_shift("With clock shift", true),
- /** Without clock shift. */
+  /** Without clock shift. */
   without_clock_shift("Without clock shift", false),
- /** TwilightType. */
+  /** TwilightType. */
   twilight("TwilightType", true);
 
   private final boolean adjustedForDaylightSavings;
   private final String description;
 
-  private DaylightBandType(final String description,
-                           final boolean adjustedForDaylightSavings)
-  {
+  private DaylightBandType(final String description, final boolean adjustedForDaylightSavings) {
     this.description = description;
     this.adjustedForDaylightSavings = adjustedForDaylightSavings;
   }
@@ -50,11 +46,9 @@ public enum DaylightBandType
   /**
    * Whether the times should be adjusted for daylight savings time.
    *
-   * @return Whether the times should be adjusted for daylight savings
-   *         time
+   * @return Whether the times should be adjusted for daylight savings time
    */
-  public boolean isAdjustedForDaylightSavings()
-  {
+  public boolean isAdjustedForDaylightSavings() {
     return adjustedForDaylightSavings;
   }
 
@@ -64,9 +58,7 @@ public enum DaylightBandType
    * @see java.lang.Enum#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
-
 }

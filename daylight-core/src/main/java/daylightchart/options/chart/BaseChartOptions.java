@@ -21,11 +21,9 @@
  */
 package daylightchart.options.chart;
 
-
 import java.beans.Transient;
 import java.io.Serial;
 import java.io.Serializable;
-
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jfree.chart.JFreeChart;
@@ -39,17 +37,13 @@ import org.jfree.chart.plot.XYPlot;
  *
  * @author sfatehi
  */
-public abstract class BaseChartOptions
-  implements Serializable
-{
+public abstract class BaseChartOptions implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = 1329786356991593668L;
+  @Serial private static final long serialVersionUID = 1329786356991593668L;
 
   private static final JFreeChart chart = createDummyChart();
 
-  private static JFreeChart createDummyChart()
-  {
+  private static JFreeChart createDummyChart() {
     final JFreeChart chart = new JFreeChart(new XYPlot());
     chart.setTitle("");
     final XYPlot plot = chart.getXYPlot();
@@ -61,19 +55,16 @@ public abstract class BaseChartOptions
   /**
    * Copies options from the provided chart.
    *
-   * @param chart
-   *        Chart to copy options from
+   * @param chart Chart to copy options from
    */
   public abstract void copyFromChart(JFreeChart chart);
 
   /**
    * Copies options from the provided chart editor.
    *
-   * @param chartEditor
-   *        Chart editor to copy options from
+   * @param chartEditor Chart editor to copy options from
    */
-  public final void copyFromChartEditor(final ChartEditor chartEditor)
-  {
+  public final void copyFromChartEditor(final ChartEditor chartEditor) {
     chartEditor.updateChart(chart);
     copyFromChart(chart);
   }
@@ -84,8 +75,7 @@ public abstract class BaseChartOptions
    * @return Chart editor.
    */
   @Transient
-  public final ChartEditor getChartEditor()
-  {
+  public final ChartEditor getChartEditor() {
     updateChart(chart);
     return ChartEditorManager.getChartEditor(chart);
   }
@@ -96,18 +86,14 @@ public abstract class BaseChartOptions
    * @see java.lang.Object#toString()
    */
   @Override
-  public String toString()
-  {
-    return ReflectionToStringBuilder.toString(this,
-                                              ToStringStyle.MULTI_LINE_STYLE);
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE);
   }
 
   /**
    * Updates a chart with these options.
    *
-   * @param chart
-   *        Chart to update.
+   * @param chart Chart to update.
    */
   public abstract void updateChart(JFreeChart chart);
-
 }

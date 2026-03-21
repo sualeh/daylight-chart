@@ -21,7 +21,9 @@
  */
 package daylightchart.gui;
 
-
+import daylightchart.gui.actions.LocationsListOperation;
+import daylightchart.gui.util.GuiAction;
+import daylightchart.service.DaylightApplicationServices;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
@@ -34,33 +36,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
-
 import org.geoname.data.Location;
 import org.geoname.parser.LocationFormatter;
-
-import daylightchart.gui.actions.LocationsListOperation;
-import daylightchart.gui.util.GuiAction;
-import daylightchart.service.DaylightApplicationServices;
 
 /**
  * Locations list component.
  *
  * @author Sualeh Fatehi
  */
-class LocationsList
-  extends JPanel
-  implements LocationOperations
-{
+class LocationsList extends JPanel implements LocationOperations {
 
-  @Serial
-  private static final long serialVersionUID = -6884483130453983685L;
+  @Serial private static final long serialVersionUID = -6884483130453983685L;
 
   private final DaylightChartGui mainWindow;
   private final JList<Location> locationsList;
@@ -69,11 +61,9 @@ class LocationsList
   /**
    * Create a new locations list component.
    *
-   * @param mainWindow
-   *        Main window.
+   * @param mainWindow Main window.
    */
-  public LocationsList(final DaylightChartGui mainWindow)
-  {
+  public LocationsList(final DaylightChartGui mainWindow) {
 
     super(new BorderLayout());
 
@@ -90,73 +80,57 @@ class LocationsList
     locationsList = new JList<>();
     locationsList.setVisibleRowCount(20);
     add(new JScrollPane(locationsList));
-    locationsList.setCellRenderer(new DefaultListCellRenderer()
-    {
-      @Serial private static final long serialVersionUID = -5892518623547830472L;
+    locationsList.setCellRenderer(
+        new DefaultListCellRenderer() {
+          @Serial private static final long serialVersionUID = -5892518623547830472L;
 
-      @Override
-      public Component getListCellRendererComponent(final JList list,
-                                                    final Object value,
-                                                    final int index,
-                                                    final boolean isSelected,
-                                                    final boolean cellHasFocus)
-      {
-        super.getListCellRendererComponent(list,
-                                           value,
-                                           index,
-                                           isSelected,
-                                           cellHasFocus);
-        setToolTipText(LocationFormatter.getToolTip((Location) value));
-        return this;
-      }
-    });
-    locationsList.addMouseListener(new MouseAdapter()
-    {
-      @Override
-      public void mouseClicked(final MouseEvent e)
-      {
-        if (!e.isConsumed() && e.getClickCount() == 2)
-        {
-          mainWindow.addLocationTab(getSelectedLocation());
-          e.consume();
-        }
-        if (e.getButton() == MouseEvent.BUTTON2
-            || e.getButton() == MouseEvent.BUTTON3)
-        {
-          popupMenu.show(e.getComponent(), e.getX(), e.getY());
-        }
-      }
-    });
-    locationsList.addKeyListener(new KeyListener()
-    {
-      @Override
-      public void keyPressed(final KeyEvent e)
-      {
-      }
+          @Override
+          public Component getListCellRendererComponent(
+              final JList list,
+              final Object value,
+              final int index,
+              final boolean isSelected,
+              final boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            setToolTipText(LocationFormatter.getToolTip((Location) value));
+            return this;
+          }
+        });
+    locationsList.addMouseListener(
+        new MouseAdapter() {
+          @Override
+          public void mouseClicked(final MouseEvent e) {
+            if (!e.isConsumed() && e.getClickCount() == 2) {
+              mainWindow.addLocationTab(getSelectedLocation());
+              e.consume();
+            }
+            if (e.getButton() == MouseEvent.BUTTON2 || e.getButton() == MouseEvent.BUTTON3) {
+              popupMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+          }
+        });
+    locationsList.addKeyListener(
+        new KeyListener() {
+          @Override
+          public void keyPressed(final KeyEvent e) {}
 
-      @Override
-      public void keyReleased(final KeyEvent e)
-      {
-      }
+          @Override
+          public void keyReleased(final KeyEvent e) {}
 
-      @Override
-      public void keyTyped(final KeyEvent e)
-      {
-        if (e.getKeyChar() == KeyEvent.VK_ENTER)
-        {
-          mainWindow.addLocationTab(getSelectedLocation());
-        }
-        e.consume();
-      }
-    });
+          @Override
+          public void keyTyped(final KeyEvent e) {
+            if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+              mainWindow.addLocationTab(getSelectedLocation());
+            }
+            e.consume();
+          }
+        });
 
-    final Collection<Location> locationsCollection = DaylightApplicationServices
-      .preferences().getLocations();
+    final Collection<Location> locationsCollection =
+        DaylightApplicationServices.preferences().getLocations();
     List<Location> locations = new ArrayList<Location>(locationsCollection);
-    Collections
-      .sort(locations,
-            DaylightApplicationServices.preferences()
-              .loadOptions().getLocationsSortOrder());
+    Collections.sort(
+        locations, DaylightApplicationServices.preferences().loadOptions().getLocationsSortOrder());
     setLocations(locations);
   }
 
@@ -166,10 +140,8 @@ class LocationsList
    * @see daylightchart.gui.LocationOperations#addLocation(org.geoname.data.Location)
    */
   @Override
-  public void addLocation(final Location location)
-  {
-    if (location != null)
-    {
+  public void addLocation(final Location location) {
+    if (location != null) {
       locations.add(location);
     }
     setLocations(locations);
@@ -181,8 +153,7 @@ class LocationsList
    * @see daylightchart.gui.LocationOperations#getLocations()
    */
   @Override
-  public List<Location> getLocations()
-  {
+  public List<Location> getLocations() {
     return new ArrayList<Location>(locations);
   }
 
@@ -192,10 +163,8 @@ class LocationsList
    * @see daylightchart.gui.LocationOperations#getSelectedLocation()
    */
   @Override
-  public Location getSelectedLocation()
-  {
-    if (locationsList.getSelectedIndex() == -1)
-    {
+  public Location getSelectedLocation() {
+    if (locationsList.getSelectedIndex() == -1) {
       locationsList.setSelectedIndex(0);
     }
     return locationsList.getSelectedValue();
@@ -207,10 +176,8 @@ class LocationsList
    * @see daylightchart.gui.LocationOperations#removeLocation(org.geoname.data.Location)
    */
   @Override
-  public void removeLocation(final Location location)
-  {
-    if (location != null)
-    {
+  public void removeLocation(final Location location) {
+    if (location != null) {
       locations.remove(location);
       setLocations(locations);
     }
@@ -220,14 +187,11 @@ class LocationsList
    * {@inheritDoc}
    *
    * @see daylightchart.gui.LocationOperations#replaceLocation(org.geoname.data.Location,
-   *      org.geoname.data.Location)
+   *     org.geoname.data.Location)
    */
   @Override
-  public void replaceLocation(final Location location,
-                              final Location newLocation)
-  {
-    if (location != null && newLocation != null)
-    {
+  public void replaceLocation(final Location location, final Location newLocation) {
+    if (location != null && newLocation != null) {
       locations.remove(location);
       locations.add(newLocation);
       setLocations(locations);
@@ -240,15 +204,12 @@ class LocationsList
    * @see daylightchart.gui.LocationOperations#setLocations(java.util.List)
    */
   @Override
-  public void setLocations(final Collection<Location> locationsCollection)
-  {
-    if (locationsCollection != null && locationsCollection.size() > 0)
-    {
+  public void setLocations(final Collection<Location> locationsCollection) {
+    if (locationsCollection != null && locationsCollection.size() > 0) {
       List<Location> locations = new ArrayList<Location>(locationsCollection);
-      Collections
-        .sort(locations,
-              DaylightApplicationServices.preferences()
-                .loadOptions().getLocationsSortOrder());
+      Collections.sort(
+          locations,
+          DaylightApplicationServices.preferences().loadOptions().getLocationsSortOrder());
       this.locations = locations;
       locationsList.setListData(new Vector<Location>(locations));
       locationsList.setSelectedIndex(0);
@@ -262,20 +223,15 @@ class LocationsList
    * @see daylightchart.gui.LocationOperations#sortLocations()
    */
   @Override
-  public void sortLocations()
-  {
+  public void sortLocations() {
     setLocations(locations);
   }
 
-  private void createActions(final JToolBar toolBar, final JPopupMenu popupMenu)
-  {
-    for (final LocationsListOperation operation: LocationsListOperation
-      .values())
-    {
+  private void createActions(final JToolBar toolBar, final JPopupMenu popupMenu) {
+    for (final LocationsListOperation operation : LocationsListOperation.values()) {
       final GuiAction action = operation.getAction(mainWindow);
       toolBar.add(action);
       popupMenu.add(action);
     }
   }
-
 }
