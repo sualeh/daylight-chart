@@ -21,38 +21,31 @@
  */
 package daylightchart.options;
 
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import sf.util.FileUtils;
 
 /**
  * Selected file.
  *
  * @author Sualeh Fatehi
- * @param <T>
- *        File type
+ * @param <T> File type
  */
-public abstract class BaseTypedFile<T extends FileType>
-{
+public abstract class BaseTypedFile<T extends FileType> {
 
-  private static final Logger LOGGER = Logger
-    .getLogger(BaseTypedFile.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(BaseTypedFile.class.getName());
 
   private final Path file;
   private final T fileType;
 
-  protected BaseTypedFile()
-  {
+  protected BaseTypedFile() {
     this(null, null);
   }
 
-  protected BaseTypedFile(final Path file, final T fileType)
-  {
+  protected BaseTypedFile(final Path file, final T fileType) {
     this.file = file;
     this.fileType = fileType;
   }
@@ -62,14 +55,10 @@ public abstract class BaseTypedFile<T extends FileType>
    *
    * @return True if the file got deleted
    */
-  public final boolean delete()
-  {
-    try
-    {
+  public final boolean delete() {
+    try {
       return Files.deleteIfExists(file);
-    }
-    catch (final IOException e)
-    {
+    } catch (final IOException e) {
       LOGGER.log(Level.SEVERE, "Could not delete file, " + file, e);
       return false;
     }
@@ -80,14 +69,10 @@ public abstract class BaseTypedFile<T extends FileType>
    *
    * @return Whether the file exists
    */
-  public boolean exists()
-  {
-    if (!hasFile())
-    {
+  public boolean exists() {
+    if (!hasFile()) {
       return false;
-    }
-    else
-    {
+    } else {
       return FileUtils.isFileReadable(file);
     }
   }
@@ -97,15 +82,11 @@ public abstract class BaseTypedFile<T extends FileType>
    *
    * @return Directory of the selected file.
    */
-  public final Path getDirectory()
-  {
-    if (hasFile())
-    {
+  public final Path getDirectory() {
+    if (hasFile()) {
       return file.getParent();
 
-    }
-    else
-    {
+    } else {
       return null;
     }
   }
@@ -115,14 +96,10 @@ public abstract class BaseTypedFile<T extends FileType>
    *
    * @return Selected file
    */
-  public final Path getFile()
-  {
-    if (hasFile())
-    {
+  public final Path getFile() {
+    if (hasFile()) {
       return file;
-    }
-    else
-    {
+    } else {
       throw new IllegalAccessError("No file");
     }
   }
@@ -132,14 +109,10 @@ public abstract class BaseTypedFile<T extends FileType>
    *
    * @return Selected filename
    */
-  public final String getFilename()
-  {
-    if (hasFile())
-    {
+  public final String getFilename() {
+    if (hasFile()) {
       return file.getFileName().toString();
-    }
-    else
-    {
+    } else {
       throw new IllegalAccessError("No file");
     }
   }
@@ -149,16 +122,14 @@ public abstract class BaseTypedFile<T extends FileType>
    *
    * @return File type.
    */
-  public final T getFileType()
-  {
+  public final T getFileType() {
     return fileType;
   }
 
   /**
    * @return the isSelected
    */
-  public final boolean hasFile()
-  {
+  public final boolean hasFile() {
     return file != null;
   }
 
@@ -168,16 +139,11 @@ public abstract class BaseTypedFile<T extends FileType>
    * @see java.lang.Object#toString()
    */
   @Override
-  public String toString()
-  {
-    if (hasFile())
-    {
-      return String.format("%s%n%s", fileType, file);
-    }
-    else
-    {
-      return String.format("No file [%d]", hashCode());
+  public String toString() {
+    if (hasFile()) {
+      return "%s%n%s".formatted(fileType, file);
+    } else {
+      return "No file [%d]".formatted(hashCode());
     }
   }
-
 }

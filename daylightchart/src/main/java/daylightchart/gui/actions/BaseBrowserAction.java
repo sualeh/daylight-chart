@@ -21,46 +21,34 @@
  */
 package daylightchart.gui.actions;
 
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.KeyStroke;
-
-import org.apache.commons.lang3.StringUtils;
-
 import daylightchart.gui.util.BareBonesBrowserLaunch;
 import daylightchart.gui.util.GuiAction;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+import javax.swing.KeyStroke;
+import org.apache.commons.lang3.StringUtils;
 
-abstract class BaseBrowserAction
-  extends GuiAction
-{
+abstract class BaseBrowserAction extends GuiAction {
 
-  private static final long serialVersionUID = 4002590686393404496L;
+  @Serial private static final long serialVersionUID = 4002590686393404496L;
 
-  BaseBrowserAction(final String text, final String url)
-  {
+  BaseBrowserAction(final String text, final String url) {
     this(text, null, null, url);
   }
 
-  BaseBrowserAction(final String text,
-                    final String iconResource,
-                    final String shortcutKey,
-                    final String url)
-  {
+  BaseBrowserAction(
+      final String text, final String iconResource, final String shortcutKey, final String url) {
     super(text, iconResource);
-    if (StringUtils.isNotBlank(shortcutKey))
-    {
+    if (StringUtils.isNotBlank(shortcutKey)) {
       setShortcutKey(KeyStroke.getKeyStroke(shortcutKey));
     }
-    addActionListener(new ActionListener()
-    {
-      @Override
-      public void actionPerformed(final ActionEvent actionevent)
-      {
-        BareBonesBrowserLaunch.openURL(url);
-      }
-    });
+    addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(final ActionEvent actionevent) {
+            BareBonesBrowserLaunch.openURL(url);
+          }
+        });
   }
-
 }

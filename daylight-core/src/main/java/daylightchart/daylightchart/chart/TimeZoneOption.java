@@ -21,26 +21,21 @@
  */
 package daylightchart.daylightchart.chart;
 
-
 /**
  * Time option for charting.
  *
  * @author sfatehi
  */
-public enum TimeZoneOption
-{
+public enum TimeZoneOption {
 
- /**
-  * Use local time for the time - do not correct for time zone, and DST
-  */
+  /** Use local time for the time - do not correct for time zone, and DST */
   USE_LOCAL_TIME("Use local time"),
- /** Use time zone for the time - correct for time zone, and DST */
+  /** Use time zone for the time - correct for time zone, and DST */
   USE_TIME_ZONE("Use time zone");
 
   private final String description;
 
-  private TimeZoneOption(final String description)
-  {
+  private TimeZoneOption(final String description) {
     this.description = description;
   }
 
@@ -49,8 +44,7 @@ public enum TimeZoneOption
    *
    * @return Description
    */
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
   }
 
@@ -60,9 +54,7 @@ public enum TimeZoneOption
    * @see java.lang.Enum#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
-
 }

@@ -1,29 +1,22 @@
 package daylightchart.gui.util;
 
-
-import java.nio.file.Path;
-
 import daylightchart.options.BaseTypedFile;
 import daylightchart.options.FileType;
+import java.nio.file.Path;
 
 /**
  * Selected file.
  *
  * @author Sualeh Fatehi
- * @param <T>
- *        File type
+ * @param <T> File type
  */
-public final class SelectedFile<T extends FileType>
-  extends BaseTypedFile<T>
-{
+public final class SelectedFile<T extends FileType> extends BaseTypedFile<T> {
 
-  SelectedFile()
-  {
+  SelectedFile() {
     super();
   }
 
-  SelectedFile(final Path file, final ExtensionFileFilter<T> fileFilter)
-  {
+  SelectedFile(final Path file, final ExtensionFileFilter<T> fileFilter) {
     super(file, fileFilter.getFileType());
   }
 
@@ -32,9 +25,7 @@ public final class SelectedFile<T extends FileType>
    *
    * @return Whether the file was selected
    */
-  public boolean isSelected()
-  {
+  public boolean isSelected() {
     return hasFile();
   }
-
 }

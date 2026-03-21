@@ -1,9 +1,9 @@
-/* 
- * 
+/*
+ *
  * Daylight Chart
  * http://sualeh.github.io/DaylightChart
  * Copyright (c) 2007-2016, Sualeh Fatehi.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it under the terms
  * of the GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
@@ -19,31 +19,27 @@
  */
 package org.geoname.parser;
 
-
 /**
  * General utility methods.
- * 
+ *
  * @author Sualeh Fatehi
  */
-public class Utility
-{
+public class Utility {
 
   /**
-   * Splits a double value into it's sexagesimal parts. Each part has
-   * the same sign as the provided value.
-   * 
-   * @param value
-   *        Value to split
+   * Splits a double value into it's sexagesimal parts. Each part has the same sign as the provided
+   * value.
+   *
+   * @param value Value to split
    * @return Split parts
    */
-  public static int[] sexagesimalSplit(final double value)
-  {
+  public static int[] sexagesimalSplit(final double value) {
     final double absValue = Math.abs(value);
 
     int units;
     int minutes;
     int seconds;
-    final int sign = value < 0? -1: 1;
+    final int sign = value < 0 ? -1 : 1;
 
     // Calculate absolute integer units
     units = (int) Math.floor(absValue);
@@ -51,8 +47,7 @@ public class Utility
 
     // Calculate absolute integer minutes
     minutes = seconds / 60; // Integer arithmetic
-    if (minutes == 60)
-    {
+    if (minutes == 60) {
       minutes = 0;
       units++;
     }
@@ -65,14 +60,10 @@ public class Utility
     minutes = minutes * sign;
     seconds = seconds * sign;
 
-    return new int[] {
-        units, minutes, seconds
-    };
+    return new int[] {units, minutes, seconds};
   }
 
-  private Utility()
-  {
+  private Utility() {
     // Prevent instantiation
   }
-
 }

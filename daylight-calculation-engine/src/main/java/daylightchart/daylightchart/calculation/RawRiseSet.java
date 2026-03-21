@@ -21,12 +21,11 @@
  */
 package daylightchart.daylightchart.calculation;
 
-
 import java.io.PrintWriter;
+import java.io.Serial;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.time.LocalDate;
-
 import org.geoname.data.Location;
 
 /**
@@ -34,11 +33,9 @@ import org.geoname.data.Location;
  *
  * @author Sualeh Fatehi
  */
-final class RawRiseSet
-  implements Serializable, Comparable<RawRiseSet>
-{
+final class RawRiseSet implements Serializable, Comparable<RawRiseSet> {
 
-  private static final long serialVersionUID = 3946758175409716163L;
+  @Serial private static final long serialVersionUID = 3946758175409716163L;
 
   private final Location location;
   private final LocalDate date;
@@ -46,12 +43,12 @@ final class RawRiseSet
   private final double sunrise;
   private final double sunset;
 
-  RawRiseSet(final Location location,
-             final LocalDate date,
-             final boolean inDaylightSavings,
-             final double sunrise,
-             final double sunset)
-  {
+  RawRiseSet(
+      final Location location,
+      final LocalDate date,
+      final boolean inDaylightSavings,
+      final double sunrise,
+      final double sunset) {
     this.location = location;
     this.date = date;
     this.inDaylightSavings = inDaylightSavings;
@@ -66,8 +63,7 @@ final class RawRiseSet
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
   @Override
-  public int compareTo(final RawRiseSet o)
-  {
+  public int compareTo(final RawRiseSet o) {
     return date.compareTo(o.getDate());
   }
 
@@ -78,20 +74,15 @@ final class RawRiseSet
    */
   @SuppressWarnings("boxing")
   @Override
-  public String toString()
-  {
-    if (location == null)
-    {
+  public String toString() {
+    if (location == null) {
       return "";
-    }
-    else
-    {
+    } else {
       final StringWriter writer = new StringWriter();
-      new PrintWriter(writer, true).printf("%s, %s: sunrise %6.3f sunset %6.4f",
-                                           location.getDescription(),
-                                           date,
-                                           sunrise,
-                                           sunset);
+      new PrintWriter(writer, true)
+          .printf(
+              "%s, %s: sunrise %6.3f sunset %6.4f",
+              location.getDescription(), date, sunrise, sunset);
       return writer.toString();
     }
   }
@@ -101,8 +92,7 @@ final class RawRiseSet
    *
    * @return Date
    */
-  LocalDate getDate()
-  {
+  LocalDate getDate() {
     return date;
   }
 
@@ -111,8 +101,7 @@ final class RawRiseSet
    *
    * @return Location
    */
-  Location getLocation()
-  {
+  Location getLocation() {
     return location;
   }
 
@@ -121,8 +110,7 @@ final class RawRiseSet
    *
    * @return Sunrise time
    */
-  double getSunrise()
-  {
+  double getSunrise() {
     return sunrise;
   }
 
@@ -131,14 +119,11 @@ final class RawRiseSet
    *
    * @return Sunset time
    */
-  double getSunset()
-  {
+  double getSunset() {
     return sunset;
   }
 
-  boolean isInDaylightSavings()
-  {
+  boolean isInDaylightSavings() {
     return inDaylightSavings;
   }
-
 }

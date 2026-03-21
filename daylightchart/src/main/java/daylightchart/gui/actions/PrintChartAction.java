@@ -21,32 +21,25 @@
  */
 package daylightchart.gui.actions;
 
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.KeyStroke;
-
 import daylightchart.gui.LocationsTabbedPane;
 import daylightchart.gui.Messages;
 import daylightchart.gui.util.GuiAction;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+import javax.swing.KeyStroke;
 
 /**
  * Prints the current chart.
  *
  * @author sfatehi
  */
-public final class PrintChartAction
-  extends GuiAction
-{
+public final class PrintChartAction extends GuiAction {
 
-  private static final class GuiActionListener
-    implements ActionListener
-  {
+  private static final class GuiActionListener implements ActionListener {
     private final LocationsTabbedPane locationsTabbedPane;
 
-    private GuiActionListener(final LocationsTabbedPane locationsTabbedPane)
-    {
+    private GuiActionListener(final LocationsTabbedPane locationsTabbedPane) {
       this.locationsTabbedPane = locationsTabbedPane;
     }
 
@@ -56,27 +49,24 @@ public final class PrintChartAction
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
-    public void actionPerformed(final ActionEvent actionevent)
-    {
+    public void actionPerformed(final ActionEvent actionevent) {
       locationsTabbedPane.printSelectedChart();
     }
   }
 
-  private static final long serialVersionUID = 4002590686393404496L;
+  @Serial private static final long serialVersionUID = 4002590686393404496L;
 
   /**
    * Prints the current chart.
    *
-   * @param locationsTabbedPane
-   *        Locations tabs.
+   * @param locationsTabbedPane Locations tabs.
    */
-  public PrintChartAction(final LocationsTabbedPane locationsTabbedPane)
-  {
-    super(Messages.getString("DaylightChartGui.Menu.File.PrintChart"), //$NON-NLS-1$
-          "/icons/print_chart.gif" //$NON-NLS-1$
-    );
+  public PrintChartAction(final LocationsTabbedPane locationsTabbedPane) {
+    super(
+        Messages.getString("DaylightChartGui.Menu.File.PrintChart"), // $NON-NLS-1$
+        "/icons/print_chart.gif" //$NON-NLS-1$
+        );
     setShortcutKey(KeyStroke.getKeyStroke("control P"));
     addActionListener(new GuiActionListener(locationsTabbedPane));
   }
-
 }

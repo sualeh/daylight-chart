@@ -21,30 +21,25 @@
  */
 package daylightchart.gui.actions;
 
-
 import daylightchart.gui.Messages;
+import java.io.Serial;
 
 /**
  * Shows online help.
  *
  * @author sfatehi
  */
-public final class OnlineHelpAction
-  extends BaseBrowserAction
-{
+public final class OnlineHelpAction extends BaseBrowserAction {
 
-  private static final long serialVersionUID = 4002590686393404496L;
+  @Serial private static final long serialVersionUID = 4002590686393404496L;
 
-  /**
-   * Shows online help.
-   */
-  public OnlineHelpAction()
-  {
-    super(Messages.getString("DaylightChartGui.Menu.Help.Online"), //$NON-NLS-1$
-          "/icons/help.gif", //$NON-NLS-1$
-          "F1", //$NON-NLS-1$
-          "http://sualeh.github.io/DaylightChart/howto.html" //$NON-NLS-1$
-    );
+  /** Shows online help. */
+  public OnlineHelpAction() {
+    super(
+        Messages.getString("DaylightChartGui.Menu.Help.Online"), // $NON-NLS-1$
+        "/icons/help.gif", //$NON-NLS-1$
+        "F1", //$NON-NLS-1$
+        "http://sualeh.github.io/DaylightChart/howto.html" //$NON-NLS-1$
+        );
   }
-
 }

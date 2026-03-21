@@ -21,37 +21,31 @@
  */
 package daylightchart.gui;
 
-
-import javax.swing.JTabbedPane;
-
-import org.geoname.data.Location;
-import org.geoname.parser.LocationFormatter;
-import org.jfree.chart.ChartPanel;
-
 import daylightchart.daylightchart.chart.ChartConfiguration;
 import daylightchart.daylightchart.chart.DaylightChart;
 import daylightchart.daylightchart.layout.DaylightChartReport;
 import daylightchart.gui.util.CloseTabIcon;
+import java.io.Serial;
+import javax.swing.JTabbedPane;
+import org.geoname.data.Location;
+import org.geoname.parser.LocationFormatter;
+import org.jfree.chart.ChartPanel;
 
 /**
  * Tabbed pane for location charts.
  *
  * @author sfatehi
  */
-public class LocationsTabbedPane
-  extends JTabbedPane
-{
+public class LocationsTabbedPane extends JTabbedPane {
 
-  private static final long serialVersionUID = -2086804705336786590L;
+  @Serial private static final long serialVersionUID = -2086804705336786590L;
 
   /**
    * Add a new tab for the location.
    *
-   * @param daylightChartReport
-   *        Daylight Chart report
+   * @param daylightChartReport Daylight Chart report
    */
-  public void addLocationTab(final DaylightChartReport daylightChartReport)
-  {
+  public void addLocationTab(final DaylightChartReport daylightChartReport) {
     final Location location = daylightChartReport.getLocation();
     final DaylightChart chart = daylightChartReport.getChart();
 
@@ -59,24 +53,20 @@ public class LocationsTabbedPane
     chartPanel.setName(location.toString());
     chartPanel.setPreferredSize(ChartConfiguration.chartDimension);
 
-    addTab(location.toString(),
-           new CloseTabIcon(),
-           chartPanel,
-           LocationFormatter.getToolTip(location));
+    addTab(
+        location.toString(),
+        new CloseTabIcon(),
+        chartPanel,
+        LocationFormatter.getToolTip(location));
     setSelectedIndex(getTabCount() - 1);
   }
 
-  /**
-   * Prints the selected chart.
-   */
-  public void printSelectedChart()
-  {
+  /** Prints the selected chart. */
+  public void printSelectedChart() {
     getSelectedChart().createChartPrintJob();
   }
 
-  private ChartPanel getSelectedChart()
-  {
+  private ChartPanel getSelectedChart() {
     return (ChartPanel) getSelectedComponent();
   }
-
 }

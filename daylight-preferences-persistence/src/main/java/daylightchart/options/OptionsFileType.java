@@ -21,15 +21,12 @@
  */
 package daylightchart.options;
 
-
 /**
  * Options file.
  *
  * @author sfatehi
  */
-class OptionsFileType
-  implements FileType
-{
+class OptionsFileType implements FileType {
 
   /**
    * {@inheritDoc}
@@ -37,8 +34,7 @@ class OptionsFileType
    * @see daylightchart.options.FileType#getDescription()
    */
   @Override
-  public String getDescription()
-  {
+  public String getDescription() {
     return "Options file";
   }
 
@@ -48,9 +44,7 @@ class OptionsFileType
    * @see daylightchart.options.FileType#getFileExtension()
    */
   @Override
-  public String getFileExtension()
-  {
+  public String getFileExtension() {
     return ".xml";
   }
-
 }

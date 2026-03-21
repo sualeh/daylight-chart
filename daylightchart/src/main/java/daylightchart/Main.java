@@ -21,23 +21,18 @@
  */
 package daylightchart;
 
-
-import java.nio.file.Paths;
+import com.jgoodies.looks.plastic.PlasticLookAndFeel;
+import com.jgoodies.looks.plastic.theme.LightGray;
+import daylightchart.gui.DaylightChartGui;
+import daylightchart.service.DaylightApplicationServices;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.UIManager;
-
 import org.apache.commons.lang3.StringUtils;
 import org.geoname.data.Location;
 import org.geoname.parser.LocationsListParser;
 import org.geoname.parser.ParserException;
-
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.plastic.theme.LightGray;
-
-import daylightchart.gui.DaylightChartGui;
-import daylightchart.service.DaylightApplicationServices;
 import sf.util.CommandLineParser;
 import sf.util.CommandLineParser.Option;
 import sf.util.CommandLineParser.StringOption;
@@ -48,8 +43,7 @@ import sf.util.CommandLineUtility;
  *
  * @author Sualeh Fatehi
  */
-public final class Main
-{
+public final class Main {
 
   private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
@@ -59,62 +53,44 @@ public final class Main
   /**
    * Main window.
    *
-   * @param args
-   *        Arguments
+   * @param args Arguments
    */
-  public static void main(final String[] args)
-  {
+  public static void main(final String[] args) {
 
     CommandLineUtility.setLogLevel(args);
 
     // Parse command line
     final CommandLineParser parser = new CommandLineParser();
-    parser.addOption(new StringOption(Option.NO_SHORT_FORM,
-                                      OPTION_PREFERENCES,
-                                      null));
-    parser
-      .addOption(new StringOption(Option.NO_SHORT_FORM, OPTION_LOCATION, null));
+    parser.addOption(new StringOption(Option.NO_SHORT_FORM, OPTION_PREFERENCES, null));
+    parser.addOption(new StringOption(Option.NO_SHORT_FORM, OPTION_LOCATION, null));
     parser.parse(args);
-    final String preferencesDirectory = parser
-      .getStringOptionValue(OPTION_PREFERENCES);
+    final String preferencesDirectory = parser.getStringOptionValue(OPTION_PREFERENCES);
     final String locationString = parser.getStringOptionValue(OPTION_LOCATION);
     Location location = null;
-    if (locationString != null)
-    {
-      try
-      {
+    if (locationString != null) {
+      try {
         location = LocationsListParser.parseLocation(locationString);
-      }
-      catch (final ParserException e)
-      {
+      } catch (final ParserException e) {
         location = null;
       }
     }
 
-    if (StringUtils.isNotBlank(preferencesDirectory))
-    {
-      DaylightApplicationServices.preferences()
-        .initialize(Paths.get(preferencesDirectory));
+    if (StringUtils.isNotBlank(preferencesDirectory)) {
+      DaylightApplicationServices.preferences().initialize(Path.of(preferencesDirectory));
     }
 
     // Set UI look and feel
-    try
-    {
+    try {
       PlasticLookAndFeel.setPlasticTheme(new LightGray());
       UIManager.setLookAndFeel(new PlasticLookAndFeel());
-    }
-    catch (final Exception e)
-    {
+    } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Cannot set look and feel");
     }
 
     new DaylightChartGui(location).setVisible(true);
-
   }
 
-  private Main()
-  {
+  private Main() {
     // No-op
   }
-
 }

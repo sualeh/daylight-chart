@@ -21,38 +21,30 @@
  */
 package daylightchart.gui.actions;
 
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-
-import org.jfree.chart.editor.ChartEditor;
-
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.gui.Messages;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
 import daylightchart.options.chart.ChartOptions;
 import daylightchart.service.DaylightApplicationServices;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
+import org.jfree.chart.editor.ChartEditor;
 
 /**
  * Shows Chart options.
  *
  * @author sfatehi
  */
-public final class ChartOptionsAction
-  extends GuiAction
-{
+public final class ChartOptionsAction extends GuiAction {
 
-  private static final class GuiActionListener
-    implements ActionListener
-  {
+  private static final class GuiActionListener implements ActionListener {
     private final DaylightChartGui mainWindow;
 
-    private GuiActionListener(final DaylightChartGui mainWindow)
-    {
+    private GuiActionListener(final DaylightChartGui mainWindow) {
       this.mainWindow = mainWindow;
     }
 
@@ -62,22 +54,19 @@ public final class ChartOptionsAction
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
-    public void actionPerformed(final ActionEvent actionevent)
-    {
-      final Options options = DaylightApplicationServices.preferences()
-        .loadOptions();
+    public void actionPerformed(final ActionEvent actionevent) {
+      final Options options = DaylightApplicationServices.preferences().loadOptions();
       final ChartOptions chartOptions = options.getChartOptions();
 
       final ChartEditor chartEditor = chartOptions.getChartEditor();
-      final int confirmValue = JOptionPane
-        .showConfirmDialog(mainWindow,
-                           chartEditor,
-                           Messages
-                             .getString("DaylightChartGui.Menu.Options.ChartOptions"), //$NON-NLS-1$
-                           JOptionPane.OK_CANCEL_OPTION,
-                           JOptionPane.PLAIN_MESSAGE);
-      if (confirmValue == JOptionPane.OK_OPTION)
-      {
+      final int confirmValue =
+          JOptionPane.showConfirmDialog(
+              mainWindow,
+              chartEditor,
+              Messages.getString("DaylightChartGui.Menu.Options.ChartOptions"), // $NON-NLS-1$
+              JOptionPane.OK_CANCEL_OPTION,
+              JOptionPane.PLAIN_MESSAGE);
+      if (confirmValue == JOptionPane.OK_OPTION) {
         // Get chart options from the editor
         chartOptions.copyFromChartEditor(chartEditor);
         // Save preferences
@@ -86,19 +75,18 @@ public final class ChartOptionsAction
     }
   }
 
-  private static final long serialVersionUID = 4002590686393404496L;
+  @Serial private static final long serialVersionUID = 4002590686393404496L;
 
   /**
    * Shows Help-About.
    *
-   * @param mainWindow
-   *        Main window.
+   * @param mainWindow Main window.
    */
-  public ChartOptionsAction(final DaylightChartGui mainWindow)
-  {
-    super(Messages.getString("DaylightChartGui.Menu.Options.ChartOptions"), //$NON-NLS-1$
-          "/icons/chart_options.gif" //$NON-NLS-1$
-    );
+  public ChartOptionsAction(final DaylightChartGui mainWindow) {
+    super(
+        Messages.getString("DaylightChartGui.Menu.Options.ChartOptions"), // $NON-NLS-1$
+        "/icons/chart_options.gif" //$NON-NLS-1$
+        );
     setShortcutKey(KeyStroke.getKeyStroke("control alt C"));
     addActionListener(new GuiActionListener(mainWindow));
   }

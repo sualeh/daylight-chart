@@ -21,7 +21,6 @@
  */
 package daylightchart.daylightchart.chart;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -33,8 +32,7 @@ import java.text.SimpleDateFormat;
  *
  * @author Sualeh Fatehi
  */
-public final class ChartConfiguration
-{
+public final class ChartConfiguration {
 
   /** Default dimensions for the chart. */
   public static final Dimension chartDimension = new Dimension(770, 600);
@@ -44,17 +42,17 @@ public final class ChartConfiguration
 
   /** Default daylight color for the chart. */
   public static final Color daylightColor = new Color(0xFF, 0xFF, 0x60, 200);
+
   /** Default twilight color for the chart. */
   public static final Color twilightColor = new Color(0xFF, 0xFF, 0xFF, 60);
+
   /** Default night color for the chart. */
   public static final Color nightColor = new Color(75, 11, 91, 190);
 
   /** Default font for the chart. */
   public static final Font chartFont = new Font("Helvetica", Font.PLAIN, 12);
 
-  private ChartConfiguration()
-  {
+  private ChartConfiguration() {
     // Prevent instantiation
   }
-
 }

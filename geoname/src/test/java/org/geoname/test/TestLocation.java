@@ -21,13 +21,11 @@
  */
 package org.geoname.test;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import java.io.InputStream;
 import java.util.Collection;
-
 import org.geoname.data.Location;
 import org.geoname.parser.FormatterException;
 import org.geoname.parser.LocationFormatter;
@@ -35,31 +33,23 @@ import org.geoname.parser.LocationsListParser;
 import org.geoname.parser.ParserException;
 import org.junit.jupiter.api.Test;
 
-public class TestLocation
-{
+public class TestLocation {
 
   @Test
-  public void location()
-    throws ParserException, FormatterException
-  {
+  public void location() throws ParserException, FormatterException {
 
     final String locationString = "Aberdeen;GB;Europe/London;+5710-00204/";
     final Location location = LocationsListParser.parseLocation(locationString);
 
     assertThat(LocationFormatter.formatLocation(location), is(locationString));
-
   }
 
   @Test
-  public void locations()
-    throws ParserException
-  {
-    final InputStream dataStream = this.getClass().getClassLoader()
-      .getResourceAsStream("locations.data");
-    final Collection<Location> locations = new LocationsListParser(dataStream)
-      .parseLocations();
+  public void locations() throws ParserException {
+    final InputStream dataStream =
+        this.getClass().getClassLoader().getResourceAsStream("locations.data");
+    final Collection<Location> locations = new LocationsListParser(dataStream).parseLocations();
 
     assertThat(locations.size(), is(109));
   }
-
 }

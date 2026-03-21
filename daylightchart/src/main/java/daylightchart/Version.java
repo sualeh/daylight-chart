@@ -21,30 +21,30 @@
  */
 package daylightchart;
 
-
 /**
- * Version information for this product. Has methods to obtain
- * information about the product, as well as a main method, so it can be
- * called from the command line.
+ * Version information for this product. Has methods to obtain information about the product, as
+ * well as a main method, so it can be called from the command line.
  *
  * @author Sualeh Fatehi
  */
-public final class Version
-{
+public final class Version {
 
-  private static final String PRODUCTNAME = "Daylight Chart"; //$NON-NLS-1$
-  private static final String VERSION = "4.1.1"; //$NON-NLS-1$
+  private static final String PRODUCTNAME = "Daylight Chart"; // $NON-NLS-1$
+  private static final String VERSION = "4.1.1"; // $NON-NLS-1$
 
   /**
    * Information about this product.
    *
    * @return Information about this product.
    */
-  public static String about()
-  {
+  public static String about() {
     final StringBuffer about = new StringBuffer();
-    about.append(getProductName()).append(" ").append(getVersion()) //$NON-NLS-1$
-      .append("\n").append("\u00A9 2007-2016, Sualeh Fatehi."); //$NON-NLS-1$ //$NON-NLS-2$
+    about
+        .append(getProductName())
+        .append(" ")
+        .append(getVersion()) // $NON-NLS-1$
+        .append("\n")
+        .append("\u00A9 2007-2016, Sualeh Fatehi."); // $NON-NLS-1$ //$NON-NLS-2$
     return new String(about);
   }
 
@@ -53,8 +53,7 @@ public final class Version
    *
    * @return Product name.
    */
-  public static String getProductName()
-  {
+  public static String getProductName() {
     return PRODUCTNAME;
   }
 
@@ -63,25 +62,20 @@ public final class Version
    *
    * @return Product version number.
    */
-  public static String getVersion()
-  {
+  public static String getVersion() {
     return VERSION;
   }
 
   /**
    * Main routine. Prints information about this product.
    *
-   * @param args
-   *        Arguments to the main routine - they are ignored.
+   * @param args Arguments to the main routine - they are ignored.
    */
-  public static void main(final String[] args)
-  {
+  public static void main(final String[] args) {
     System.out.println(about());
   }
 
-  private Version()
-  {
-  }
+  private Version() {}
 
   /**
    * String representation. Information about this product.
@@ -89,11 +83,8 @@ public final class Version
    * @return String representation.
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
 
     return about();
-
   }
-
 }

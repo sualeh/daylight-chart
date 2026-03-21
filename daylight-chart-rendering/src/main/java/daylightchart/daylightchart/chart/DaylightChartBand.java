@@ -1,10 +1,11 @@
 package daylightchart.daylightchart.chart;
 
-
+import daylightchart.daylightchart.calculation.DaylightBand;
+import daylightchart.daylightchart.calculation.DaylightBandType;
+import daylightchart.daylightchart.calculation.RiseSet;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.time.LocalDateTime;
-
 import org.jfree.chart.renderer.xy.XYDifferenceRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -14,24 +15,17 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
-import daylightchart.daylightchart.calculation.DaylightBand;
-import daylightchart.daylightchart.calculation.DaylightBandType;
-import daylightchart.daylightchart.calculation.RiseSet;
-
 /**
  * Adapter for daylight bands to add charting functionality.
  *
  * @author Sualeh Fatehi
  */
-public class DaylightChartBand
-{
+public class DaylightChartBand {
 
   private final DaylightBand daylightBand;
 
-  DaylightChartBand(final DaylightBand daylightBand)
-  {
-    if (daylightBand == null)
-    {
+  DaylightChartBand(final DaylightBand daylightBand) {
+    if (daylightBand == null) {
       throw new IllegalArgumentException("DaylightBand not provided");
     }
     this.daylightBand = daylightBand;
@@ -42,8 +36,7 @@ public class DaylightChartBand
    *
    * @return Chart renderer
    */
-  public XYItemRenderer getRenderer()
-  {
+  public XYItemRenderer getRenderer() {
     return getRenderer(daylightBand.getDaylightBandType());
   }
 
@@ -52,13 +45,11 @@ public class DaylightChartBand
    *
    * @return Time series collection
    */
-  public TimeSeriesCollection getTimeSeriesCollection()
-  {
+  public TimeSeriesCollection getTimeSeriesCollection() {
     final String name = daylightBand.getName();
     final TimeSeries sunriseSeries = new TimeSeries("Sunrise " + name);
     final TimeSeries sunsetSeries = new TimeSeries("Sunset " + name);
-    for (final RiseSet riseSet: daylightBand.getRiseSets())
-    {
+    for (final RiseSet riseSet : daylightBand.getRiseSets()) {
       final LocalDateTime sunrise = riseSet.getSunrise();
       final LocalDateTime sunset = riseSet.getSunset();
       sunriseSeries.add(toTimeSeriesDataItem(sunrise));
@@ -72,21 +63,16 @@ public class DaylightChartBand
     return band;
   }
 
-  private XYItemRenderer createDifferenceRenderer(final Color color)
-  {
-    final XYDifferenceRenderer renderer = new XYDifferenceRenderer(color,
-                                                                   color,
-                                                                   false);
+  private XYItemRenderer createDifferenceRenderer(final Color color) {
+    final XYDifferenceRenderer renderer = new XYDifferenceRenderer(color, color, false);
     renderer.setDefaultStroke(new BasicStroke(0.1f));
     renderer.setSeriesPaint(0, color);
     renderer.setSeriesPaint(1, color);
     return renderer;
   }
 
-  private XYItemRenderer createOutlineRenderer()
-  {
-    final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true,
-                                                                       false);
+  private XYItemRenderer createOutlineRenderer() {
+    final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
     renderer.setDefaultStroke(new BasicStroke(0.8f));
     renderer.setSeriesPaint(0, Color.white);
     renderer.setSeriesPaint(1, Color.white);
@@ -98,45 +84,24 @@ public class DaylightChartBand
    *
    * @return Chart renderer
    */
-  private XYItemRenderer getRenderer(final DaylightBandType daylightBandType)
-  {
-    XYItemRenderer renderer;
-    switch (daylightBandType)
-    {
-      case with_clock_shift:
-        renderer = createDifferenceRenderer(ChartConfiguration.daylightColor);
-        break;
-      case without_clock_shift:
-        renderer = createOutlineRenderer();
-        break;
-      case twilight:
-        renderer = createDifferenceRenderer(ChartConfiguration.twilightColor);
-        break;
-      default:
-        renderer = null;
-        break;
-    }
-    return renderer;
+  private XYItemRenderer getRenderer(final DaylightBandType daylightBandType) {
+    return switch (daylightBandType) {
+      case with_clock_shift -> createDifferenceRenderer(ChartConfiguration.daylightColor);
+      case without_clock_shift -> createOutlineRenderer();
+      case twilight -> createDifferenceRenderer(ChartConfiguration.twilightColor);
+      default -> null;
+    };
   }
 
   /**
    * A utility method for creating a value based on a date.
    *
-   * @param date
-   *        Date
+   * @param date Date
    */
-  private TimeSeriesDataItem toTimeSeriesDataItem(final LocalDateTime dateTime)
-  {
-    final Day day = new Day(dateTime.getDayOfMonth(),
-                            dateTime.getMonthValue(),
-                            dateTime.getYear());
-    final Minute minute = new Minute(dateTime.getMinute(),
-                                     dateTime.getHour(),
-                                     1,
-                                     1,
-                                     1970);
+  private TimeSeriesDataItem toTimeSeriesDataItem(final LocalDateTime dateTime) {
+    final Day day = new Day(dateTime.getDayOfMonth(), dateTime.getMonthValue(), dateTime.getYear());
+    final Minute minute = new Minute(dateTime.getMinute(), dateTime.getHour(), 1, 1, 1970);
     final long minuteValue = minute.getFirstMillisecond();
     return new TimeSeriesDataItem(day, minuteValue);
   }
-
 }

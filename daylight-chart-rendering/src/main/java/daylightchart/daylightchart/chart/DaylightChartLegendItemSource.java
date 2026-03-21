@@ -21,33 +21,27 @@
  */
 package daylightchart.daylightchart.chart;
 
-
+import daylightchart.daylightchart.calculation.DaylightBandType;
+import daylightchart.daylightchart.calculation.TwilightType;
+import daylightchart.options.Options;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Rectangle;
+import java.io.Serial;
 import java.io.Serializable;
-
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.LegendItemSource;
 
-import daylightchart.daylightchart.calculation.DaylightBandType;
-import daylightchart.daylightchart.calculation.TwilightType;
-import daylightchart.options.Options;
+final class DaylightChartLegendItemSource implements LegendItemSource, Serializable {
 
-final class DaylightChartLegendItemSource
-  implements LegendItemSource, Serializable
-{
+  /** */
+  @Serial private static final long serialVersionUID = -7877379059709945565L;
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = -7877379059709945565L;
   private final Options options;
 
-  DaylightChartLegendItemSource(final Options options)
-  {
+  DaylightChartLegendItemSource(final Options options) {
     this.options = options;
   }
 
@@ -57,21 +51,17 @@ final class DaylightChartLegendItemSource
    * @see org.jfree.chart.LegendItemSource#getLegendItems()
    */
   @Override
-  public LegendItemCollection getLegendItems()
-  {
+  public LegendItemCollection getLegendItems() {
     final LegendItemCollection legendItemCollection = new LegendItemCollection();
 
-    final Paint configuredNightColor = options.getChartOptions()
-      .getPlotOptions().getBackgroundPaint();
-    legendItemCollection.add(createLegendItem(resolveLegendLabel(null),
-                                              configuredNightColor,
-                                              false));
+    final Paint configuredNightColor =
+        options.getChartOptions().getPlotOptions().getBackgroundPaint();
+    legendItemCollection.add(
+        createLegendItem(resolveLegendLabel(null), configuredNightColor, false));
 
-    for (final DaylightBandType daylightSavingsMode: DaylightBandType.values())
-    {
+    for (final DaylightBandType daylightSavingsMode : DaylightBandType.values()) {
       if (daylightSavingsMode == DaylightBandType.twilight
-          && options.getTwilightType() == TwilightType.NO)
-      {
+          && options.getTwilightType() == TwilightType.NO) {
         continue;
       }
       legendItemCollection.add(getLegendItem(daylightSavingsMode));
@@ -80,92 +70,66 @@ final class DaylightChartLegendItemSource
     return legendItemCollection;
   }
 
-  private LegendItem createLegendItem(final String label,
-                                      final Paint paint,
-                                      final boolean isLine)
-  {
-    final LegendItem legendItem = new LegendItem(label, /* description */
-                                                 null,
-                                                 /* toolTipText */null, /* urlText */
-                                                 null,
-                                                 /* shapeVisible */!isLine,
-                                                 /* shape */new Rectangle(10,
-                                                                          10),
-                                                 /* shapeFilled */true,
-                                                 paint,
-                                                 /* shapeOutlineVisible */true,
-                                                 /* outlinePaint */Color.black,
-                                                 /* outlineStroke */new BasicStroke(0.2f),
-                                                 /* lineVisible */isLine,
-                                                 /* line */new Rectangle(10, 3),
-                                                 /* lineStroke */new BasicStroke(0.6f),
-                                                 /* linePaint */Color.black);
-
-    return legendItem;
+  private LegendItem createLegendItem(final String label, final Paint paint, final boolean isLine) {
+    return new LegendItem(
+        label, /* description */
+        null,
+        /* toolTipText */ null, /* urlText */
+        null,
+        /* shapeVisible */ !isLine,
+        /* shape */ new Rectangle(10, 10),
+        /* shapeFilled */ true,
+        paint,
+        /* shapeOutlineVisible */ true,
+        /* outlinePaint */ Color.black,
+        /* outlineStroke */ new BasicStroke(0.2f),
+        /* lineVisible */ isLine,
+        /* line */ new Rectangle(10, 3),
+        /* lineStroke */ new BasicStroke(0.6f),
+        /* linePaint */ Color.black);
   }
 
-  private LegendItem getLegendItem(final DaylightBandType daylightSavingsMode)
-  {
+  private LegendItem getLegendItem(final DaylightBandType daylightSavingsMode) {
     final String legendLabel = resolveLegendLabel(daylightSavingsMode);
-    LegendItem legendItem;
-    switch (daylightSavingsMode)
-    {
-      case with_clock_shift:
-        legendItem = createLegendItem(legendLabel,
-                                      ChartConfiguration.daylightColor,
-                                      false);
-        break;
-      case without_clock_shift:
-        legendItem = createLegendItem(legendLabel, Color.white, true);
-        break;
-      case twilight:
-        legendItem = createLegendItem(legendLabel,
-                                      ChartConfiguration.twilightColor,
-                                      false);
-        break;
-      default:
-        legendItem = null;
-        break;
-    }
-    return legendItem;
+    return switch (daylightSavingsMode) {
+      case with_clock_shift ->
+          createLegendItem(legendLabel, ChartConfiguration.daylightColor, false);
+      case without_clock_shift -> createLegendItem(legendLabel, Color.white, true);
+      case twilight -> createLegendItem(legendLabel, ChartConfiguration.twilightColor, false);
+      default -> null;
+    };
   }
 
-  private String resolveLegendLabel(final DaylightBandType daylightSavingsMode)
-  {
+  private String resolveLegendLabel(final DaylightBandType daylightSavingsMode) {
 
     String legendLabel;
-    if (daylightSavingsMode == null)
-    {
-      legendLabel = Messages.getString("DaylightChart.Legend.Night"); //$NON-NLS-1$
-    }
-    else
-    {
-      switch (daylightSavingsMode)
-      {
+    if (daylightSavingsMode == null) {
+      legendLabel = Messages.getString("DaylightChart.Legend.Night"); // $NON-NLS-1$
+    } else {
+      switch (daylightSavingsMode) {
         case with_clock_shift:
-          legendLabel = Messages.getString("DaylightChart.Legend.Daylight"); //$NON-NLS-1$
+          legendLabel = Messages.getString("DaylightChart.Legend.Daylight"); // $NON-NLS-1$
           break;
         case without_clock_shift:
-          legendLabel = Messages.getString("DaylightChart.Legend.WithoutDST"); //$NON-NLS-1$
+          legendLabel = Messages.getString("DaylightChart.Legend.WithoutDST"); // $NON-NLS-1$
           break;
         case twilight:
           final TwilightType twilight = options.getTwilightType();
-          switch (twilight)
-          {
+          switch (twilight) {
             case CIVIL:
-              legendLabel = Messages
-                .getString("DaylightChart.Legend.Twilight.Civil"); //$NON-NLS-1$
+              legendLabel =
+                  Messages.getString("DaylightChart.Legend.Twilight.Civil"); // $NON-NLS-1$
               break;
             case NAUTICAL:
-              legendLabel = Messages
-                .getString("DaylightChart.Legend.Twilight.Nautical"); //$NON-NLS-1$
+              legendLabel =
+                  Messages.getString("DaylightChart.Legend.Twilight.Nautical"); // $NON-NLS-1$
               break;
             case ASTRONOMICAL:
-              legendLabel = Messages
-                .getString("DaylightChart.Legend.Twilight.Astronomical"); //$NON-NLS-1$
+              legendLabel =
+                  Messages.getString("DaylightChart.Legend.Twilight.Astronomical"); // $NON-NLS-1$
               break;
             default:
-              legendLabel = Messages.getString("DaylightChart.Legend.Twilight"); //$NON-NLS-1$ ;
+              legendLabel = Messages.getString("DaylightChart.Legend.Twilight"); // $NON-NLS-1$ ;
           }
           break;
         default:

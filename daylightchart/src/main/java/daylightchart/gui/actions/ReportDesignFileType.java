@@ -21,7 +21,6 @@
  */
 package daylightchart.gui.actions;
 
-
 import daylightchart.options.FileType;
 
 /**
@@ -29,19 +28,15 @@ import daylightchart.options.FileType;
  *
  * @author Sualeh Fatehi
  */
-public enum ReportDesignFileType
-    implements FileType
-{
+public enum ReportDesignFileType implements FileType {
 
- /** Report design file */
+  /** Report design file */
   report_design("Report design file", ".jasper");
 
   private final String description;
   private final String fileExtension;
 
-  private ReportDesignFileType(final String description,
-                               final String fileExtension)
-  {
+  private ReportDesignFileType(final String description, final String fileExtension) {
     this.description = description;
     this.fileExtension = fileExtension;
   }
@@ -52,8 +47,7 @@ public enum ReportDesignFileType
    * @see daylightchart.options.FileType#getDescription()
    */
   @Override
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
   }
 
@@ -63,8 +57,7 @@ public enum ReportDesignFileType
    * @see daylightchart.options.FileType#getFileExtension()
    */
   @Override
-  public String getFileExtension()
-  {
+  public String getFileExtension() {
     return fileExtension;
   }
 
@@ -74,9 +67,7 @@ public enum ReportDesignFileType
    * @see java.lang.Enum#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return description + " (*" + fileExtension + ")";
   }
-
 }

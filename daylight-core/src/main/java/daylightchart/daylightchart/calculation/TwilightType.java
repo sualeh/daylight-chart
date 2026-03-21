@@ -21,22 +21,19 @@
  */
 package daylightchart.daylightchart.calculation;
 
-
 /**
  * Twilight type.
  *
  * @author Sualeh Fatehi
  */
-public enum TwilightType
-{
+public enum TwilightType {
 
- /** No twilight */
+  /** No twilight */
   NO,
- /** Civil twilight */
+  /** Civil twilight */
   CIVIL,
- /** Nautical twilight */
+  /** Nautical twilight */
   NAUTICAL,
- /** Astronomical twilight */
-  ASTRONOMICAL;
-
+  /** Astronomical twilight */
+  ASTRONOMICAL
 }

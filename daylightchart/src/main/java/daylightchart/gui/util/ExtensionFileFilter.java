@@ -21,38 +21,30 @@
  */
 package daylightchart.gui.util;
 
-
+import daylightchart.options.FileType;
 import java.io.File;
 import java.util.Locale;
-
-import daylightchart.options.FileType;
 
 /**
  * Filters files by extension.
  *
  * @author sfatehi
- * @param <T>
- *        A file type enumeration
+ * @param <T> A file type enumeration
  */
-public class ExtensionFileFilter<T extends FileType>
-  extends javax.swing.filechooser.FileFilter
-  implements java.io.FileFilter, FileType
-{
+public class ExtensionFileFilter<T extends FileType> extends javax.swing.filechooser.FileFilter
+    implements java.io.FileFilter, FileType {
 
   /**
    * Gets the extension for the given file.
    *
-   * @param file
-   *        File
+   * @param file File
    * @return Extension
    */
-  public static String getExtension(final File file)
-  {
+  public static String getExtension(final File file) {
     String extension = "";
     final String fileName = file.getName();
     final int i = fileName.lastIndexOf('.');
-    if (i > 0 && i < fileName.length() - 1)
-    {
+    if (i > 0 && i < fileName.length() - 1) {
       extension = fileName.substring(i + 1).toLowerCase(Locale.ENGLISH);
     }
     return "." + extension;
@@ -64,34 +56,23 @@ public class ExtensionFileFilter<T extends FileType>
   /**
    * Constructor.
    *
-   * @param fileType
-   *        A description of the file type.
+   * @param fileType A description of the file type.
    */
-  public ExtensionFileFilter(final T fileType)
-  {
+  public ExtensionFileFilter(final T fileType) {
     this.fileType = fileType;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
-  public boolean accept(final File file)
-  {
+  public boolean accept(final File file) {
     boolean accept = false;
-    if (file.isDirectory())
-    {
+    if (file.isDirectory()) {
       accept = true;
-    }
-    else if (file.isHidden())
-    {
+    } else if (file.isHidden()) {
       accept = false;
-    }
-    else
-    {
+    } else {
       final String extension = getExtension(file);
-      accept = extension != null
-               && extension.equals(fileType.getFileExtension());
+      accept = extension != null && extension.equals(fileType.getFileExtension());
     }
     return accept;
   }
@@ -102,8 +83,7 @@ public class ExtensionFileFilter<T extends FileType>
    * @see javax.swing.filechooser.FileFilter#getDescription()
    */
   @Override
-  public String getDescription()
-  {
+  public String getDescription() {
     return fileType.getDescription();
   }
 
@@ -113,8 +93,7 @@ public class ExtensionFileFilter<T extends FileType>
    * @see daylightchart.options.FileType#getFileExtension()
    */
   @Override
-  public String getFileExtension()
-  {
+  public String getFileExtension() {
     return fileType.getFileExtension();
   }
 
@@ -123,8 +102,7 @@ public class ExtensionFileFilter<T extends FileType>
    *
    * @return File type.
    */
-  public T getFileType()
-  {
+  public T getFileType() {
     return fileType;
   }
 
@@ -134,9 +112,7 @@ public class ExtensionFileFilter<T extends FileType>
    * @see java.lang.Object#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return fileType.getDescription();
   }
-
 }

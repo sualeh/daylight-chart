@@ -21,31 +21,26 @@
  */
 package daylightchart.options;
 
-
-import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.geoname.data.LocationsSortOrder;
-
 import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.daylightchart.chart.ChartOrientation;
 import daylightchart.daylightchart.chart.TimeZoneOption;
 import daylightchart.options.chart.ChartOptions;
+import java.io.Serial;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.geoname.data.LocationsSortOrder;
 
 /**
  * All Daylight Chart options.
  *
  * @author Sualeh Fatehi
  */
-public class Options
-  implements Serializable
-{
+public class Options implements Serializable {
 
-  private static final long serialVersionUID = 3195704386171200909L;
+  @Serial private static final long serialVersionUID = 3195704386171200909L;
 
   private LocationsSortOrder locationsSortOrder;
   private TimeZoneOption timeZoneOption;
@@ -55,11 +50,8 @@ public class Options
   private ChartOptions chartOptions;
   private Path workingDirectory;
 
-  /**
-   * Default options.
-   */
-  public Options()
-  {
+  /** Default options. */
+  public Options() {
     locationsSortOrder = LocationsSortOrder.BY_NAME;
     timeZoneOption = TimeZoneOption.USE_TIME_ZONE;
     chartOptions = new ChartOptions();
@@ -73,8 +65,7 @@ public class Options
    *
    * @return Chart options.
    */
-  public final ChartOptions getChartOptions()
-  {
+  public final ChartOptions getChartOptions() {
     return chartOptions;
   }
 
@@ -83,24 +74,21 @@ public class Options
    *
    * @return Chart orientation
    */
-  public ChartOrientation getChartOrientation()
-  {
+  public ChartOrientation getChartOrientation() {
     return chartOrientation;
   }
 
   /**
    * @return the locationsSortOrder
    */
-  public final LocationsSortOrder getLocationsSortOrder()
-  {
+  public final LocationsSortOrder getLocationsSortOrder() {
     return locationsSortOrder;
   }
 
   /**
    * @return the timeZoneOption
    */
-  public final TimeZoneOption getTimeZoneOption()
-  {
+  public final TimeZoneOption getTimeZoneOption() {
     return timeZoneOption;
   }
 
@@ -109,8 +97,7 @@ public class Options
    *
    * @return TwilightType setting
    */
-  public TwilightType getTwilightType()
-  {
+  public TwilightType getTwilightType() {
     return twilightType;
   }
 
@@ -119,15 +106,11 @@ public class Options
    *
    * @return Working directory.
    */
-  public Path getWorkingDirectory()
-  {
-    if (workingDirectory != null && Files.isDirectory(workingDirectory))
-    {
+  public Path getWorkingDirectory() {
+    if (workingDirectory != null && Files.isDirectory(workingDirectory)) {
       return workingDirectory;
-    }
-    else
-    {
-      return Paths.get(".");
+    } else {
+      return Path.of(".");
     }
   }
 
@@ -136,19 +119,15 @@ public class Options
    *
    * @return Whether to show the chart legend
    */
-  public boolean isShowChartLegend()
-  {
+  public boolean isShowChartLegend() {
     return showChartLegend;
   }
 
   /**
-   * @param chartOptions
-   *        the chartOptions to set
+   * @param chartOptions the chartOptions to set
    */
-  public final void setChartOptions(final ChartOptions chartOptions)
-  {
-    if (chartOptions != null)
-    {
+  public final void setChartOptions(final ChartOptions chartOptions) {
+    if (chartOptions != null) {
       this.chartOptions = chartOptions;
     }
   }
@@ -156,25 +135,19 @@ public class Options
   /**
    * Sets the chart orientation.
    *
-   * @param chartOrientation
-   *        Chart orientation
+   * @param chartOrientation Chart orientation
    */
-  public void setChartOrientation(final ChartOrientation chartOrientation)
-  {
-    if (chartOrientation != null)
-    {
+  public void setChartOrientation(final ChartOrientation chartOrientation) {
+    if (chartOrientation != null) {
       this.chartOrientation = chartOrientation;
     }
   }
 
   /**
-   * @param locationsSortOrder
-   *        the locationsSortOrder to set
+   * @param locationsSortOrder the locationsSortOrder to set
    */
-  public final void setLocationsSortOrder(final LocationsSortOrder locationsSortOrder)
-  {
-    if (locationsSortOrder != null)
-    {
+  public final void setLocationsSortOrder(final LocationsSortOrder locationsSortOrder) {
+    if (locationsSortOrder != null) {
       this.locationsSortOrder = locationsSortOrder;
     }
   }
@@ -182,22 +155,17 @@ public class Options
   /**
    * Whether to show the chart legend.
    *
-   * @param showChartLegend
-   *        Whether to show the chart legend
+   * @param showChartLegend Whether to show the chart legend
    */
-  public void setShowChartLegend(final boolean showChartLegend)
-  {
+  public void setShowChartLegend(final boolean showChartLegend) {
     this.showChartLegend = showChartLegend;
   }
 
   /**
-   * @param timeZoneOption
-   *        the timeZoneOption to set
+   * @param timeZoneOption the timeZoneOption to set
    */
-  public final void setTimeZoneOption(final TimeZoneOption timeZoneOption)
-  {
-    if (timeZoneOption != null)
-    {
+  public final void setTimeZoneOption(final TimeZoneOption timeZoneOption) {
+    if (timeZoneOption != null) {
       this.timeZoneOption = timeZoneOption;
     }
   }
@@ -205,13 +173,10 @@ public class Options
   /**
    * Sets the twilight display setting for the chart.
    *
-   * @param twilight
-   *        TwilightType setting
+   * @param twilight TwilightType setting
    */
-  public void setTwilightType(final TwilightType twilight)
-  {
-    if (twilight != null)
-    {
+  public void setTwilightType(final TwilightType twilight) {
+    if (twilight != null) {
       twilightType = twilight;
     }
   }
@@ -219,13 +184,10 @@ public class Options
   /**
    * Working directory.
    *
-   * @param workingDirectory
-   *        Working directory.
+   * @param workingDirectory Working directory.
    */
-  public void setWorkingDirectory(final Path workingDirectory)
-  {
-    if (workingDirectory != null && Files.isDirectory(workingDirectory))
-    {
+  public void setWorkingDirectory(final Path workingDirectory) {
+    if (workingDirectory != null && Files.isDirectory(workingDirectory)) {
       this.workingDirectory = workingDirectory;
     }
   }
@@ -236,10 +198,7 @@ public class Options
    * @see java.lang.Object#toString()
    */
   @Override
-  public String toString()
-  {
-    return ReflectionToStringBuilder.toString(this,
-                                              ToStringStyle.MULTI_LINE_STYLE);
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE);
   }
-
 }

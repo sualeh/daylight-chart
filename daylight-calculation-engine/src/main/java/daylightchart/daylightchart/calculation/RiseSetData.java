@@ -1,22 +1,18 @@
 package daylightchart.daylightchart.calculation;
 
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * Contains a data point for the sunrise and sunset, and twilight times
- * for single day.
+ * Contains a data point for the sunrise and sunset, and twilight times for single day.
  *
  * @author sfatehi
  */
-public final class RiseSetData
-{
+public final class RiseSetData {
   private final RiseSet riseSet;
   private final RiseSet twilight;
 
-  RiseSetData(final RiseSet riseSet, final RiseSet twilight)
-  {
+  RiseSetData(final RiseSet riseSet, final RiseSet twilight) {
     this.riseSet = riseSet;
     this.twilight = twilight;
   }
@@ -26,8 +22,7 @@ public final class RiseSetData
    *
    * @return Date for this data point
    */
-  public LocalDate getDate()
-  {
+  public LocalDate getDate() {
     return riseSet.getDate();
   }
 
@@ -36,8 +31,7 @@ public final class RiseSetData
    *
    * @return Sunrise.
    */
-  public LocalDateTime getSunrise()
-  {
+  public LocalDateTime getSunrise() {
     return riseSet.getSunrise();
   }
 
@@ -46,8 +40,7 @@ public final class RiseSetData
    *
    * @return Sunset.
    */
-  public LocalDateTime getSunset()
-  {
+  public LocalDateTime getSunset() {
     return riseSet.getSunset();
   }
 
@@ -56,8 +49,7 @@ public final class RiseSetData
    *
    * @return Twilight, before sunrise.
    */
-  public LocalDateTime getTwilightRise()
-  {
+  public LocalDateTime getTwilightRise() {
     return twilight.getSunrise();
   }
 
@@ -66,9 +58,7 @@ public final class RiseSetData
    *
    * @return Twilight, after sunset.
    */
-  public LocalDateTime getTwilightSet()
-  {
+  public LocalDateTime getTwilightSet() {
     return twilight.getSunset();
   }
-
 }

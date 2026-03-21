@@ -21,17 +21,15 @@
  */
 package daylightchart.options.chart;
 
-
-import java.awt.Font;
-import java.awt.Paint;
-
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.title.TextTitle;
-
 import daylightchart.options.chart.serialization.ChartOptionSerializers.FontDeserializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.FontSerializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.PaintDeserializer;
 import daylightchart.options.chart.serialization.ChartOptionSerializers.PaintSerializer;
+import java.awt.Font;
+import java.awt.Paint;
+import java.io.Serial;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.title.TextTitle;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 
@@ -40,19 +38,20 @@ import tools.jackson.databind.annotation.JsonSerialize;
  *
  * @author sfatehi
  */
-public class TitleOptions
-  extends BaseChartOptions
-{
+public class TitleOptions extends BaseChartOptions {
 
-  private static final long serialVersionUID = -6096894681186027546L;
+  @Serial private static final long serialVersionUID = -6096894681186027546L;
 
   private boolean hideTitle;
+
   @JsonSerialize(using = FontSerializer.class)
   @JsonDeserialize(using = FontDeserializer.class)
   private Font titleFont;
+
   @JsonSerialize(using = PaintSerializer.class)
   @JsonDeserialize(using = PaintDeserializer.class)
   private Paint titlePaint;
+
   private String titleText;
 
   /**
@@ -61,11 +60,9 @@ public class TitleOptions
    * @see BaseChartOptions#copyFromChart(org.jfree.chart.JFreeChart)
    */
   @Override
-  public void copyFromChart(final JFreeChart chart)
-  {
+  public void copyFromChart(final JFreeChart chart) {
     final TextTitle title = chart.getTitle();
-    if (title != null)
-    {
+    if (title != null) {
       titleFont = title.getFont();
       titlePaint = title.getPaint();
       titleText = title.getText();
@@ -77,32 +74,28 @@ public class TitleOptions
    *
    * @return Show title.
    */
-  public boolean getShowTitle()
-  {
+  public boolean getShowTitle() {
     return !hideTitle;
   }
 
   /**
    * @return the titleFont
    */
-  public final Font getTitleFont()
-  {
+  public final Font getTitleFont() {
     return titleFont;
   }
 
   /**
    * @return the titlePaint
    */
-  public final Paint getTitlePaint()
-  {
+  public final Paint getTitlePaint() {
     return titlePaint;
   }
 
   /**
    * @return the titleText
    */
-  public final String getTitleText()
-  {
+  public final String getTitleText() {
     return titleText;
   }
 
@@ -111,35 +104,28 @@ public class TitleOptions
    *
    * @param showTitle
    */
-  public void setShowTitle(final boolean showTitle)
-  {
+  public void setShowTitle(final boolean showTitle) {
     hideTitle = !showTitle;
   }
 
   /**
-   * @param titleFont
-   *        the titleFont to set
+   * @param titleFont the titleFont to set
    */
-  public final void setTitleFont(final Font titleFont)
-  {
+  public final void setTitleFont(final Font titleFont) {
     this.titleFont = titleFont;
   }
 
   /**
-   * @param titlePaint
-   *        the titlePaint to set
+   * @param titlePaint the titlePaint to set
    */
-  public final void setTitlePaint(final Paint titlePaint)
-  {
+  public final void setTitlePaint(final Paint titlePaint) {
     this.titlePaint = titlePaint;
   }
 
   /**
-   * @param titleText
-   *        the titleText to set
+   * @param titleText the titleText to set
    */
-  public final void setTitleText(final String titleText)
-  {
+  public final void setTitleText(final String titleText) {
     this.titleText = titleText;
   }
 
@@ -149,22 +135,16 @@ public class TitleOptions
    * @see BaseChartOptions#updateChart(org.jfree.chart.JFreeChart)
    */
   @Override
-  public void updateChart(final JFreeChart chart)
-  {
-    if (hideTitle)
-    {
+  public void updateChart(final JFreeChart chart) {
+    if (hideTitle) {
       final TextTitle title = chart.getTitle();
-      if (title != null)
-      {
+      if (title != null) {
         title.setFont(titleFont);
         title.setPaint(titlePaint);
         title.setText(titleText);
       }
-    }
-    else
-    {
+    } else {
       chart.setTitle((TextTitle) null);
     }
   }
-
 }

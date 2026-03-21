@@ -21,87 +21,70 @@
  */
 package daylightchart.options;
 
-
+import daylightchart.gui.actions.LocationFileType;
 import java.io.InputStream;
 import java.nio.file.Path;
-
-import daylightchart.gui.actions.LocationFileType;
 
 /**
  * Represents a location file, with data.
  *
  * @author sfatehi
  */
-public final class LocationsDataFile
-  extends BaseLocationsDataFile
-{
+public final class LocationsDataFile extends BaseLocationsDataFile {
 
   /**
    * Constructor.
    *
-   * @param locationDataFile
-   *        File
+   * @param locationDataFile File
    */
-  public LocationsDataFile(final BaseTypedFile<LocationFileType> locationDataFile)
-  {
+  public LocationsDataFile(final BaseTypedFile<LocationFileType> locationDataFile) {
     this(locationDataFile.getFile(), locationDataFile.getFileType());
   }
 
   /**
    * Constructor.
    *
-   * @param settingsDirectory
-   *        Settings directory
+   * @param settingsDirectory Settings directory
    */
-  public LocationsDataFile(final Path settingsDirectory)
-  {
+  public LocationsDataFile(final Path settingsDirectory) {
     super(settingsDirectory, "locations.data", LocationFileType.data);
   }
 
   /**
    * Constructor.
    *
-   * @param file
-   *        File
-   * @param fileType
-   *        Location file type
+   * @param file File
+   * @param fileType Location file type
    */
-  public LocationsDataFile(final Path file, final LocationFileType fileType)
-  {
+  public LocationsDataFile(final Path file, final LocationFileType fileType) {
     super(file, fileType);
 
     // Validation
-    if (file == null)
-    {
+    if (file == null) {
       throw new IllegalArgumentException("No file provided");
     }
-    if (fileType == null)
-    {
+    if (fileType == null) {
       throw new IllegalArgumentException("No file type provided");
     }
   }
 
   /**
-   * Loads a list of locations from a file of a given format, falling
-   * back to an internal resource with the same name.
+   * Loads a list of locations from a file of a given format, falling back to an internal resource
+   * with the same name.
    */
   @Override
-  protected void loadWithFallback()
-  {
+  protected void loadWithFallback() {
     // 1. Load from file
     load();
     // 2. Load from internal store
-    if (data == null)
-    {
-      final InputStream input = Thread.currentThread().getContextClassLoader()
-        .getResourceAsStream(getFilename());
+    if (data == null) {
+      final InputStream input =
+          Thread.currentThread().getContextClassLoader().getResourceAsStream(getFilename());
       load(input);
     }
     // 3. If no locations are loaded, fail
-    if (data == null)
-    {
+    if (data == null) {
       throw new RuntimeException("Cannot load locations");
     }
   }
-
 }
