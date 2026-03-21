@@ -20,58 +20,6 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>3.2.0</version>
-        <executions>
-          <execution>
-            <id>download-licenses</id>
-            <phase>package</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <property name="licenses.dir" location="target/licenses" />
-                <mkdir dir="${licenses.dir}" />
-                <get src="http://www.apache.org/licenses/LICENSE-2.0"
-                  dest="${licenses.dir}/LICENSE.ApacheCommons.html"
-                  usetimestamp="true" 
-                  ignoreerrors="true" />
-                <get src="http://www.object-refinery.com/lgpl.html"
-                  dest="${licenses.dir}/LICENSE.JFreeChart.html"
-                  usetimestamp="true"  
-                  ignoreerrors="true" />
-                <get src="http://xml.apache.org/xalan-j/#license1.1"
-                  dest="${licenses.dir}/LICENSE.ApacheXML.html"
-                  usetimestamp="true"  
-                  ignoreerrors="true" />
-                <get src="http://x-stream.github.io/license.html"
-                  dest="${licenses.dir}/LICENSE.XStream.html"
-                  usetimestamp="true"  
-                  ignoreerrors="true" />
-                <get src="http://www.jgoodies.com/freeware/libraries/"
-                  dest="${licenses.dir}/LICENSE.JGoodies.html"
-                  usetimestamp="true"  
-                  ignoreerrors="true" />
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.10.15</version>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant-apache-regexp</artifactId>
-            <version>1.10.15</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.5.0</version>
         <configuration>
