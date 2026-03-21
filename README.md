@@ -1,5 +1,5 @@
 [![Project Website](https://img.shields.io/badge/project_website-DaylightChart-7B2A90.svg)](http://sualeh.github.io/DaylightChart)
-[![Build Status](https://travis-ci.org/sualeh/DaylightChart.svg?branch=master)](https://travis-ci.org/sualeh/DaylightChart)
+[![CI](https://github.com/sualeh/daylight-chart/actions/workflows/ci.yml/badge.svg)](https://github.com/sualeh/daylight-chart/actions/workflows/ci.yml)
 
 
 # ![DaylightChart](https://github.com/sualeh/DaylightChart/blob/master/daylightchart/src/site/resources/images/daylightchart_logo.png) Daylight Chart
