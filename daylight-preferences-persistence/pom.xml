@@ -18,7 +18,7 @@
     </dependency>
     <dependency>
       <groupId>daylightchart</groupId>
-      <artifactId>daylight-chart-rendering</artifactId>
+      <artifactId>daylightchart-chart</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

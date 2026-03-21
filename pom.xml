@@ -35,9 +35,8 @@
   <modules>
     <module>geoname</module>
     <module>daylight-core</module>
-    <module>daylight-calculation-engine</module>
-    <module>daylight-chart-rendering</module>
     <module>daylight-preferences-persistence</module>
+    <module>daylightchart-chart</module>
     <module>daylight-application-service</module>
     <module>daylightchart</module>
   </modules>
