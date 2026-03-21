@@ -191,18 +191,6 @@ public class Options
   }
 
   /**
-   * Backwards-compatible no-op for persisted options files that still contain
-   * the removed slim UI setting.
-   *
-   * @param slimUi
-   *        Ignored legacy setting.
-   */
-  public void setSlimUi(final boolean slimUi)
-  {
-    // Ignore removed slim UI setting
-  }
-
-  /**
    * @param timeZoneOption
    *        the timeZoneOption to set
    */
