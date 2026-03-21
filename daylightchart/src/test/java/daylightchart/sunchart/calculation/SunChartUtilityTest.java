@@ -1,13 +1,13 @@
 package daylightchart.sunchart.calculation;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import org.geoname.data.Location;
 import org.geoname.parser.LocationsListParser;
 import org.geoname.parser.ParserException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SunChartUtilityTest
 {
@@ -22,17 +22,17 @@ public class SunChartUtilityTest
     final SunChartYearData sunChartYear = SunChartUtility
       .createSunChartYear(location, 2024);
 
-    assertEquals(12, sunChartYear.getSunPositionsList().size());
+    assertThat(sunChartYear.getSunPositionsList().size(), is(12));
     for (final SunPositions sunPositions: sunChartYear.getSunPositionsList())
     {
-      assertFalse(sunPositions.iterator().hasNext() == false);
+      assertThat(sunPositions.iterator().hasNext(), is(true));
       int count = 0;
       for (@SuppressWarnings("unused")
       final SunPosition ignored: sunPositions)
       {
         count++;
       }
-      assertEquals(24, count);
+      assertThat(count, is(24));
     }
   }
 

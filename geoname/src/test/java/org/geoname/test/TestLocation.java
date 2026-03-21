@@ -22,7 +22,8 @@
 package org.geoname.test;
 
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -32,7 +33,7 @@ import org.geoname.parser.FormatterException;
 import org.geoname.parser.LocationFormatter;
 import org.geoname.parser.LocationsListParser;
 import org.geoname.parser.ParserException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestLocation
 {
@@ -45,7 +46,7 @@ public class TestLocation
     final String locationString = "Aberdeen;GB;Europe/London;+5710-00204/";
     final Location location = LocationsListParser.parseLocation(locationString);
 
-    assertEquals(locationString, LocationFormatter.formatLocation(location));
+    assertThat(LocationFormatter.formatLocation(location), is(locationString));
 
   }
 
@@ -58,7 +59,7 @@ public class TestLocation
     final Collection<Location> locations = new LocationsListParser(dataStream)
       .parseLocations();
 
-    assertEquals(109, locations.size());
+    assertThat(locations.size(), is(109));
   }
 
 }

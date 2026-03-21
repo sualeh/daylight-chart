@@ -1,8 +1,10 @@
 package daylightchart.daylightchart.calculation;
 
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -12,7 +14,7 @@ import java.util.List;
 import org.geoname.data.Location;
 import org.geoname.parser.ParserException;
 import org.geoname.parser.LocationsListParser;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import daylightchart.options.Options;
 
@@ -100,7 +102,7 @@ public class RiseSetUtilityTest
     final Location location = LocationsListParser.parseLocation(locationString);
     final RiseSetData riseSetData = getRiseSetData(location, date);
 
-    assertNotNull(riseSetData);
+    assertThat(riseSetData, is(notNullValue()));
     assertWithinTolerance(location,
                           date,
                           "sunrise",
@@ -121,9 +123,10 @@ public class RiseSetUtilityTest
   {
     final long differenceInSeconds = Math.abs(Duration.between(expected, actual)
       .getSeconds());
-    assertTrue(location + " " + date + " " + label + " expected " + expected
+    assertThat(location + " " + date + " " + label + " expected " + expected
                + " but was " + actual,
-               differenceInSeconds <= TOLERANCE_MINUTES * 60L);
+               differenceInSeconds,
+               lessThanOrEqualTo(TOLERANCE_MINUTES * 60L));
   }
 
   private RiseSetData getRiseSetData(final Location location, final LocalDate date)

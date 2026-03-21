@@ -22,7 +22,8 @@
 package org.geoname.test;
 
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,13 +39,13 @@ import org.geoname.parser.DefaultTimezones;
 import org.geoname.parser.GNISFileParser;
 import org.geoname.parser.GNSCountryFileParser;
 import org.geoname.parser.ParserException;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class TestGeoNameFiles
 {
 
-  @BeforeClass
+  @BeforeAll
   public static void turnOffLogs()
   {
     final Logger[] loggers = new Logger[] {
@@ -101,10 +102,9 @@ public class TestGeoNameFiles
     }
     zis.close();
 
-    assertEquals(String.format("Number of locations in file %s:%s",
-                               filename,
-                               ze),
-                 numLocations, locations.size());
+    assertThat(String.format("Number of locations in file %s:%s", filename, ze),
+               locations.size(),
+               is(numLocations));
   }
 
   private void parseGNSCountryFile(final String filename,
@@ -124,9 +124,8 @@ public class TestGeoNameFiles
     }
     zis.close();
 
-    assertEquals(String.format("Number of locations in file %s:%s",
-                               filename,
-                               ze),
-                 numLocations, locations.size());
+    assertThat(String.format("Number of locations in file %s:%s", filename, ze),
+               locations.size(),
+               is(numLocations));
   }
 }
