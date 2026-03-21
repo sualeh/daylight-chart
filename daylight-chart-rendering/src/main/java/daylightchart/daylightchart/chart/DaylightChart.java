@@ -27,6 +27,7 @@ import daylightchart.daylightchart.calculation.RiseSetYearData;
 import daylightchart.options.Options;
 import daylightchart.options.chart.ChartOptions;
 import daylightchart.options.chart.ChartOptionsListener;
+import daylightchart.options.chart.ChartOptionsService;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -69,14 +70,13 @@ public class DaylightChart extends JFreeChart implements ChartOptionsListener {
   @Serial private static final long serialVersionUID = 1223227216177061127L;
 
   private static final Logger LOGGER = Logger.getLogger(DaylightChart.class.getName());
+  private static final ChartOptionsService CHART_OPTIONS_SERVICE = new ChartOptionsService();
 
   private final RiseSetYearData riseSetData;
 
   /** Create an empty chart, just to get the default chart options. */
   public DaylightChart() {
-    this(
-        RiseSetUtility.createRiseSetYear(null, Year.now().getValue(), new Options()),
-        new Options());
+    this(RiseSetUtility.createRiseSetYear(null, Year.now().getValue(), new Options()), new Options(), null);
     setTitle("");
   }
 
@@ -86,10 +86,14 @@ public class DaylightChart extends JFreeChart implements ChartOptionsListener {
    * @param riseSetData Rise and set data for the year
    * @param options Options
    */
-  public DaylightChart(final RiseSetYearData riseSetData, final Options options) {
+  public DaylightChart(
+      final RiseSetYearData riseSetData, final Options options, final ChartOptions chartOptions) {
     super(new XYPlot());
     this.riseSetData = riseSetData;
-    createChart(options);
+    createChart(options, chartOptions);
+    if (chartOptions != null) {
+      CHART_OPTIONS_SERVICE.applyChartOptions(chartOptions, this);
+    }
   }
 
   /**
@@ -157,7 +161,7 @@ public class DaylightChart extends JFreeChart implements ChartOptionsListener {
   }
 
   /** Creates the daylight chart. */
-  private void createChart(final Options options) {
+  private void createChart(final Options options, final ChartOptions chartOptions) {
 
     setBackgroundPaint(Color.white);
 
@@ -194,9 +198,9 @@ public class DaylightChart extends JFreeChart implements ChartOptionsListener {
       optionsNotNull = options;
     }
     createTitles(
-        optionsNotNull.getChartOptions(), ChartConfiguration.chartFont.deriveFont(Font.BOLD, 18));
-
-    createLegend(optionsNotNull, ChartConfiguration.chartFont.deriveFont(Font.PLAIN, 12));
+        chartOptions == null ? new ChartOptions() : chartOptions,
+        ChartConfiguration.chartFont.deriveFont(Font.BOLD, 18));
+    createLegend(optionsNotNull, chartOptions, ChartConfiguration.chartFont.deriveFont(Font.PLAIN, 12));
   }
 
   private void createDSTMarker(final XYPlot plot) {
@@ -246,11 +250,11 @@ public class DaylightChart extends JFreeChart implements ChartOptionsListener {
     plot.setRangeAxis(axis);
   }
 
-  private void createLegend(final Options options, final Font font) {
+  private void createLegend(final Options options, final ChartOptions chartOptions, final Font font) {
     removeLegend();
 
     if (options.isShowChartLegend()) {
-      final LegendItemSource legendItemSource = new DaylightChartLegendItemSource(options);
+      final LegendItemSource legendItemSource = new DaylightChartLegendItemSource(options, chartOptions);
       final LegendTitle legendTitle = new LegendTitle(legendItemSource);
       legendTitle.setItemFont(font);
       legendTitle.setPosition(RectangleEdge.BOTTOM);

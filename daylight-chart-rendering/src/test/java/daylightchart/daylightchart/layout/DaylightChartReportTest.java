@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import daylightchart.options.Options;
+import daylightchart.options.chart.ChartOptionsService;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.geoname.data.Location;
@@ -17,9 +18,12 @@ class DaylightChartReportTest {
 
   @Test
   void shouldCreateReportFileNameAndImage() throws Exception {
+    final ChartOptionsService chartOptionsService = new ChartOptionsService();
     final Location location =
         LocationsListParser.parseLocation("Boston, MA;US;America/New_York;+4232-07104/");
-    final DaylightChartReport report = new DaylightChartReport(location, new Options());
+    final DaylightChartReport report =
+        new DaylightChartReport(
+            location, new Options(), chartOptionsService.createDefaultChartOptions());
     final Path imageFile = Files.createTempFile("daylight-report", ".png");
 
     assertThat(report.getChart(), is(notNullValue()));

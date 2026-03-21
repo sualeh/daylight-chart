@@ -2,7 +2,6 @@ package daylightchart.options;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.daylightchart.chart.ChartOrientation;
@@ -18,7 +17,6 @@ class OptionsTest {
   void shouldProvideStableDefaultOptions() {
     final Options options = new Options();
 
-    assertThat(options.getChartOptions(), is(notNullValue()));
     assertThat(options.getLocationsSortOrder(), is(LocationsSortOrder.BY_NAME));
     assertThat(options.getTimeZoneOption(), is(TimeZoneOption.USE_TIME_ZONE));
     assertThat(options.getChartOrientation(), is(ChartOrientation.STANDARD));

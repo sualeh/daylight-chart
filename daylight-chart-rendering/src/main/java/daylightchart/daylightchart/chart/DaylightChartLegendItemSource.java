@@ -24,6 +24,7 @@ package daylightchart.daylightchart.chart;
 import daylightchart.daylightchart.calculation.DaylightBandType;
 import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.options.Options;
+import daylightchart.options.chart.ChartOptions;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
@@ -40,9 +41,11 @@ final class DaylightChartLegendItemSource implements LegendItemSource, Serializa
   @Serial private static final long serialVersionUID = -7877379059709945565L;
 
   private final Options options;
+  private final ChartOptions chartOptions;
 
-  DaylightChartLegendItemSource(final Options options) {
+  DaylightChartLegendItemSource(final Options options, final ChartOptions chartOptions) {
     this.options = options;
+    this.chartOptions = chartOptions;
   }
 
   /**
@@ -55,7 +58,10 @@ final class DaylightChartLegendItemSource implements LegendItemSource, Serializa
     final LegendItemCollection legendItemCollection = new LegendItemCollection();
 
     final Paint configuredNightColor =
-        options.getChartOptions().getPlotOptions().getBackgroundPaint();
+        chartOptions != null && chartOptions.getPlotOptions() != null
+                && chartOptions.getPlotOptions().getBackgroundPaint() != null
+            ? chartOptions.getPlotOptions().getBackgroundPaint()
+            : ChartConfiguration.nightColor;
     legendItemCollection.add(
         createLegendItem(resolveLegendLabel(null), configuredNightColor, false));
 

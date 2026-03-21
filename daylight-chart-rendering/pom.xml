@@ -31,5 +31,10 @@
       <artifactId>jfreechart</artifactId>
       <version>1.5.6</version>
     </dependency>
+    <dependency>
+      <groupId>tools.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>3.1.0</version>
+    </dependency>
   </dependencies>
 </project>

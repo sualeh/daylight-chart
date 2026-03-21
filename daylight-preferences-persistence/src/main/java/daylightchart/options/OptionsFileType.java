@@ -45,6 +45,6 @@ class OptionsFileType implements FileType {
    */
   @Override
   public String getFileExtension() {
-    return ".xml";
+    return ".yaml";
   }
 }
