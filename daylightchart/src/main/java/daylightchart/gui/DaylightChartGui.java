@@ -23,18 +23,10 @@ package daylightchart.gui;
 
 
 import java.awt.BorderLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -61,10 +53,8 @@ import daylightchart.gui.actions.PrintChartAction;
 import daylightchart.gui.actions.ResetAllAction;
 import daylightchart.gui.actions.SaveChartAction;
 import daylightchart.gui.actions.SaveLocationsFileAction;
-import daylightchart.gui.util.BareBonesBrowserLaunch;
 import daylightchart.gui.util.ExitAction;
 import daylightchart.gui.util.GuiAction;
-import daylightchart.options.Options;
 import daylightchart.service.DaylightApplicationServices;
 
 /**
@@ -79,23 +69,16 @@ public final class DaylightChartGui
 
   private final static long serialVersionUID = 3760840181833283637L;
 
-  private static final Logger LOGGER = Logger
-    .getLogger(DaylightChartGui.class.getName());
-
   private final LocationsList locationsList;
   private JMenu recentLocationsMenu;
   private final LocationsTabbedPane locationsTabbedPane;
-  private final boolean slimUi;
 
   /**
    * Creates a new instance of a Daylight Chart main window.
-   *
-   * @param slimUi
-   *        Whether to show the slim user interface
    */
-  public DaylightChartGui(final boolean slimUi)
+  public DaylightChartGui()
   {
-    this(null, slimUi);
+    this(null);
   }
 
   /**
@@ -103,14 +86,9 @@ public final class DaylightChartGui
    *
    * @param location
    *        Location for a single chart window, or null for the full UI
-   * @param slimUi
-   *        Whether to use a slim user interface
    */
-  public DaylightChartGui(final Location location, final boolean slimUi)
+  public DaylightChartGui(final Location location)
   {
-
-    this.slimUi = slimUi;
-
     setIconImage(new ImageIcon(DaylightChartGui.class
       .getResource("/daylightchart.png")) //$NON-NLS-1$
         .getImage());
@@ -123,19 +101,11 @@ public final class DaylightChartGui
       // Create basic UI
       locationsTabbedPane = new LocationsTabbedPane();
       locationsList = new LocationsList(this);
-
-      if (slimUi)
-      {
-        getContentPane().add(locationsList);
-      }
-      else
-      {
-        final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                                                    locationsList,
-                                                    locationsTabbedPane);
-        splitPane.setOneTouchExpandable(true);
-        getContentPane().add(splitPane);
-      }
+      final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                                                  locationsList,
+                                                  locationsTabbedPane);
+      splitPane.setOneTouchExpandable(true);
+      getContentPane().add(splitPane);
 
       // Create menus and toolbars
       final JMenuBar menuBar = new JMenuBar();
@@ -207,28 +177,7 @@ public final class DaylightChartGui
       .reports()
       .createReport(location,
                     DaylightApplicationServices.preferences().loadOptions());
-    if (slimUi)
-    {
-      final Path reportFile = Paths
-        .get(DaylightApplicationServices.preferences().getScratchDirectory()
-          .toString(),
-             daylightChartReport.getReportFileName(ChartFileType.png));
-      daylightChartReport.write(reportFile, ChartFileType.png);
-      try
-      {
-        final String url = reportFile.toUri().toURL().toString();
-        LOGGER.log(Level.FINE, "Opening URL " + url);
-        BareBonesBrowserLaunch.openURL(url);
-      }
-      catch (final MalformedURLException e)
-      {
-        LOGGER.log(Level.FINE, "Cannot open file " + reportFile, e);
-      }
-    }
-    else
-    {
-      locationsTabbedPane.addLocationTab(daylightChartReport);
-    }
+    locationsTabbedPane.addLocationTab(daylightChartReport);
 
     // Add to recent locations
     DaylightApplicationServices.preferences().addRecentLocation(location);
@@ -264,14 +213,6 @@ public final class DaylightChartGui
   public Location getSelectedLocation()
   {
     return locationsList.getSelectedLocation();
-  }
-
-  /**
-   * @return the slimUi
-   */
-  public boolean isSlimUi()
-  {
-    return slimUi;
   }
 
   /**
@@ -371,10 +312,7 @@ public final class DaylightChartGui
     menu.add(saveLocationsFile);
     menu.addSeparator();
     menu.add(saveChart);
-    if (!isSlimUi())
-    {
-      menu.add(printChart);
-    }
+    menu.add(printChart);
     menu.addSeparator();
     menu.add(recentLocationsMenu);
     menu.addSeparator();
@@ -424,26 +362,6 @@ public final class DaylightChartGui
 
     final GuiAction resetAll = new ResetAllAction(this);
     menu.add(resetAll);
-
-    menu.addSeparator();
-
-    final JCheckBoxMenuItem slimUiMenuItem = new JCheckBoxMenuItem(Messages
-      .getString("DaylightChartGui.Menu.Options.SlimUi")); //$NON-NLS-1$
-    slimUiMenuItem.setState(isSlimUi());
-    slimUiMenuItem.addItemListener(new ItemListener()
-    {
-      @Override
-      public void itemStateChanged(final ItemEvent e)
-      {
-        final boolean slimUi = e.getStateChange() == ItemEvent.SELECTED;
-        final Options options = DaylightApplicationServices.preferences()
-          .loadOptions();
-        options.setSlimUi(slimUi);
-        DaylightApplicationServices.preferences().saveOptions(options);
-        ResetAllAction.restart(DaylightChartGui.this, slimUi);
-      }
-    });
-    menu.add(slimUiMenuItem);
 
     menuBar.add(menu);
 

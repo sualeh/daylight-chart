@@ -25,14 +25,17 @@ class UserPreferencesServiceTest
     final UserPreferencesService service = new UserPreferencesService();
     final Path settingsDirectory = Files
       .createTempDirectory("daylight-service-preferences");
+    final Path workingDirectory = Files.createTempDirectory(settingsDirectory,
+                                                           "work");
 
     service.initialize(settingsDirectory);
     final Options options = service.loadOptions();
-    options.setSlimUi(true);
+    options.setWorkingDirectory(workingDirectory);
     service.saveOptions(options);
 
     assertThat(service.loadOptions(), is(notNullValue()));
-    assertThat(service.loadOptions().isSlimUi(), is(true));
+    assertThat(service.loadOptions().getWorkingDirectory(),
+               is(workingDirectory));
     assertThat(service.getLocations().size(), is(greaterThan(0)));
   }
 

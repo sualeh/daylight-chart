@@ -38,9 +38,7 @@ import com.jgoodies.looks.plastic.theme.LightGray;
 
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.service.DaylightApplicationServices;
-import daylightchart.options.Options;
 import sf.util.CommandLineParser;
-import sf.util.CommandLineParser.BooleanOption;
 import sf.util.CommandLineParser.Option;
 import sf.util.CommandLineParser.StringOption;
 import sf.util.CommandLineUtility;
@@ -55,7 +53,6 @@ public final class Main
 
   private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
-  private static final String OPTION_SLIMUI = "slim";
   private static final String OPTION_PREFERENCES = "prefs";
   private static final String OPTION_LOCATION = "location";
 
@@ -72,14 +69,12 @@ public final class Main
 
     // Parse command line
     final CommandLineParser parser = new CommandLineParser();
-    parser.addOption(new BooleanOption(Option.NO_SHORT_FORM, OPTION_SLIMUI));
     parser.addOption(new StringOption(Option.NO_SHORT_FORM,
                                       OPTION_PREFERENCES,
                                       null));
     parser
       .addOption(new StringOption(Option.NO_SHORT_FORM, OPTION_LOCATION, null));
     parser.parse(args);
-    boolean slimUi = parser.getBooleanOptionValue(OPTION_SLIMUI);
     final String preferencesDirectory = parser
       .getStringOptionValue(OPTION_PREFERENCES);
     final String locationString = parser.getStringOptionValue(OPTION_LOCATION);
@@ -113,15 +108,7 @@ public final class Main
       LOGGER.log(Level.WARNING, "Cannot set look and feel");
     }
 
-    final Options options = DaylightApplicationServices.preferences()
-      .loadOptions();
-    if (!slimUi)
-    {
-      slimUi = options.isSlimUi();
-    }
-    options.setSlimUi(slimUi);
-    DaylightApplicationServices.preferences().saveOptions(options);
-    new DaylightChartGui(location, slimUi).setVisible(true);
+    new DaylightChartGui(location).setVisible(true);
 
   }
 

@@ -25,13 +25,11 @@ class OptionsDataFileTest
     final OptionsDataFile optionsDataFile = new OptionsDataFile(settingsDirectory);
     final Options options = optionsDataFile.getData();
     options.setWorkingDirectory(workingDirectory);
-    options.setSlimUi(true);
     optionsDataFile.save(options);
 
     final OptionsDataFile reloaded = new OptionsDataFile(settingsDirectory);
 
     assertThat(reloaded.getData(), is(notNullValue()));
-    assertThat(reloaded.getData().isSlimUi(), is(true));
     assertThat(reloaded.getData().getWorkingDirectory(), is(workingDirectory));
   }
 
