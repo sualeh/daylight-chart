@@ -12,33 +12,51 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import us.fatehi.calculation.ExtendedSunPositionAlgorithm.SolarEphemerides;
-
 /**
  * Solar ephemerides at a given date and time.
  *
  * @author sfatehi
  */
 public class SunPosition
-  implements SolarEphemerides, Serializable, Comparable<SunPosition>
+  implements Serializable, Comparable<SunPosition>
 {
 
   private static final long serialVersionUID = -7394558865293598834L;
 
   private final LocalDateTime dateTime;
-  private final SolarEphemerides solarEphemerides;
+  private final double altitude;
+  private final double azimuth;
+  private final double declination;
+  private final double equationOfTime;
+  private final double hourAngle;
+  private final double rightAscension;
 
   /**
    * Solar ephemerides at a given date and time.
    *
    * @param dateTime
-   * @param solarEphemerides
+   * @param altitude
+   * @param azimuth
+   * @param declination
+   * @param equationOfTime
+   * @param hourAngle
+   * @param rightAscension
    */
   public SunPosition(final LocalDateTime dateTime,
-                     final SolarEphemerides solarEphemerides)
+                     final double altitude,
+                     final double azimuth,
+                     final double declination,
+                     final double equationOfTime,
+                     final double hourAngle,
+                     final double rightAscension)
   {
     this.dateTime = dateTime;
-    this.solarEphemerides = solarEphemerides;
+    this.altitude = altitude;
+    this.azimuth = azimuth;
+    this.declination = declination;
+    this.equationOfTime = equationOfTime;
+    this.hourAngle = hourAngle;
+    this.rightAscension = rightAscension;
   }
 
   /**
@@ -66,19 +84,17 @@ public class SunPosition
   /**
    * @return the altitude
    */
-  @Override
   public double getAltitude()
   {
-    return solarEphemerides.getAltitude();
+    return altitude;
   }
 
   /**
    * @return the azimuth
    */
-  @Override
   public double getAzimuth()
   {
-    return solarEphemerides.getAzimuth();
+    return azimuth;
   }
 
   /**
@@ -97,48 +113,24 @@ public class SunPosition
     return dateTime;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see org.sunposition.calculation.ExtendedSunPositionAlgorithm.SolarEphemerides#getDeclination()
-   */
-  @Override
   public double getDeclination()
   {
-    return solarEphemerides.getDeclination();
+    return declination;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see org.sunposition.calculation.ExtendedSunPositionAlgorithm.SolarEphemerides#getEquationOfTime()
-   */
-  @Override
   public double getEquationOfTime()
   {
-    return solarEphemerides.getEquationOfTime();
+    return equationOfTime;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see org.sunposition.calculation.ExtendedSunPositionAlgorithm.SolarEphemerides#getHourAngle()
-   */
-  @Override
   public double getHourAngle()
   {
-    return solarEphemerides.getHourAngle();
+    return hourAngle;
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see org.sunposition.calculation.ExtendedSunPositionAlgorithm.SolarEphemerides#getRightAscension()
-   */
-  @Override
   public double getRightAscension()
   {
-    return solarEphemerides.getRightAscension();
+    return rightAscension;
   }
 
   /**

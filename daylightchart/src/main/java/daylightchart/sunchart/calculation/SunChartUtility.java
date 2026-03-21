@@ -28,6 +28,8 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +37,9 @@ import java.util.logging.Logger;
 
 import org.geoname.data.Location;
 
-import us.fatehi.calculation.Equinox;
-import us.fatehi.calculation.Equinox.DateTime;
-import us.fatehi.calculation.ExtendedSunPositionAlgorithm;
-import us.fatehi.calculation.ExtendedSunPositionAlgorithm.SolarEphemerides;
-import us.fatehi.calculation.SunPositionAlgorithmFactory;
+import net.e175.klaus.solarpositioning.DeltaT;
+import net.e175.klaus.solarpositioning.SPA;
+import net.e175.klaus.solarpositioning.SolarPosition;
 
 /**
  * Calculator for sunrise and sunset times for a year.
@@ -51,9 +51,6 @@ public final class SunChartUtility
 
   private static final Logger LOGGER = Logger
     .getLogger(SunChartUtility.class.getName());
-
-  private static final ExtendedSunPositionAlgorithm sunAlgorithm = SunPositionAlgorithmFactory
-    .getExtendedSunPositionAlgorithmInstance();
 
   /**
    * Calculator for sunrise and sunset times for a year.
@@ -68,17 +65,16 @@ public final class SunChartUtility
                                                     final int year)
   {
     final SunChartYearData sunChartYear = new SunChartYearData(location, year);
+    final ZoneId zoneId = getZoneId(location);
+    final double latitude = getLatitude(location);
+    final double longitude = getLongitude(location);
 
     for (final LocalDate date: getYearsDates(year))
     {
       final SunPositions sunPositions = new SunPositions(date);
-      sunAlgorithm.setDate(date.getYear(),
-                           date.getMonthValue(),
-                           date.getDayOfMonth());
+      final double deltaT = DeltaT.estimate(date);
       for (int hour = 0; hour < 24; hour++)
       {
-        final SolarEphemerides solarEphemerides = sunAlgorithm
-          .calcSolarEphemerides(hour);
         final LocalDateTime dateTime = LocalDateTime
           .of(date.getYear(),
               date.getMonthValue(),
@@ -86,8 +82,30 @@ public final class SunChartUtility
               hour,
               0,
               0);
+        final ZonedDateTime zonedDateTime = dateTime.atZone(zoneId);
+        final SPA.SpaTimeDependent timeDependent = SPA
+          .calculateSpaTimeDependentParts(zonedDateTime, deltaT);
+        final SolarPosition solarPosition = SPA
+          .calculateSolarPositionWithTimeDependentParts(latitude,
+                                                        longitude,
+                                                        0D,
+                                                        timeDependent);
         final SunPosition sunPosition = new SunPosition(dateTime,
-                                                        solarEphemerides);
+                                                        90D
+                                                            - solarPosition
+                                                              .zenithAngle(),
+                                                        solarPosition.azimuth(),
+                                                        timeDependent
+                                                          .deltaDegrees(),
+                                                        Double.NaN,
+                                                        normalizeHourAngle(
+                                                                           timeDependent
+                                                                             .nuDegrees()
+                                                                           + longitude
+                                                                           - timeDependent
+                                                                             .alphaDegrees()),
+                                                        timeDependent
+                                                          .alphaDegrees());
         sunPositions.add(sunPosition);
       }
       sunChartYear.add(sunPositions);
@@ -149,23 +167,22 @@ public final class SunChartUtility
   private static List<LocalDate> getYearsDates(final int year)
   {
     final List<LocalDate> dates = new ArrayList<LocalDate>();
-    final Equinox equinox = new Equinox(year);
     for (int month = 1; month <= 12; month++)
     {
       LocalDate date;
       switch (month)
       {
         case 3:
-          date = toLocalDate(equinox.getMarchEquinox());
+          date = LocalDate.of(year, month, 20);
           break;
         case 6:
-          date = toLocalDate(equinox.getJuneSolstice());
+          date = LocalDate.of(year, month, 21);
           break;
         case 9:
-          date = toLocalDate(equinox.getSeptemberEquinox());
+          date = LocalDate.of(year, month, 22);
           break;
         case 12:
-          date = toLocalDate(equinox.getDecemberSolstice());
+          date = LocalDate.of(year, month, 21);
           break;
         default:
           date = LocalDate.of(year, month, 15);
@@ -176,13 +193,45 @@ public final class SunChartUtility
     return dates;
   }
 
-  private static LocalDate toLocalDate(final DateTime equinox3)
+  private static double getLatitude(final Location location)
   {
-    LocalDate date;
-    date = LocalDate.of(equinox3.getYear(),
-                        equinox3.getMonth(),
-                        equinox3.getDay());
-    return date;
+    if (location == null)
+    {
+      return 0D;
+    }
+    return location.getPointLocation().getLatitude().getDegrees();
+  }
+
+  private static double getLongitude(final Location location)
+  {
+    if (location == null)
+    {
+      return 0D;
+    }
+    return location.getPointLocation().getLongitude().getDegrees();
+  }
+
+  private static ZoneId getZoneId(final Location location)
+  {
+    if (location == null)
+    {
+      return ZoneId.systemDefault();
+    }
+    return ZoneId.of(location.getTimeZoneId());
+  }
+
+  private static double normalizeHourAngle(final double hourAngle)
+  {
+    double normalized = hourAngle % 360D;
+    if (normalized > 180D)
+    {
+      normalized = normalized - 360D;
+    }
+    else if (normalized < -180D)
+    {
+      normalized = normalized + 360D;
+    }
+    return normalized;
   }
 
   private SunChartUtility()
