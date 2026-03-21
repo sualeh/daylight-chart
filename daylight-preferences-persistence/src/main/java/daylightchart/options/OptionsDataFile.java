@@ -154,15 +154,15 @@ public final class OptionsDataFile
     try
     {
       delete();
-      final Writer writer = getFileWriter(getFile());
-      if (writer == null)
+      try (Writer writer = getFileWriter(getFile()))
       {
-        return;
-      }
+        if (writer == null)
+        {
+          return;
+        }
 
-      YAML_MAPPER.writeValue(writer, data);
-      writer.flush();
-      writer.close();
+        YAML_MAPPER.writeValue(writer, data);
+      }
     }
     catch (final Exception e)
     {
