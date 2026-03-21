@@ -54,7 +54,6 @@ public class Options
   private boolean showChartLegend;
   private ChartOptions chartOptions;
   private Path workingDirectory;
-  private boolean slimUi;
 
   /**
    * Default options.
@@ -143,14 +142,6 @@ public class Options
   }
 
   /**
-   * @return the slimUi
-   */
-  public boolean isSlimUi()
-  {
-    return slimUi;
-  }
-
-  /**
    * @param chartOptions
    *        the chartOptions to set
    */
@@ -197,17 +188,6 @@ public class Options
   public void setShowChartLegend(final boolean showChartLegend)
   {
     this.showChartLegend = showChartLegend;
-  }
-
-  /**
-   * Whether the UI should work in "slim" mode.
-   *
-   * @param slimUi
-   *        Slim mode setting.
-   */
-  public void setSlimUi(final boolean slimUi)
-  {
-    this.slimUi = slimUi;
   }
 
   /**

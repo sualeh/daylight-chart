@@ -61,9 +61,7 @@ public final class ResetAllAction
     {
       // Clear all preferences
       DaylightApplicationServices.preferences().clear();
-
-      final boolean slimUi = mainWindow.isSlimUi();
-      restart(mainWindow, slimUi);
+      restart(mainWindow);
     }
 
   }
@@ -76,18 +74,15 @@ public final class ResetAllAction
    *
    * @param mainWindow
    *        Main window.
-   * @param slimUi
-   *        Whether the program should start with a minimal GUI.
    */
-  public static void restart(final DaylightChartGui mainWindow,
-                             final boolean slimUi)
+  public static void restart(final DaylightChartGui mainWindow)
   {
     // Dispose this window
     mainWindow.setVisible(false);
     mainWindow.dispose();
 
     // Open a new window
-    new DaylightChartGui(slimUi).setVisible(true);
+    new DaylightChartGui().setVisible(true);
   }
 
   /**

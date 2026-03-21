@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 
 import org.geoname.parser.UnicodeReader;
 
-import tools.jackson.dataformat.xml.XmlMapper;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import daylightchart.daylightchart.chart.DaylightChart;
 import daylightchart.options.chart.ChartOptions;
@@ -47,7 +47,7 @@ public final class OptionsDataFile
   extends BaseDataFile<OptionsFileType, Options>
 {
 
-  private static final XmlMapper XML_MAPPER = new XmlMapper();
+  private static final YAMLMapper YAML_MAPPER = new YAMLMapper();
 
   private static final Logger LOGGER = Logger
     .getLogger(OptionsDataFile.class.getName());
@@ -60,7 +60,7 @@ public final class OptionsDataFile
    */
   public OptionsDataFile(final Path settingsDirectory)
   {
-    super(settingsDirectory, "options.xml", new OptionsFileType());
+    super(settingsDirectory, "options.yaml", new OptionsFileType());
   }
 
   /**
@@ -101,7 +101,7 @@ public final class OptionsDataFile
     try
     {
       reader = new UnicodeReader(input[0], "UTF-8");
-      data = XML_MAPPER.readValue(reader, Options.class);
+      data = YAML_MAPPER.readValue(reader, Options.class);
     }
     catch (final Exception e)
     {
@@ -160,7 +160,7 @@ public final class OptionsDataFile
         return;
       }
 
-      XML_MAPPER.writeValue(writer, data);
+      YAML_MAPPER.writeValue(writer, data);
       writer.flush();
       writer.close();
     }
