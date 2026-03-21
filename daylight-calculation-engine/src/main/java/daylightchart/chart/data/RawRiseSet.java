@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.calculation;
+package daylightchart.chart.data;
 
 import java.io.PrintWriter;
 import java.io.Serial;
@@ -77,14 +77,12 @@ final class RawRiseSet implements Serializable, Comparable<RawRiseSet> {
   public String toString() {
     if (location == null) {
       return "";
-    } else {
-      final StringWriter writer = new StringWriter();
-      new PrintWriter(writer, true)
-          .printf(
-              "%s, %s: sunrise %6.3f sunset %6.4f",
-              location.getDescription(), date, sunrise, sunset);
-      return writer.toString();
     }
+    final StringWriter writer = new StringWriter();
+    new PrintWriter(writer, true)
+        .printf(
+            "%s, %s: sunrise %6.3f sunset %6.4f", location.getDescription(), date, sunrise, sunset);
+    return writer.toString();
   }
 
   /**

@@ -1,10 +1,13 @@
-package daylightchart.daylightchart.calculation;
+package daylightchart.test.chart.data;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 
+import daylightchart.chart.data.RiseSetData;
+import daylightchart.chart.data.RiseSetUtility;
+import daylightchart.chart.data.RiseSetYearData;
 import daylightchart.options.Options;
 import java.time.Duration;
 import java.time.LocalDate;

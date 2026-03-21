@@ -1,8 +1,8 @@
 package daylightchart.chart;
 
-import daylightchart.daylightchart.calculation.DaylightBand;
-import daylightchart.daylightchart.calculation.DaylightBandType;
-import daylightchart.daylightchart.calculation.RiseSet;
+import daylightchart.chart.data.DaylightBand;
+import daylightchart.chart.data.DaylightBandType;
+import daylightchart.chart.data.RiseSet;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.time.LocalDateTime;

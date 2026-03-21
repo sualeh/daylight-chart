@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.calculation;
+package daylightchart.chart.data;
 
 import java.io.PrintWriter;
 import java.io.Serial;
@@ -177,18 +177,17 @@ public final class RiseSet implements Serializable, Comparable<RiseSet> {
   public String toString() {
     if (location == null) {
       return "";
-    } else {
-      final StringWriter writer = new StringWriter();
-      new PrintWriter(writer, true)
-          .printf(
-              "%s, %s: (%s) sunrise %s sunset %s",
-              location.getDescription(),
-              date,
-              riseSetType,
-              sunrise.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
-              sunset.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-      return writer.toString();
     }
+    final StringWriter writer = new StringWriter();
+    new PrintWriter(writer, true)
+        .printf(
+            "%s, %s: (%s) sunrise %s sunset %s",
+            location.getDescription(),
+            date,
+            riseSetType,
+            sunrise.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+            sunset.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+    return writer.toString();
   }
 
   /**
@@ -218,9 +217,8 @@ public final class RiseSet implements Serializable, Comparable<RiseSet> {
   RiseSet withAdjustmentForDaylightSavings(final boolean adjustedForDaylightSavings) {
     if (adjustedForDaylightSavings || !isInDaylightSavings()) {
       return this;
-    } else {
-      return new RiseSet(location, date, false, sunrise.minusHours(1), sunset.minusHours(1));
     }
+    return new RiseSet(location, date, false, sunrise.minusHours(1), sunset.minusHours(1));
   }
 
   /**

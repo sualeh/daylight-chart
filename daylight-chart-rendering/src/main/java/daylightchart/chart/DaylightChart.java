@@ -21,12 +21,12 @@
  */
 package daylightchart.chart;
 
+import daylightchart.chart.data.DaylightBand;
+import daylightchart.chart.data.RiseSetUtility;
+import daylightchart.chart.data.RiseSetYearData;
 import daylightchart.chart.options.ChartOptions;
 import daylightchart.chart.options.ChartOptionsListener;
 import daylightchart.chart.options.ChartOptionsService;
-import daylightchart.daylightchart.calculation.DaylightBand;
-import daylightchart.daylightchart.calculation.RiseSetUtility;
-import daylightchart.daylightchart.calculation.RiseSetYearData;
 import daylightchart.daylightchart.chart.ChartOrientation;
 import daylightchart.options.Options;
 import java.awt.BasicStroke;

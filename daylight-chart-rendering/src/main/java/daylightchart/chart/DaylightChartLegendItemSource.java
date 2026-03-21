@@ -21,8 +21,8 @@
  */
 package daylightchart.chart;
 
+import daylightchart.chart.data.DaylightBandType;
 import daylightchart.chart.options.ChartOptions;
-import daylightchart.daylightchart.calculation.DaylightBandType;
 import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.options.Options;
 import java.awt.BasicStroke;

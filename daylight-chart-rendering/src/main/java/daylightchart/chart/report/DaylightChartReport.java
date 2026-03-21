@@ -22,10 +22,10 @@
 package daylightchart.chart.report;
 
 import daylightchart.chart.DaylightChart;
+import daylightchart.chart.data.RiseSetUtility;
+import daylightchart.chart.data.RiseSetYearData;
 import daylightchart.chart.options.ChartOptions;
 import daylightchart.chart.options.ChartOptionsService;
-import daylightchart.daylightchart.calculation.RiseSetUtility;
-import daylightchart.daylightchart.calculation.RiseSetYearData;
 import daylightchart.options.FileType;
 import daylightchart.options.Options;
 import java.awt.image.BufferedImage;

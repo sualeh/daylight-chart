@@ -19,8 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.calculation;
+package daylightchart.chart.data;
 
+import daylightchart.daylightchart.calculation.TwilightType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -52,9 +53,9 @@ public final class RiseSetYearData implements Serializable {
     this.location = location;
     this.year = year;
     this.twilight = twilight;
-    riseSets = new ArrayList<RawRiseSet>();
-    twilights = new ArrayList<RawRiseSet>();
-    bands = new ArrayList<DaylightBand>();
+    riseSets = new ArrayList<>();
+    twilights = new ArrayList<>();
+    bands = new ArrayList<>();
   }
 
   /**
@@ -63,7 +64,7 @@ public final class RiseSetYearData implements Serializable {
    * @return Daylight bands
    */
   public List<DaylightBand> getBands() {
-    return new ArrayList<DaylightBand>(bands);
+    return new ArrayList<>(bands);
   }
 
   /**
@@ -105,7 +106,7 @@ public final class RiseSetYearData implements Serializable {
    * @return Sunrise and sunset data for the year
    */
   public List<RiseSetData> getRiseSetData() {
-    final List<RiseSetData> riseSetData = new ArrayList<RiseSetData>();
+    final List<RiseSetData> riseSetData = new ArrayList<>();
     final List<RiseSet> riseSets = getRiseSets(true);
     final List<RiseSet> twilights = getTwilights();
     for (int i = 0; i < riseSets.size(); i++) {
@@ -165,13 +166,13 @@ public final class RiseSetYearData implements Serializable {
   List<RiseSet> getRiseSets(final boolean adjustedForDaylightSavings) {
     List<RiseSet> copiedRiseSets;
     if (!adjustedForDaylightSavings) {
-      copiedRiseSets = new ArrayList<RiseSet>();
+      copiedRiseSets = new ArrayList<>();
       for (final RawRiseSet riseSetTuple : riseSets) {
         final RiseSet riseSet = new RiseSet(riseSetTuple);
         copiedRiseSets.add(riseSet.withAdjustmentForDaylightSavings(adjustedForDaylightSavings));
       }
     } else {
-      copiedRiseSets = new ArrayList<RiseSet>();
+      copiedRiseSets = new ArrayList<>();
       for (final RawRiseSet riseSetTuple : riseSets) {
         final RiseSet riseSet = new RiseSet(riseSetTuple);
         copiedRiseSets.add(riseSet);
@@ -187,7 +188,7 @@ public final class RiseSetYearData implements Serializable {
    */
   List<RiseSet> getTwilights() {
     List<RiseSet> copiedRiseSets;
-    copiedRiseSets = new ArrayList<RiseSet>();
+    copiedRiseSets = new ArrayList<>();
     for (final RawRiseSet riseSetTuple : twilights) {
       final RiseSet riseSet = new RiseSet(riseSetTuple);
       copiedRiseSets.add(riseSet);

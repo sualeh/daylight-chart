@@ -19,8 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.calculation;
+package daylightchart.chart.data;
 
+import daylightchart.daylightchart.calculation.TwilightType;
 import daylightchart.daylightchart.chart.TimeZoneOption;
 import daylightchart.options.Options;
 import java.time.Duration;
@@ -132,7 +133,7 @@ public final class RiseSetUtility {
    */
   static List<DaylightBand> createDaylightBands(
       final List<RiseSet> riseSetData, final DaylightBandType daylightSavingsMode) {
-    final List<DaylightBand> bands = new ArrayList<DaylightBand>();
+    final List<DaylightBand> bands = new ArrayList<>();
 
     DaylightBand baseBand = null;
     DaylightBand wrapBand = null;
@@ -224,17 +225,16 @@ public final class RiseSetUtility {
         riseSet.withNewRiseSetTimes(sunrise.toLocalTime(), RiseSet.JUST_BEFORE_MIDNIGHT),
         riseSet.withNewRiseSetTimes(RiseSet.JUST_AFTER_MIDNIGHT, sunset.toLocalTime())
       };
-    } else if (riseSet.getRiseSetType() != RiseSetType.partial && sunrise.getHour() > 15) {
+    }
+    if (riseSet.getRiseSetType() != RiseSetType.partial && sunrise.getHour() > 15) {
       return new RiseSet[] {
         riseSet.withNewRiseSetTimes(RiseSet.JUST_AFTER_MIDNIGHT, sunset.toLocalTime()),
         riseSet.withNewRiseSetTimes(sunrise.toLocalTime(), RiseSet.JUST_BEFORE_MIDNIGHT)
       };
-    } else {
-      return new RiseSet[] {riseSet};
     }
+    return new RiseSet[] {riseSet};
   }
 
-  @SuppressWarnings("boxing")
   private static RawRiseSet calculateRiseSet(
       final Location location,
       final LocalDate date,
@@ -256,57 +256,54 @@ public final class RiseSetUtility {
             dayStart, latitude, longitude, DeltaT.estimate(date), toHorizon(twilight));
 
     final boolean usesDaylightSavings = !zoneId.getRules().getTransitionRules().isEmpty();
-    if (sunriseResult instanceof SunriseResult.RegularDay regularDay) {
+    if (sunriseResult instanceof final SunriseResult.RegularDay regularDay) {
       return new RawRiseSet(
           location,
           date,
           usesDaylightSavings && inDaylightSavings,
           toHour(dayStart, regularDay.sunrise()),
           toHour(dayStart, regularDay.sunset()));
-    } else if (sunriseResult instanceof SunriseResult.AllDay) {
+    }
+    if (sunriseResult instanceof SunriseResult.AllDay) {
       return new RawRiseSet(
           location,
           date,
           usesDaylightSavings && inDaylightSavings,
           Double.POSITIVE_INFINITY,
           Double.POSITIVE_INFINITY);
-    } else {
-      return new RawRiseSet(
-          location,
-          date,
-          usesDaylightSavings && inDaylightSavings,
-          Double.NEGATIVE_INFINITY,
-          Double.NEGATIVE_INFINITY);
     }
-  }
-
-  private static SPA.Horizon toHorizon(final TwilightType twilight) {
-    if (twilight == null || twilight == TwilightType.NO) {
-      return SPA.Horizon.SUNRISE_SUNSET;
-    }
-    switch (twilight) {
-      case ASTRONOMICAL:
-        return SPA.Horizon.ASTRONOMICAL_TWILIGHT;
-      case NAUTICAL:
-        return SPA.Horizon.NAUTICAL_TWILIGHT;
-      case CIVIL:
-      default:
-        return SPA.Horizon.CIVIL_TWILIGHT;
-    }
-  }
-
-  private static double toHour(final ZonedDateTime dayStart, final ZonedDateTime eventTime) {
-    return Duration.between(dayStart, eventTime).getSeconds() / 3600D;
+    return new RawRiseSet(
+        location,
+        date,
+        usesDaylightSavings && inDaylightSavings,
+        Double.NEGATIVE_INFINITY,
+        Double.NEGATIVE_INFINITY);
   }
 
   private static List<LocalDate> getYearsDates(final int year) {
-    final List<LocalDate> dates = new ArrayList<LocalDate>();
+    final List<LocalDate> dates = new ArrayList<>();
     LocalDate date = LocalDate.of(year, 1, 1);
     do {
       dates.add(date);
       date = date.plusDays(1);
     } while (!(date.getMonthValue() == 1 && date.getDayOfMonth() == 1));
     return dates;
+  }
+
+  private static SPA.Horizon toHorizon(final TwilightType twilight) {
+    if (twilight == null || twilight == TwilightType.NO) {
+      return SPA.Horizon.SUNRISE_SUNSET;
+    }
+    return switch (twilight) {
+      case ASTRONOMICAL -> SPA.Horizon.ASTRONOMICAL_TWILIGHT;
+      case NAUTICAL -> SPA.Horizon.NAUTICAL_TWILIGHT;
+      case CIVIL -> SPA.Horizon.CIVIL_TWILIGHT;
+      default -> SPA.Horizon.CIVIL_TWILIGHT;
+    };
+  }
+
+  private static double toHour(final ZonedDateTime dayStart, final ZonedDateTime eventTime) {
+    return Duration.between(dayStart, eventTime).getSeconds() / 3600D;
   }
 
   private RiseSetUtility() {

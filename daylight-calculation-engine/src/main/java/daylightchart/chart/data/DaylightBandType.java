@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.calculation;
+package daylightchart.chart.data;
 
 /**
  * Band type.
@@ -38,7 +38,7 @@ public enum DaylightBandType {
   private final boolean adjustedForDaylightSavings;
   private final String description;
 
-  private DaylightBandType(final String description, final boolean adjustedForDaylightSavings) {
+  DaylightBandType(final String description, final boolean adjustedForDaylightSavings) {
     this.description = description;
     this.adjustedForDaylightSavings = adjustedForDaylightSavings;
   }

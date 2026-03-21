@@ -1,4 +1,4 @@
-package daylightchart.daylightchart.calculation;
+package daylightchart.chart.data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

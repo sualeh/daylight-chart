@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.calculation;
+package daylightchart.chart.data;
 
 import java.io.PrintWriter;
 import java.io.Serial;
@@ -53,7 +53,7 @@ public final class DaylightBand implements Serializable {
   DaylightBand(final DaylightBandType bandType, final int bandNumber) {
     this.bandType = bandType;
     this.bandNumber = bandNumber;
-    riseSetMap = new HashMap<LocalDate, RiseSet>();
+    riseSetMap = new HashMap<>();
   }
 
   /**
@@ -80,7 +80,7 @@ public final class DaylightBand implements Serializable {
    * @return Rise/ sets list
    */
   public List<RiseSet> getRiseSets() {
-    final List<RiseSet> riseSets = new ArrayList<RiseSet>(riseSetMap.values());
+    final List<RiseSet> riseSets = new ArrayList<>(riseSetMap.values());
     Collections.sort(riseSets);
     return riseSets;
   }
@@ -134,17 +134,15 @@ public final class DaylightBand implements Serializable {
     if (riseSetMap.size() > 0) {
       final List<RiseSet> riseSets = getRiseSets();
       return riseSets.getFirst();
-    } else {
-      return null;
     }
+    return null;
   }
 
   RiseSet getLastRiseSet() {
     if (riseSetMap.size() > 0) {
       final List<RiseSet> riseSets = getRiseSets();
       return riseSets.getLast();
-    } else {
-      return null;
     }
+    return null;
   }
 }
