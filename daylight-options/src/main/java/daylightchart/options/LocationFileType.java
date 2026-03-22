@@ -19,9 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.gui.actions;
-
-import daylightchart.options.FileType;
+package daylightchart.options;
 
 /**
  * Types of locations specifications files.

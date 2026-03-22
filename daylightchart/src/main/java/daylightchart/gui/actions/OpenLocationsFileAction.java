@@ -27,6 +27,7 @@ import daylightchart.gui.util.Actions;
 import daylightchart.gui.util.ExtensionFileFilter;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.gui.util.SelectedFile;
+import daylightchart.options.LocationFileType;
 import daylightchart.service.UserPreferencesService;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;

@@ -21,7 +21,6 @@
  */
 package daylightchart.options;
 
-import daylightchart.gui.actions.LocationFileType;
 import java.io.InputStream;
 import java.nio.file.Path;
 
