@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Daylight Chart
  * http://sualeh.github.io/DaylightChart
  * Copyright (c) 2007-2026, Sualeh Fatehi <sualeh@hotmail.com>.
