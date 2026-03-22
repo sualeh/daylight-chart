@@ -22,6 +22,7 @@
 package daylightchart.gui.actions;
 
 import daylightchart.chart.options.ChartOptions;
+import daylightchart.chart.options.ChartOptionsService;
 import daylightchart.chart.report.ChartFileType;
 import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.chart.report.DaylightChartReportService;
@@ -66,7 +67,7 @@ public final class SaveChartAction extends GuiAction {
     @Override
     public void actionPerformed(final ActionEvent actionevent) {
       final UserPreferencesService preferencesService = UserPreferencesService.preferences();
-      final ChartOptions chartOptions = preferencesService.loadChartOptions();
+      final ChartOptions chartOptions = ChartOptionsService.chartOptions().loadChartOptions();
       final Options options = preferencesService.loadOptions();
       final DaylightChartReport daylightChartReport =
           DaylightChartReportService.reports()

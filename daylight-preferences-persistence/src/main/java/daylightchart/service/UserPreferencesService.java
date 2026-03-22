@@ -1,6 +1,5 @@
 package daylightchart.service;
 
-import daylightchart.chart.options.ChartOptions;
 import daylightchart.gui.actions.LocationFileType;
 import daylightchart.options.BaseTypedFile;
 import daylightchart.options.LocationsDataFile;
@@ -45,15 +44,11 @@ public class UserPreferencesService {
   }
 
   public void initialize() {
-    UserPreferences.initialize(null);
+    initialize(PersistenceConfigurationService.configuration().resolvePreferencesDirectory());
   }
 
   public void initialize(final Path settingsDir) {
     UserPreferences.initialize(settingsDir);
-  }
-
-  public ChartOptions loadChartOptions() {
-    return UserPreferences.chartOptionsFile().getData();
   }
 
   public Collection<Location> loadLocations(
@@ -65,10 +60,6 @@ public class UserPreferencesService {
 
   public Options loadOptions() {
     return UserPreferences.optionsFile().getData();
-  }
-
-  public void saveChartOptions(final ChartOptions chartOptions) {
-    UserPreferences.chartOptionsFile().save(chartOptions);
   }
 
   public void saveLocations(

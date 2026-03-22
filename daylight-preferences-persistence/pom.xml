@@ -17,11 +17,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>daylightchart</groupId>
-      <artifactId>daylightchart-chart</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>geoname</groupId>
       <artifactId>geoname</artifactId>
       <version>${project.version}</version>

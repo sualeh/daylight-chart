@@ -1,6 +1,7 @@
 package daylightchart.chart.options;
 
 import daylightchart.chart.DaylightChart;
+import java.nio.file.Path;
 import java.util.Objects;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
@@ -11,6 +12,14 @@ import org.jfree.chart.title.TextTitle;
 
 /** Applies chart options to charts and captures chart state as serializable options. */
 public final class ChartOptionsService {
+
+  private static final ChartOptionsService CHART_OPTIONS_SERVICE = new ChartOptionsService();
+
+  private ChartOptionsDataFile chartOptionsDataFile;
+
+  public static ChartOptionsService chartOptions() {
+    return CHART_OPTIONS_SERVICE;
+  }
 
   public void applyChartOptions(final ChartOptions chartOptions, final JFreeChart chart) {
     Objects.requireNonNull(chart, "Chart must not be null");
@@ -43,6 +52,27 @@ public final class ChartOptionsService {
 
   public ChartOptions createDefaultChartOptions() {
     return captureChartOptions(new DaylightChart());
+  }
+
+  public void clear() {
+    final ChartOptionsDataFile persistedChartOptions = getPersistedChartOptions();
+    final Path settingsDirectory = persistedChartOptions.getDirectory();
+    persistedChartOptions.delete();
+    chartOptionsDataFile = new ChartOptionsDataFile(settingsDirectory);
+  }
+
+  public void initialize(final Path settingsDirectory) {
+    Objects.requireNonNull(settingsDirectory, "Settings directory must not be null");
+    chartOptionsDataFile = new ChartOptionsDataFile(settingsDirectory);
+  }
+
+  public ChartOptions loadChartOptions() {
+    return getPersistedChartOptions().getData();
+  }
+
+  public void saveChartOptions(final ChartOptions chartOptions) {
+    Objects.requireNonNull(chartOptions, "Chart options must not be null");
+    getPersistedChartOptions().save(chartOptions);
   }
 
   private void applyAxisOptions(final AxisOptions axisOptions, final Axis axis) {
@@ -166,5 +196,12 @@ public final class ChartOptionsService {
       return xyPlot.getRangeAxis();
     }
     return null;
+  }
+
+  private ChartOptionsDataFile getPersistedChartOptions() {
+    if (chartOptionsDataFile == null) {
+      throw new IllegalStateException("Chart options persistence has not been initialized");
+    }
+    return chartOptionsDataFile;
   }
 }

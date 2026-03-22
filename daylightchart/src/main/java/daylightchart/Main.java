@@ -23,15 +23,14 @@ package daylightchart;
 
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.theme.LightGray;
+import daylightchart.chart.options.ChartOptionsService;
 import daylightchart.gui.DaylightChartGui;
+import daylightchart.service.PersistenceConfigurationService;
 import daylightchart.service.UserPreferencesService;
-import java.util.Enumeration;
-import java.util.logging.Handler;
+import java.nio.file.Path;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Main window.
@@ -42,17 +41,20 @@ public final class Main {
 
   private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
-  private static final String ENV_LOG_LEVEL = "DAYLIGHTCHART_LOG_LEVEL";
-
   /**
    * Main window.
    *
    * @param args Arguments
    */
   public static void main(final String[] args) {
+    final PersistenceConfigurationService persistenceConfigurationService =
+        PersistenceConfigurationService.configuration();
+    persistenceConfigurationService.configureLoggingFromEnvironment();
 
-    configureLogLevel();
-    UserPreferencesService.preferences().initialize();
+    final Path preferencesDirectory = persistenceConfigurationService.resolvePreferencesDirectory();
+    UserPreferencesService.preferences().initialize(preferencesDirectory);
+    ChartOptionsService.chartOptions().initialize(preferencesDirectory);
+    ChartOptionsService.chartOptions().loadChartOptions();
 
     // Set UI look and feel
     try {
@@ -63,38 +65,6 @@ public final class Main {
     }
 
     new DaylightChartGui().setVisible(true);
-  }
-
-  private static void configureLogLevel() {
-    final String logLevelString = System.getenv(ENV_LOG_LEVEL);
-    if (StringUtils.isBlank(logLevelString)) {
-      return;
-    }
-
-    try {
-      setApplicationLogLevel(Level.parse(logLevelString.trim().toUpperCase()));
-    } catch (final IllegalArgumentException e) {
-      LOGGER.log(
-          Level.WARNING, "Ignoring invalid log level in " + ENV_LOG_LEVEL + ": " + logLevelString);
-    }
-  }
-
-  private static void setApplicationLogLevel(final Level logLevel) {
-    final LogManager logManager = LogManager.getLogManager();
-    for (final Enumeration<String> loggerNames = logManager.getLoggerNames();
-        loggerNames.hasMoreElements(); ) {
-      final String loggerName = loggerNames.nextElement();
-      final Logger logger = logManager.getLogger(loggerName);
-      if (logger == null) {
-        continue;
-      }
-      logger.setLevel(null);
-      for (final Handler handler : logger.getHandlers()) {
-        handler.setLevel(logLevel);
-      }
-    }
-
-    Logger.getLogger("").setLevel(logLevel);
   }
 
   private Main() {
