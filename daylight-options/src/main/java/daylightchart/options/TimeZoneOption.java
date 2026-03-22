@@ -19,21 +19,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.daylightchart.calculation;
+package daylightchart.options;
 
 /**
- * Twilight type.
+ * Time option for charting.
  *
- * @author Sualeh Fatehi
+ * @author sfatehi
  */
-public enum TwilightType {
+public enum TimeZoneOption {
 
-  /** No twilight */
-  NO,
-  /** Civil twilight */
-  CIVIL,
-  /** Nautical twilight */
-  NAUTICAL,
-  /** Astronomical twilight */
-  ASTRONOMICAL
+  /** Use local time for the time - do not correct for time zone, and DST */
+  USE_LOCAL_TIME("Use local time"),
+  /** Use time zone for the time - correct for time zone, and DST */
+  USE_TIME_ZONE("Use time zone");
+
+  private final String description;
+
+  private TimeZoneOption(final String description) {
+    this.description = description;
+  }
+
+  /**
+   * Description.
+   *
+   * @return Description
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Enum#toString()
+   */
+  @Override
+  public String toString() {
+    return description;
+  }
 }

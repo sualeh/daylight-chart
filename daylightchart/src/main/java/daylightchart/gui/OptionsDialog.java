@@ -25,10 +25,10 @@ import static com.jgoodies.forms.layout.CellConstraints.BOTTOM;
 import static com.jgoodies.forms.layout.CellConstraints.RIGHT;
 
 import com.jgoodies.forms.builder.FormBuilder;
-import daylightchart.daylightchart.calculation.TwilightType;
-import daylightchart.daylightchart.chart.ChartOrientation;
-import daylightchart.daylightchart.chart.TimeZoneOption;
+import daylightchart.options.ChartOrientation;
 import daylightchart.options.Options;
+import daylightchart.options.TimeZoneOption;
+import daylightchart.options.TwilightType;
 import java.awt.AWTEvent;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;

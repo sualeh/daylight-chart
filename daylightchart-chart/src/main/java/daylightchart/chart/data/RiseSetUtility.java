@@ -21,9 +21,9 @@
  */
 package daylightchart.chart.data;
 
-import daylightchart.daylightchart.calculation.TwilightType;
-import daylightchart.daylightchart.chart.TimeZoneOption;
 import daylightchart.options.Options;
+import daylightchart.options.TimeZoneOption;
+import daylightchart.options.TwilightType;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

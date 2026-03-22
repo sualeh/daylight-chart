@@ -21,9 +21,6 @@
  */
 package daylightchart.options;
 
-import daylightchart.daylightchart.calculation.TwilightType;
-import daylightchart.daylightchart.chart.ChartOrientation;
-import daylightchart.daylightchart.chart.TimeZoneOption;
 import java.io.Serial;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -110,7 +107,6 @@ public class Options implements Serializable {
   public boolean isShowChartLegend() {
     return showChartLegend;
   }
-
 
   /**
    * Sets the chart orientation.

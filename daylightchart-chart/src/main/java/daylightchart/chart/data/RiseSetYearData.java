@@ -21,7 +21,7 @@
  */
 package daylightchart.chart.data;
 
-import daylightchart.daylightchart.calculation.TwilightType;
+import daylightchart.options.TwilightType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;

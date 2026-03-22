@@ -60,7 +60,7 @@
   <dependencies>
     <dependency>
       <groupId>daylightchart</groupId>
-      <artifactId>daylight-core</artifactId>
+      <artifactId>daylight-options</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
