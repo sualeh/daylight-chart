@@ -19,9 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.options;
+package daylightchart.options.service;
 
-import daylightchart.service.PersistenceConfigurationService;
+import daylightchart.options.persistence.LocationsDataFile;
+import daylightchart.options.persistence.OptionsDataFile;
+import daylightchart.options.persistence.RecentLocationsDataFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

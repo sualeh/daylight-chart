@@ -21,7 +21,7 @@
  */
 package daylightchart.chart.report;
 
-import daylightchart.options.FileType;
+import daylightchart.options.persistence.FileType;
 
 /**
  * Chart file type, when exported.
@@ -45,7 +45,7 @@ public enum ChartFileType implements FileType {
   /**
    * {@inheritDoc}
    *
-   * @see daylightchart.options.FileType#getDescription()
+   * @see daylightchart.options.persistence.FileType#getDescription()
    */
   @Override
   public String getDescription() {
@@ -55,7 +55,7 @@ public enum ChartFileType implements FileType {
   /**
    * {@inheritDoc}
    *
-   * @see daylightchart.options.FileType#getFileExtension()
+   * @see daylightchart.options.persistence.FileType#getFileExtension()
    */
   @Override
   public String getFileExtension() {

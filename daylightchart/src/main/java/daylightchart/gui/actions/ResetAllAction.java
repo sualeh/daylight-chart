@@ -25,7 +25,7 @@ import daylightchart.chart.options.ChartOptionsService;
 import daylightchart.gui.DaylightChartGui;
 import daylightchart.gui.Messages;
 import daylightchart.gui.util.GuiAction;
-import daylightchart.service.UserPreferencesService;
+import daylightchart.options.service.UserPreferencesService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serial;

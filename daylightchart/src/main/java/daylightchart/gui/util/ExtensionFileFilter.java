@@ -21,7 +21,7 @@
  */
 package daylightchart.gui.util;
 
-import daylightchart.options.FileType;
+import daylightchart.options.persistence.FileType;
 import java.io.File;
 import java.util.Locale;
 
@@ -90,7 +90,7 @@ public class ExtensionFileFilter<T extends FileType> extends javax.swing.filecho
   /**
    * {@inheritDoc}
    *
-   * @see daylightchart.options.FileType#getFileExtension()
+   * @see daylightchart.options.persistence.FileType#getFileExtension()
    */
   @Override
   public String getFileExtension() {

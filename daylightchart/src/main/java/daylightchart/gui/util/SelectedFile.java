@@ -1,7 +1,7 @@
 package daylightchart.gui.util;
 
-import daylightchart.options.BaseTypedFile;
-import daylightchart.options.FileType;
+import daylightchart.options.persistence.BaseTypedFile;
+import daylightchart.options.persistence.FileType;
 import java.nio.file.Path;
 
 /**

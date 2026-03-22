@@ -1,6 +1,6 @@
 package daylightchart.chart.options;
 
-import daylightchart.options.FileType;
+import daylightchart.options.persistence.FileType;
 
 /** Chart options file. */
 class ChartOptionsFileType implements FileType {

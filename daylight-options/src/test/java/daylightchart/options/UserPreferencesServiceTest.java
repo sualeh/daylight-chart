@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import daylightchart.service.UserPreferencesService;
+import daylightchart.options.service.UserPreferencesService;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.geoname.data.Location;

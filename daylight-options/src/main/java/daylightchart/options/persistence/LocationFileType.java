@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.options;
+package daylightchart.options.persistence;
 
 /**
  * Types of locations specifications files.
@@ -51,7 +51,7 @@ public enum LocationFileType implements FileType {
   /**
    * {@inheritDoc}
    *
-   * @see daylightchart.options.FileType#getDescription()
+   * @see daylightchart.options.persistence.FileType#getDescription()
    */
   @Override
   public String getDescription() {
@@ -61,7 +61,7 @@ public enum LocationFileType implements FileType {
   /**
    * {@inheritDoc}
    *
-   * @see daylightchart.options.FileType#getFileExtension()
+   * @see daylightchart.options.persistence.FileType#getFileExtension()
    */
   @Override
   public String getFileExtension() {

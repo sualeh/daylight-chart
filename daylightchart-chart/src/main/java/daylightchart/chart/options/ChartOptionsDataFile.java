@@ -1,6 +1,6 @@
 package daylightchart.chart.options;
 
-import daylightchart.options.BaseDataFile;
+import daylightchart.options.persistence.BaseDataFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;

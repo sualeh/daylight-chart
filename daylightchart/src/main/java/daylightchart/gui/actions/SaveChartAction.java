@@ -33,7 +33,7 @@ import daylightchart.gui.util.ExtensionFileFilter;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.gui.util.SelectedFile;
 import daylightchart.options.Options;
-import daylightchart.service.UserPreferencesService;
+import daylightchart.options.service.UserPreferencesService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serial;

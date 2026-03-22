@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
+import daylightchart.options.persistence.RecentLocationsDataFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;

@@ -19,32 +19,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.options;
+package daylightchart.options.persistence;
 
 /**
- * Options file.
+ * Defines a type of file, with a given file extension.
  *
  * @author sfatehi
  */
-class OptionsFileType implements FileType {
+public interface FileType {
 
   /**
-   * {@inheritDoc}
+   * The description of the file type.
    *
-   * @see daylightchart.options.FileType#getDescription()
+   * @return the description
    */
-  @Override
-  public String getDescription() {
-    return "Options file";
-  }
+  String getDescription();
 
   /**
-   * {@inheritDoc}
+   * Gets the file extension.
    *
-   * @see daylightchart.options.FileType#getFileExtension()
+   * @return File extension
    */
-  @Override
-  public String getFileExtension() {
-    return ".yaml";
-  }
+  String getFileExtension();
 }

@@ -41,7 +41,7 @@ import daylightchart.gui.actions.SaveLocationsFileAction;
 import daylightchart.gui.util.ExitAction;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
-import daylightchart.service.UserPreferencesService;
+import daylightchart.options.service.UserPreferencesService;
 import java.awt.BorderLayout;
 import java.io.Serial;
 import java.util.Collection;

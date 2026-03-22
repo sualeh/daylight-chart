@@ -23,7 +23,7 @@ package daylightchart.gui;
 
 import daylightchart.gui.actions.LocationsListOperation;
 import daylightchart.gui.util.GuiAction;
-import daylightchart.service.UserPreferencesService;
+import daylightchart.options.service.UserPreferencesService;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.KeyEvent;

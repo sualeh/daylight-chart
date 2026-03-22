@@ -1,10 +1,9 @@
-package daylightchart.service;
+package daylightchart.options.service;
 
-import daylightchart.options.BaseTypedFile;
-import daylightchart.options.LocationFileType;
-import daylightchart.options.LocationsDataFile;
 import daylightchart.options.Options;
-import daylightchart.options.UserPreferences;
+import daylightchart.options.persistence.BaseTypedFile;
+import daylightchart.options.persistence.LocationFileType;
+import daylightchart.options.persistence.LocationsDataFile;
 import java.nio.file.Path;
 import java.util.Collection;
 import org.geoname.data.Location;
