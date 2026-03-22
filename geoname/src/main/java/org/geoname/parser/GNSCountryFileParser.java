@@ -47,37 +47,36 @@ public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser
 
     final String featureClassification = locationDataMap.get("FC");
     final String nameType = locationDataMap.get("NT");
-    if (featureClassification.equals("P") && (nameType.equals("C") || nameType.equals("N"))) {
-      try {
-        final Country country = Countries.lookupFips10CountryCode(locationDataMap.get("CC1"));
+    if (!"P".equals(featureClassification) || (!"C".equals(nameType) && !"N".equals(nameType))) {
+      return null;
+    }
+    try {
+      final Country country = Countries.lookupFips10CountryCode(locationDataMap.get("CC1"));
 
-        final int fips10AdministrationDivisionCode = getInteger(locationDataMap, "ADM1", 0);
-        final String fips10AdministrationDivisionName;
-        if (fips10AdministrationDivisionCode > 0) {
-          fips10AdministrationDivisionName =
-              FIPS10AdministrationDivisions.lookupFips10AdministrationDivisionName(
-                  country, "%02d".formatted(fips10AdministrationDivisionCode));
-        } else {
-          fips10AdministrationDivisionName = null;
-        }
+      final int fips10AdministrationDivisionCode = getInteger(locationDataMap, "ADM1", 0);
+      final String fips10AdministrationDivisionName;
+      if (fips10AdministrationDivisionCode > 0) {
+        fips10AdministrationDivisionName =
+            FIPS10AdministrationDivisions.lookupFips10AdministrationDivisionName(
+                country, "%02d".formatted(fips10AdministrationDivisionCode));
+      } else {
+        fips10AdministrationDivisionName = null;
+      }
 
-        String city;
-        if (locationDataMap.containsKey("FULL_NAME_RO")) {
-          city = locationDataMap.get("FULL_NAME_RO");
-        } else if (locationDataMap.containsKey("FULL_NAME")) {
-          city = locationDataMap.get("FULL_NAME");
-        } else {
-          return null;
-        }
-        if (fips10AdministrationDivisionName != null) {
-          city = city + ", " + fips10AdministrationDivisionName;
-        }
-
-        return getLocation(locationDataMap, city, country, "LAT", "LONG", "ELEV");
-      } catch (final ParserException e) {
+      String city;
+      if (locationDataMap.containsKey("FULL_NAME_RO")) {
+        city = locationDataMap.get("FULL_NAME_RO");
+      } else if (locationDataMap.containsKey("FULL_NAME")) {
+        city = locationDataMap.get("FULL_NAME");
+      } else {
         return null;
       }
-    } else {
+      if (fips10AdministrationDivisionName != null) {
+        city = city + ", " + fips10AdministrationDivisionName;
+      }
+
+      return getLocation(locationDataMap, city, country, "LAT", "LONG", "ELEV");
+    } catch (final ParserException e) {
       return null;
     }
   }

@@ -32,6 +32,7 @@ import us.fatehi.pointlocation6709.Latitude;
  */
 public enum LocationsSortOrder implements Comparator<Location> {
   BY_NAME("Sort locations by name") {
+    @Override
     public int compare(final Location location1, final Location location2) {
       return location1
           .getDescription()
@@ -40,6 +41,7 @@ public enum LocationsSortOrder implements Comparator<Location> {
     }
   },
   BY_LATITUDE("Sort locations by latitude") {
+    @Override
     public int compare(final Location location1, final Location location2) {
       final Latitude latitude1 = location1.getPointLocation().getLatitude();
       final Latitude latitude2 = location2.getPointLocation().getLatitude();
@@ -51,7 +53,7 @@ public enum LocationsSortOrder implements Comparator<Location> {
 
   private final String description;
 
-  private LocationsSortOrder(final String description) {
+  LocationsSortOrder(final String description) {
     this.description = description;
   }
 

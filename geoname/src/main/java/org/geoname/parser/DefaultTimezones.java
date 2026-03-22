@@ -57,11 +57,9 @@ public final class DefaultTimezones {
 
   private static final Logger LOGGER = Logger.getLogger(DefaultTimezones.class.getName());
 
-  private static final Map<Country, List<String>> defaultTimezones =
-      new HashMap<Country, List<String>>();
-  private static final Map<String, List<String>> allTimezoneIds =
-      new HashMap<String, List<String>>();
-  private static final Set<TimeZoneDisplay> allTimezones = new TreeSet<TimeZoneDisplay>();
+  private static final Map<Country, List<String>> defaultTimezones = new HashMap<>();
+  private static final Map<String, List<String>> allTimezoneIds = new HashMap<>();
+  private static final Set<TimeZoneDisplay> allTimezones = new TreeSet<>();
 
   /**
    * Loads default time zones from the internal database. These are default time zone ids for every
@@ -70,7 +68,7 @@ public final class DefaultTimezones {
   static {
     final List<Country> allCountries = Countries.getAllCountries();
     for (final Country country : allCountries) {
-      defaultTimezones.put(country, new ArrayList<String>());
+      defaultTimezones.put(country, new ArrayList<>());
     }
 
     try (BufferedReader reader =
@@ -144,7 +142,8 @@ public final class DefaultTimezones {
       final List<String> defaultTimezonesForCountry = defaultTimezones.get(country);
       if (defaultTimezonesForCountry == null || defaultTimezonesForCountry.size() == 0) {
         return createGMTTimeZoneId(tzOffsetHours);
-      } else if (defaultTimezonesForCountry.size() == 1) {
+      }
+      if (defaultTimezonesForCountry.size() == 1) {
         return defaultTimezonesForCountry.toArray(new String[1])[0];
       }
       // 3. Try a match by longitude, if no good default for
@@ -201,8 +200,7 @@ public final class DefaultTimezones {
    * @return All time zones
    */
   public static List<TimeZoneDisplay> getAllTimeZonesForDisplay() {
-    final ArrayList<TimeZoneDisplay> allTimeZonesList =
-        new ArrayList<TimeZoneDisplay>(allTimezones);
+    final ArrayList<TimeZoneDisplay> allTimeZonesList = new ArrayList<>(allTimezones);
     Collections.sort(allTimeZonesList);
     return allTimeZonesList;
   }
@@ -268,18 +266,15 @@ public final class DefaultTimezones {
    */
   private static String findBestTimeZoneId(final String city, final Country country) {
 
-    if (city == null || city.length() == 0) {
-      return null;
-    }
-    if (country == null) {
+    if (city == null || city.length() == 0 || (country == null)) {
       return null;
     }
 
-    final List<String> locationParts = new ArrayList<String>();
+    final List<String> locationParts = new ArrayList<>();
     for (final String locationPart : city.split(",")) {
       locationParts.add(locationPart.trim().replaceAll(" |-", "_"));
     }
-    if (country.getCode().equals("US") && locationParts.size() >= 2) {
+    if ("US".equals(country.getCode()) && locationParts.size() >= 2) {
       final String stateString = locationParts.getLast();
       final USState state = USStates.lookupUSState(stateString);
       if (state != null) {
@@ -298,14 +293,13 @@ public final class DefaultTimezones {
       final String locationPart1 = locationParts.getFirst().toLowerCase(Locale.ENGLISH);
       final String timeZonePart1 = timeZoneParts.getFirst().toLowerCase(Locale.ENGLISH);
       if (locationPart1.equals(timeZonePart1)) {
-        if (timeZoneParts.size() > 1) {
-          final String locationPart2 = locationParts.get(1).toLowerCase(Locale.ENGLISH);
-          final String timeZonePart2 = timeZoneParts.get(1).toLowerCase(Locale.ENGLISH);
-          if (locationPart2.equals(timeZonePart2)) {
-            bestTimeZoneId = timeZoneId;
-            break;
-          }
-        } else {
+        if (timeZoneParts.size() <= 1) {
+          bestTimeZoneId = timeZoneId;
+          break;
+        }
+        final String locationPart2 = locationParts.get(1).toLowerCase(Locale.ENGLISH);
+        final String timeZonePart2 = timeZoneParts.get(1).toLowerCase(Locale.ENGLISH);
+        if (locationPart2.equals(timeZonePart2)) {
           bestTimeZoneId = timeZoneId;
           break;
         }
@@ -316,7 +310,7 @@ public final class DefaultTimezones {
   }
 
   private static List<String> splitTimeZoneId(final String timeZoneId) {
-    final List<String> timeZoneParts = new ArrayList<String>();
+    final List<String> timeZoneParts = new ArrayList<>();
     timeZoneParts.addAll(Arrays.asList(timeZoneId.split("/")));
     // If the first part is not a country, it is a continent, so
     // remove it

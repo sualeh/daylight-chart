@@ -44,12 +44,11 @@ public class TestGeoNameFiles {
 
   @BeforeAll
   public static void turnOffLogs() {
-    final Logger[] loggers =
-        new Logger[] {
-          Logger.getLogger(DefaultTimezones.class.getName()),
-          Logger.getLogger("org.geoname.parser.BaseDelimitedLocationsFileParser")
-        };
-    for (Logger logger : loggers) {
+    final Logger[] loggers = {
+      Logger.getLogger(DefaultTimezones.class.getName()),
+      Logger.getLogger("org.geoname.parser.BaseDelimitedLocationsFileParser")
+    };
+    for (final Logger logger : loggers) {
       logger.setUseParentHandlers(false);
       final Handler[] handlers = logger.getHandlers();
       for (final Handler handler : handlers) {
@@ -74,12 +73,12 @@ public class TestGeoNameFiles {
   private void parseGNISUSStates(final String state, final String date, final int numLocations)
       throws ParserException, IOException {
     final String filename = state + "_Features_" + date + ".zip";
-    Collection<Location> locations = new ArrayList<Location>();
+    Collection<Location> locations = new ArrayList<>();
 
     final InputStream dataStream = this.getClass().getClassLoader().getResourceAsStream(filename);
     final ZipInputStream zis = new ZipInputStream(dataStream);
-    ZipEntry ze;
-    if ((ze = zis.getNextEntry()) != null) {
+    final ZipEntry ze = zis.getNextEntry();
+    if (ze != null) {
       final GNISFileParser parser = new GNISFileParser(zis);
       locations = parser.parseLocations();
     }
@@ -93,12 +92,12 @@ public class TestGeoNameFiles {
 
   private void parseGNSCountryFile(final String filename, final int numLocations)
       throws ParserException, IOException {
-    Collection<Location> locations = new ArrayList<Location>();
+    Collection<Location> locations = new ArrayList<>();
 
     final InputStream dataStream = this.getClass().getClassLoader().getResourceAsStream(filename);
     final ZipInputStream zis = new ZipInputStream(dataStream);
-    ZipEntry ze;
-    if ((ze = zis.getNextEntry()) != null) {
+    final ZipEntry ze = zis.getNextEntry();
+    if (ze != null) {
       final GNSCountryFileParser parser = new GNSCountryFileParser(zis);
       locations = parser.parseLocations();
     }

@@ -51,14 +51,6 @@ public final class Location implements Serializable, Comparable<Location> {
 
   private static final Logger LOGGER = Logger.getLogger(Location.class.getName());
 
-  private final String city;
-  private final Country country;
-  private final PointLocation pointLocation;
-  private final String timeZoneId;
-
-  private transient String description;
-  private transient String details;
-
   /** UNKNOWN, setting all fields to blank. */
   public static final Location UNKNOWN =
       new Location(
@@ -67,6 +59,15 @@ public final class Location implements Serializable, Comparable<Location> {
           ZoneId.systemDefault().getId(),
           new PointLocation(
               new Latitude(Angle.fromDegrees(0)), new Longitude(Angle.fromDegrees(0))));
+
+  private final String city;
+  private final Country country;
+  private final PointLocation pointLocation;
+
+  private final String timeZoneId;
+  private transient String description;
+
+  private transient String details;
 
   /**
    * Copy constructor. Copies the value of a provided location.
@@ -123,22 +124,19 @@ public final class Location implements Serializable, Comparable<Location> {
    *
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
+  @Override
   public int compareTo(final Location location) {
     return toString().compareTo(location.toString());
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
+    if ((obj == null) || !(obj instanceof final Location other)) {
       return false;
     }
-    if (!(obj instanceof Location)) {
-      return false;
-    }
-    Location other = (Location) obj;
     if (city == null) {
       if (other.city != null) {
         return false;
@@ -228,10 +226,10 @@ public final class Location implements Serializable, Comparable<Location> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((city == null) ? 0 : city.hashCode());
-    result = prime * result + ((country == null) ? 0 : country.hashCode());
-    result = prime * result + ((pointLocation == null) ? 0 : pointLocation.hashCode());
-    result = prime * result + ((timeZoneId == null) ? 0 : timeZoneId.hashCode());
+    result = prime * result + (city == null ? 0 : city.hashCode());
+    result = prime * result + (country == null ? 0 : country.hashCode());
+    result = prime * result + (pointLocation == null ? 0 : pointLocation.hashCode());
+    result = prime * result + (timeZoneId == null ? 0 : timeZoneId.hashCode());
     return result;
   }
 
@@ -280,7 +278,7 @@ public final class Location implements Serializable, Comparable<Location> {
                   getPointLocation(), PointLocationFormatType.HUMAN_MEDIUM)
               + ", "
               + zoneId.getDisplayName(TextStyle.FULL, Locale.getDefault());
-    } catch (FormatterException e) {
+    } catch (final FormatterException e) {
       LOGGER.log(Level.FINE, e.getMessage(), e);
       details = "";
     }

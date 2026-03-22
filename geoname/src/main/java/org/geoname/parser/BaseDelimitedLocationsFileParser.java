@@ -42,36 +42,20 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
   private static final Logger LOGGER =
       Logger.getLogger(BaseDelimitedLocationsFileParser.class.getName());
 
-  private final BufferedReader reader;
+  private final InputStream stream;
   private final String delimiter;
-  private final String[] header;
 
   protected BaseDelimitedLocationsFileParser(final InputStream stream, final String delimiter)
       throws ParserException {
     if (stream == null) {
       throw new ParserException("Cannot read locations");
     }
-    reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"));
+    this.stream = stream;
 
     if (delimiter == null) {
       throw new ParserException("No delimiter provided");
     }
     this.delimiter = delimiter;
-
-    String[] header = null;
-    try {
-      String line;
-      if ((line = reader.readLine()) != null) {
-        header = line.split(delimiter);
-      }
-      if (header == null || header.length == 0) {
-        throw new ParserException("No header row provided");
-      }
-      this.header = header;
-      LOGGER.log(Level.FINE, "Loaded header");
-    } catch (final IOException e) {
-      throw new ParserException("Could not load locations", e);
-    }
   }
 
   /**
@@ -79,10 +63,12 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
    *
    * @see org.geoname.parser.LocationsParser#parseLocations()
    */
+  @Override
   public final Collection<Location> parseLocations() throws ParserException {
-    final Set<Location> locations = new HashSet<Location>();
-    try {
-      final Map<String, String> locationDataMap = new HashMap<String, String>();
+    final Set<Location> locations = new HashSet<>();
+    try (BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
+      final String[] header = readHeader(reader);
+      final Map<String, String> locationDataMap = new HashMap<>();
       String line;
       while ((line = reader.readLine()) != null) {
         final String[] fields = line.split(delimiter);
@@ -103,29 +89,10 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
       }
     } catch (final IOException e) {
       throw new ParserException("Invalid locations", e);
-    } finally {
-      try {
-        reader.close();
-      } catch (final IOException e) {
-        LOGGER.log(Level.WARNING, "Could not close locations reader");
-      }
     }
 
     LOGGER.log(Level.INFO, "Loaded " + locations.size() + " locations");
     return locations;
-  }
-
-  private final double getDouble(final Map<String, String> locationDataMap, final String key)
-      throws ParserException {
-    if (locationDataMap == null || !locationDataMap.containsKey(key)) {
-      throw new ParserException("No value for key " + key);
-    }
-
-    try {
-      return Double.parseDouble(locationDataMap.get(key));
-    } catch (final NumberFormatException e) {
-      throw new ParserException("Bad value for key " + key, e);
-    }
   }
 
   protected final double getDouble(
@@ -179,4 +146,34 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
   }
 
   protected abstract Location parseLocation(final Map<String, String> locationDataMap);
+
+  private final double getDouble(final Map<String, String> locationDataMap, final String key)
+      throws ParserException {
+    if (locationDataMap == null || !locationDataMap.containsKey(key)) {
+      throw new ParserException("No value for key " + key);
+    }
+
+    try {
+      return Double.parseDouble(locationDataMap.get(key));
+    } catch (final NumberFormatException e) {
+      throw new ParserException("Bad value for key " + key, e);
+    }
+  }
+
+  private String[] readHeader(final BufferedReader reader) throws ParserException {
+    try {
+      String[] header = null;
+      final String line = reader.readLine();
+      if (line != null) {
+        header = line.split(delimiter);
+      }
+      if (header == null || header.length == 0) {
+        throw new ParserException("No header row provided");
+      }
+      LOGGER.log(Level.FINE, "Loaded header");
+      return header;
+    } catch (final IOException e) {
+      throw new ParserException("Could not load locations", e);
+    }
+  }
 }

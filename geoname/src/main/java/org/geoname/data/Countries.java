@@ -43,7 +43,7 @@ public final class Countries {
 
   private static final Map<String, Country> iso3166CountryCodeMap;
   private static final Map<String, Country> fips10CountryCodeMap;
-  private static final Map<String, Country> countryNameMap = new HashMap<String, Country>();
+  private static final Map<String, Country> countryNameMap = new HashMap<>();
 
   /** Loads data from internal database. */
   static {
@@ -65,7 +65,7 @@ public final class Countries {
    * @return All countries.
    */
   public static List<Country> getAllCountries() {
-    final ArrayList<Country> countries = new ArrayList<Country>(iso3166CountryCodeMap.values());
+    final ArrayList<Country> countries = new ArrayList<>(iso3166CountryCodeMap.values());
     Collections.sort(countries);
     return countries;
   }

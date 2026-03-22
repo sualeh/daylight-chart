@@ -55,6 +55,7 @@ public final class Country implements Serializable, Comparable<Country> {
    *
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
+  @Override
   public int compareTo(final Country otherCountry) {
     return name.compareTo(otherCountry.name);
   }
@@ -69,10 +70,7 @@ public final class Country implements Serializable, Comparable<Country> {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if ((obj == null) || (getClass() != obj.getClass())) {
       return false;
     }
     final Country other = (Country) obj;

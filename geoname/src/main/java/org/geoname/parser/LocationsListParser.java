@@ -73,13 +73,13 @@ public final class LocationsListParser implements LocationsParser {
     }
   }
 
-  private final BufferedReader reader;
+  private final InputStream stream;
 
   public LocationsListParser(final InputStream stream) throws ParserException {
     if (stream == null) {
       throw new ParserException("Cannot read locations");
     }
-    reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"));
+    this.stream = stream;
   }
 
   /**
@@ -87,10 +87,11 @@ public final class LocationsListParser implements LocationsParser {
    *
    * @see org.geoname.parser.LocationsParser#parseLocations()
    */
+  @Override
   public Collection<Location> parseLocations() throws ParserException {
 
-    final List<Location> locations = new ArrayList<Location>();
-    try {
+    final List<Location> locations = new ArrayList<>();
+    try (BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
       String line;
       while ((line = reader.readLine()) != null) {
         line = line.trim();
@@ -101,12 +102,6 @@ public final class LocationsListParser implements LocationsParser {
       }
     } catch (final IOException e) {
       throw new ParserException("Invalid locations", e);
-    } finally {
-      try {
-        reader.close();
-      } catch (final IOException e) {
-        LOGGER.log(Level.WARNING, "Could not close locations reader");
-      }
     }
 
     LOGGER.log(Level.INFO, "Loaded " + locations.size() + " locations");

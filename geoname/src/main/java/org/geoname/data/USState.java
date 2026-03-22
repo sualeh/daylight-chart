@@ -57,6 +57,7 @@ public final class USState implements Serializable, Comparable<USState> {
    *
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
+  @Override
   public int compareTo(final USState otherUSState) {
     return fips5_2NumericCode - otherUSState.fips5_2NumericCode;
   }
@@ -71,10 +72,7 @@ public final class USState implements Serializable, Comparable<USState> {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if ((obj == null) || (getClass() != obj.getClass())) {
       return false;
     }
     final USState other = (USState) obj;

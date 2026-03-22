@@ -34,8 +34,7 @@ import org.geoname.parser.UnicodeReader;
  */
 public final class FIPS10AdministrationDivisions {
 
-  private static final Map<String, String> fips10AdministrationDivisionMap =
-      new HashMap<String, String>();
+  private static final Map<String, String> fips10AdministrationDivisionMap = new HashMap<>();
 
   /** Loads data from internal database. */
   static {
@@ -71,8 +70,7 @@ public final class FIPS10AdministrationDivisions {
       final String fips10FullAdministrationDivisionCode =
           country.getCode() + fips10AdministrationDivisionCode;
       return fips10AdministrationDivisionMap.get(fips10FullAdministrationDivisionCode);
-    } else {
-      return null;
     }
+    return null;
   }
 }

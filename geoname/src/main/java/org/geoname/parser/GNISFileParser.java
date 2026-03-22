@@ -47,18 +47,16 @@ public final class GNISFileParser extends BaseDelimitedLocationsFileParser {
     }
 
     final String featureClass = locationDataMap.get("FEATURE_CLASS");
-    if (featureClass != null && featureClass.equals("Populated Place")) {
-      try {
-        // City name is in the form: city, state
-        final String city =
-            locationDataMap.get("FEATURE_NAME") + ", " + locationDataMap.get("STATE_ALPHA");
+    if ((featureClass == null) || !"Populated Place".equals(featureClass)) {
+      return null;
+    }
+    try {
+      // City name is in the form: city, state
+      final String city =
+          locationDataMap.get("FEATURE_NAME") + ", " + locationDataMap.get("STATE_ALPHA");
 
-        return getLocation(
-            locationDataMap, city, usa, "PRIM_LAT_DEC", "PRIM_LONG_DEC", "ELEVATION");
-      } catch (final ParserException e) {
-        return null;
-      }
-    } else {
+      return getLocation(locationDataMap, city, usa, "PRIM_LAT_DEC", "PRIM_LONG_DEC", "ELEVATION");
+    } catch (final ParserException e) {
       return null;
     }
   }

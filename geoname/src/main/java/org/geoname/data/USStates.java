@@ -24,6 +24,8 @@ package org.geoname.data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -34,14 +36,13 @@ import java.util.Set;
  *
  * @author Sualeh Fatehi
  */
-@SuppressWarnings("boxing")
-public final class USStates {
+public final class USStates implements Serializable {
 
-  private static final long serialVersionUID = -2155899588206966572L;
+  @Serial private static final long serialVersionUID = 7433823852132316904L;
 
-  private static final Map<String, USState> alphaCodeMap = new HashMap<String, USState>();
-  private static final Map<Integer, USState> numericCodeMap = new HashMap<Integer, USState>();
-  private static final Map<String, USState> stateNameMap = new HashMap<String, USState>();
+  private static final Map<String, USState> alphaCodeMap = new HashMap<>();
+  private static final Map<Integer, USState> numericCodeMap = new HashMap<>();
+  private static final Map<String, USState> stateNameMap = new HashMap<>();
 
   /** Loads data from internal database. */
   static {
@@ -89,7 +90,7 @@ public final class USStates {
    * @return All US states.
    */
   public static Set<USState> getAllUSStates() {
-    return new HashSet<USState>(alphaCodeMap.values());
+    return new HashSet<>(alphaCodeMap.values());
   }
 
   /**
