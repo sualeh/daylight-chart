@@ -30,7 +30,7 @@ package daylightchart;
 public final class Version {
 
   private static final String PRODUCTNAME = "Daylight Chart"; // $NON-NLS-1$
-  private static final String VERSION = "4.1.1"; // $NON-NLS-1$
+  private static final String VERSION = "5.0.1"; // $NON-NLS-1$
 
   /**
    * Information about this product.
