@@ -34,7 +34,7 @@
   </organization>
   <modules>
     <module>geoname</module>
-    <module>daylight-options</module>
+    <module>daylightchart-options</module>
     <module>daylightchart-chart</module>
     <module>daylightchart</module>
   </modules>
