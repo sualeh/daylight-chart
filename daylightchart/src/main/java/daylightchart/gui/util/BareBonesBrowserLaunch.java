@@ -1,3 +1,11 @@
+/*
+ * Daylight Chart
+ * http://sualeh.github.io/DaylightChart
+ * Copyright (c) 2007-2026, Sualeh Fatehi <sualeh@hotmail.com>.
+ * All rights reserved.
+ * SPDX-License-Identifier: EPL-2.0
+ */
+
 /////////////////////////////////////////////////////////
 // Bare Bones Browser Launch                            //
 // Version 1.5                                          //
