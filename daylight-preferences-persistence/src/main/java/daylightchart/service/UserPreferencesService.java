@@ -35,16 +35,8 @@ public class UserPreferencesService {
     return UserPreferences.recentLocationsFile().getData();
   }
 
-  public Path getScratchDirectory() {
-    return UserPreferences.getScratchDirectory();
-  }
-
   public Path getWorkingDirectory() {
     return loadOptions().getWorkingDirectory();
-  }
-
-  public void initialize() {
-    initialize(PersistenceConfigurationService.configuration().resolvePreferencesDirectory());
   }
 
   public void initialize(final Path settingsDir) {

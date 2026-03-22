@@ -60,15 +60,6 @@ public final class UserPreferences {
   }
 
   /**
-   * Gets the scratch directory.
-   *
-   * @return Gets the scratch directory
-   */
-  public static Path getScratchDirectory() {
-    return scratchDirectory;
-  }
-
-  /**
    * Set the location of the settings directory.
    *
    * @param settingsDir Location of the settings directory
