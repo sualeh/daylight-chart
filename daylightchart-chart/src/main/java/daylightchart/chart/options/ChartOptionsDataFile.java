@@ -1,7 +1,6 @@
-package daylightchart.options;
+package daylightchart.chart.options;
 
-import daylightchart.chart.options.ChartOptions;
-import daylightchart.chart.options.ChartOptionsService;
+import daylightchart.options.persistence.BaseDataFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -14,13 +13,13 @@ import org.geoname.parser.UnicodeReader;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 /** Persists chart options in a dedicated YAML file. */
-public final class ChartOptionsDataFile extends BaseDataFile<ChartOptionsFileType, ChartOptions> {
+final class ChartOptionsDataFile extends BaseDataFile<ChartOptionsFileType, ChartOptions> {
 
   private static final YAMLMapper YAML_MAPPER = new YAMLMapper();
   private static final Logger LOGGER = Logger.getLogger(ChartOptionsDataFile.class.getName());
   private static final ChartOptionsService CHART_OPTIONS_SERVICE = new ChartOptionsService();
 
-  public ChartOptionsDataFile(final Path settingsDirectory) {
+  ChartOptionsDataFile(final Path settingsDirectory) {
     super(settingsDirectory, "chart-options.yaml", new ChartOptionsFileType());
   }
 

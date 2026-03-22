@@ -35,7 +35,6 @@
   <modules>
     <module>geoname</module>
     <module>daylight-options</module>
-    <module>daylight-preferences-persistence</module>
     <module>daylightchart-chart</module>
     <module>daylightchart</module>
   </modules>

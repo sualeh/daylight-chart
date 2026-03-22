@@ -21,8 +21,8 @@
  */
 package daylightchart.gui.util;
 
-import daylightchart.options.FileType;
-import daylightchart.service.UserPreferencesService;
+import daylightchart.options.persistence.FileType;
+import daylightchart.options.service.UserPreferencesService;
 import java.awt.Component;
 import java.io.File;
 import java.nio.file.Files;

@@ -22,6 +22,7 @@
 package daylightchart.gui;
 
 import daylightchart.chart.options.ChartOptions;
+import daylightchart.chart.options.ChartOptionsService;
 import daylightchart.chart.report.DaylightChartReport;
 import daylightchart.chart.report.DaylightChartReportService;
 import daylightchart.gui.actions.AboutAction;
@@ -40,7 +41,7 @@ import daylightchart.gui.actions.SaveLocationsFileAction;
 import daylightchart.gui.util.ExitAction;
 import daylightchart.gui.util.GuiAction;
 import daylightchart.options.Options;
-import daylightchart.service.UserPreferencesService;
+import daylightchart.options.service.UserPreferencesService;
 import java.awt.BorderLayout;
 import java.io.Serial;
 import java.util.Collection;
@@ -129,7 +130,7 @@ public final class DaylightChartGui extends JFrame implements LocationOperations
       return;
     }
     final UserPreferencesService preferencesService = UserPreferencesService.preferences();
-    final ChartOptions chartOptions = preferencesService.loadChartOptions();
+    final ChartOptions chartOptions = ChartOptionsService.chartOptions().loadChartOptions();
     final Options options = preferencesService.loadOptions();
     final DaylightChartReport daylightChartReport =
         DaylightChartReportService.reports().createReport(location, options, chartOptions);

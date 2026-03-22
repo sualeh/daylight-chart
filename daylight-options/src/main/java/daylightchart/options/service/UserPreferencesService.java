@@ -1,11 +1,9 @@
-package daylightchart.service;
+package daylightchart.options.service;
 
-import daylightchart.chart.options.ChartOptions;
-import daylightchart.gui.actions.LocationFileType;
-import daylightchart.options.BaseTypedFile;
-import daylightchart.options.LocationsDataFile;
 import daylightchart.options.Options;
-import daylightchart.options.UserPreferences;
+import daylightchart.options.persistence.BaseTypedFile;
+import daylightchart.options.persistence.LocationFileType;
+import daylightchart.options.persistence.LocationsDataFile;
 import java.nio.file.Path;
 import java.util.Collection;
 import org.geoname.data.Location;
@@ -36,24 +34,12 @@ public class UserPreferencesService {
     return UserPreferences.recentLocationsFile().getData();
   }
 
-  public Path getScratchDirectory() {
-    return UserPreferences.getScratchDirectory();
-  }
-
   public Path getWorkingDirectory() {
     return loadOptions().getWorkingDirectory();
   }
 
-  public void initialize() {
-    UserPreferences.initialize(null);
-  }
-
   public void initialize(final Path settingsDir) {
     UserPreferences.initialize(settingsDir);
-  }
-
-  public ChartOptions loadChartOptions() {
-    return UserPreferences.chartOptionsFile().getData();
   }
 
   public Collection<Location> loadLocations(
@@ -65,10 +51,6 @@ public class UserPreferencesService {
 
   public Options loadOptions() {
     return UserPreferences.optionsFile().getData();
-  }
-
-  public void saveChartOptions(final ChartOptions chartOptions) {
-    UserPreferences.chartOptionsFile().save(chartOptions);
   }
 
   public void saveLocations(

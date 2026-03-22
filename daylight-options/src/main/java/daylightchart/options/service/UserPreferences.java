@@ -19,8 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.options;
+package daylightchart.options.service;
 
+import daylightchart.options.persistence.LocationsDataFile;
+import daylightchart.options.persistence.OptionsDataFile;
+import daylightchart.options.persistence.RecentLocationsDataFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,32 +44,21 @@ public final class UserPreferences {
   private static LocationsDataFile locationsFile;
   private static RecentLocationsDataFile recentLocationsFile;
   private static OptionsDataFile optionsFile;
-  private static ChartOptionsDataFile chartOptionsFile;
 
   static {
     scratchDirectory = Path.of(System.getProperty("java.io.tmpdir"), ".");
     validateDirectory(scratchDirectory);
 
-    initialize((Path) null);
+    initialize(PersistenceConfigurationService.configuration().resolvePreferencesDirectory());
   }
 
   /** Clears all user preferences. */
   public static void clear() {
-    chartOptionsFile.delete();
     optionsFile.delete();
     locationsFile.delete();
     recentLocationsFile.delete();
 
     initialize(optionsFile.getDirectory());
-  }
-
-  /**
-   * Gets the scratch directory.
-   *
-   * @return Gets the scratch directory
-   */
-  public static Path getScratchDirectory() {
-    return scratchDirectory;
   }
 
   /**
@@ -77,7 +69,8 @@ public final class UserPreferences {
   public static void initialize(final Path settingsDir) {
     final Path settingsDirectory;
     if (settingsDir == null) {
-      settingsDirectory = Path.of(System.getProperty("user.home", "."), ".daylightchart");
+      settingsDirectory =
+          PersistenceConfigurationService.configuration().resolvePreferencesDirectory();
     } else {
       settingsDirectory = settingsDir;
     }
@@ -91,18 +84,8 @@ public final class UserPreferences {
     }
 
     optionsFile = new OptionsDataFile(settingsDirectory);
-    chartOptionsFile = new ChartOptionsDataFile(settingsDirectory);
     locationsFile = new LocationsDataFile(settingsDirectory);
     recentLocationsFile = new RecentLocationsDataFile(settingsDirectory);
-  }
-
-  /**
-   * Chart options file.
-   *
-   * @return Chart options file.
-   */
-  public static ChartOptionsDataFile chartOptionsFile() {
-    return chartOptionsFile;
   }
 
   /**

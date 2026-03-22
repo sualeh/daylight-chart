@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.options;
+package daylightchart.options.persistence;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -41,7 +41,7 @@ import java.util.logging.Logger;
  * @param <T> File type
  * @param <D> Data object type
  */
-abstract class BaseDataFile<T extends FileType, D> extends BaseTypedFile<T> {
+public abstract class BaseDataFile<T extends FileType, D> extends BaseTypedFile<T> {
 
   private static final Logger LOGGER = Logger.getLogger(BaseDataFile.class.getName());
 
@@ -65,7 +65,6 @@ abstract class BaseDataFile<T extends FileType, D> extends BaseTypedFile<T> {
   public BaseDataFile(final Path file, final T fileType) {
     super(file, fileType);
 
-    // Validation
     if (file == null) {
       throw new IllegalArgumentException("No file provided");
     }
@@ -81,13 +80,11 @@ abstract class BaseDataFile<T extends FileType, D> extends BaseTypedFile<T> {
    * @param resource Resource
    * @param fileType File type
    */
-  BaseDataFile(final Path settingsDirectory, final String resource, final T fileType) {
+  protected BaseDataFile(final Path settingsDirectory, final String resource, final T fileType) {
     this(Path.of(settingsDirectory.toString(), resource), fileType);
-    // Validation
     if (settingsDirectory == null || !Files.isDirectory(settingsDirectory)) {
       throw new IllegalArgumentException("Settings directory is not a directory");
     }
-    // Load
     loadWithFallback();
   }
 

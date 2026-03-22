@@ -19,55 +19,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  */
-package daylightchart.gui.actions;
-
-import daylightchart.options.FileType;
+package daylightchart.options.persistence;
 
 /**
- * Report design file.
+ * Options file.
  *
- * @author Sualeh Fatehi
+ * @author sfatehi
  */
-public enum ReportDesignFileType implements FileType {
-
-  /** Report design file */
-  report_design("Report design file", ".jasper");
-
-  private final String description;
-  private final String fileExtension;
-
-  private ReportDesignFileType(final String description, final String fileExtension) {
-    this.description = description;
-    this.fileExtension = fileExtension;
-  }
+class OptionsFileType implements FileType {
 
   /**
    * {@inheritDoc}
    *
-   * @see daylightchart.options.FileType#getDescription()
+   * @see daylightchart.options.persistence.FileType#getDescription()
    */
   @Override
   public String getDescription() {
-    return description;
+    return "Options file";
   }
 
   /**
    * {@inheritDoc}
    *
-   * @see daylightchart.options.FileType#getFileExtension()
+   * @see daylightchart.options.persistence.FileType#getFileExtension()
    */
   @Override
   public String getFileExtension() {
-    return fileExtension;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @see java.lang.Enum#toString()
-   */
-  @Override
-  public String toString() {
-    return description + " (*" + fileExtension + ")";
+    return ".yaml";
   }
 }
