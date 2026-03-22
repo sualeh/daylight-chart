@@ -31,7 +31,7 @@ public final class Version {
         .append(" ")
         .append(getVersion()) // $NON-NLS-1$
         .append("\n")
-        .append("\u00A9 2007-2016, Sualeh Fatehi."); // $NON-NLS-1$ //$NON-NLS-2$
+        .append("\u00A9 2007-2026, Sualeh Fatehi."); // $NON-NLS-1$
     return new String(about);
   }
 

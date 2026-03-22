@@ -11,7 +11,7 @@
   <artifactId>geoname</artifactId>
   <name>Geographical Names</name>
   <description>
-	Geographical Names is an LGPL licensed Java library that can parse geographical data files.
+	Geographical Names parses geographical data files.
   </description>
   <licenses>
     <license>
@@ -26,28 +26,4 @@
       <version>4.1</version>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.8.0</version>
-        <executions>
-          <execution>
-            <id>assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptorRefs>
-                <descriptorRef>src</descriptorRef>
-                <descriptorRef>bin</descriptorRef>
-              </descriptorRefs>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 </project>
