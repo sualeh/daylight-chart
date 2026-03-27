@@ -8,7 +8,7 @@
     <version>5.0.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>daylight-options</artifactId>
+  <artifactId>daylightchart-options</artifactId>
   <name>Daylight Chart Options</name>
   <dependencies>
     <dependency>

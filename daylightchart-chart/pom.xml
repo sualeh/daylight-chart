@@ -13,7 +13,7 @@
   <dependencies>
     <dependency>
       <groupId>daylightchart</groupId>
-      <artifactId>daylight-options</artifactId>
+      <artifactId>daylightchart-options</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
