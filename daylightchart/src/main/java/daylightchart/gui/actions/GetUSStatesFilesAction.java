@@ -18,7 +18,7 @@ public final class GetUSStatesFilesAction extends BaseBrowserAction {
   public GetUSStatesFilesAction() {
     super(
         Messages.getString("DaylightChartGui.Menu.Actions.GetUSStatesFiles"), // $NON-NLS-1$
-        "http://geonames.usgs.gov/domestic/download_data.htm" //$NON-NLS-1$
+        "https://edits.nationalmap.gov/apps/gaz-domestic/public/search/names" //$NON-NLS-1$
         );
   }
 }
