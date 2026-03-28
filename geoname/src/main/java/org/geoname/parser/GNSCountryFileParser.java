@@ -9,9 +9,10 @@
 package org.geoname.parser;
 
 import java.util.Map;
+import org.geoname.data.AdministrativeArea;
+import org.geoname.data.AdministrativeAreas;
 import org.geoname.data.Countries;
 import org.geoname.data.Country;
-import org.geoname.data.ISOAdministrationDivisions;
 import org.geoname.data.Location;
 import org.geoname.parser.resources.ResourceRef;
 
@@ -50,22 +51,20 @@ public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser
       final String alpha3CountryCode = locationDataMap.get(COUNTRY_CODE);
       final Country country = Countries.lookupIso3166CountryCode3(alpha3CountryCode);
 
-      final String adminDivision = locationDataMap.get(FIRST_ORDER_ADMINISTRATIVE_SUBDIVISION_CODE);
-      final String adminDivisionName =
-          ISOAdministrationDivisions.lookupIsoRegionName(adminDivision);
+      final String adminDivisionCode =
+          locationDataMap.get(FIRST_ORDER_ADMINISTRATIVE_SUBDIVISION_CODE);
+      final AdministrativeArea adminArea =
+          AdministrativeAreas.lookupAdministrativeArea(adminDivisionCode);
 
       if (!locationDataMap.containsKey(FULL_NAME)) {
         return null;
       }
-      final String fullName = locationDataMap.get(FULL_NAME);
-      final StringBuilder city = new StringBuilder().append(fullName);
-      if (adminDivisionName != null) {
-        city.append(", ").append(adminDivisionName);
-      }
+      final String city = locationDataMap.get(FULL_NAME);
 
       return getLocation(
           locationDataMap,
-          city.toString(),
+          city,
+          adminArea,
           country,
           LATITUDE_DECIMAL_DEGREES,
           LONGITUDE_DECIMAL_DEGREES,

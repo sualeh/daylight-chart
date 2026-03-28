@@ -32,7 +32,7 @@ class RecentLocationsDataFileTest {
     for (int i = 0; i < 10; i++) {
       locations.add(
           LocationsListParser.parseLocation(
-              "City%d;US;America/New_York;+420%d-0710%d/".formatted(i, i, i)));
+              "City%d;;US;America/New_York;+420%d-0710%d/".formatted(i, i, i)));
     }
     for (final Location location : locations) {
       recentLocations.add(location);

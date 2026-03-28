@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.geoname.data.AdministrativeArea;
+import org.geoname.data.AdministrativeAreas;
 import org.geoname.data.Countries;
 import org.geoname.data.Country;
 import org.geoname.data.Location;
@@ -46,17 +48,21 @@ public final class LocationsListParser implements LocationsParser {
     }
 
     final String[] fields = representation.split(";");
-    if (fields.length != 4) {
+    if (fields.length != 5) {
       throw new ParserException("Invalid location format: " + representation);
     }
 
     try {
       final String city = fields[0];
-      final Country country = Countries.lookupCountry(fields[1]);
-      final String timeZoneId = fields[2];
-      final PointLocation pointLocation = PointLocationParser.parsePointLocation(fields[3]);
+      final String admCode = fields[1].trim();
+      final AdministrativeArea administrativeArea =
+          admCode.isEmpty() ? null : AdministrativeAreas.lookupAdministrativeArea(admCode);
+      final Country country = Countries.lookupCountry(fields[2]);
+      final String timeZoneId = fields[3];
+      final PointLocation pointLocation = PointLocationParser.parsePointLocation(fields[4]);
 
-      final Location location = new Location(city, country, timeZoneId, pointLocation);
+      final Location location =
+          new Location(city, administrativeArea, country, timeZoneId, pointLocation);
       return location;
     } catch (final us.fatehi.pointlocation6709.parse.ParserException e) {
       throw new ParserException("Invalid location: " + representation, e);
@@ -89,7 +95,12 @@ public final class LocationsListParser implements LocationsParser {
         line = line.trim();
         if (!line.startsWith("#")) {
           final Location location = parseLocation(line);
-          if (seen.add(location.getCity() + "\0" + location.getCountry().getCode())) {
+          final String admCode =
+              location.getAdministrativeArea() != null
+                  ? location.getAdministrativeArea().getCode()
+                  : "";
+          if (seen.add(
+              location.getCity() + "|" + admCode + "|" + location.getCountry().getCode())) {
             locations.add(location);
           }
         }

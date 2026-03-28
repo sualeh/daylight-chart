@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.geoname.data.AdministrativeArea;
 import org.geoname.data.Country;
 import org.geoname.data.Location;
 import org.geoname.parser.resources.ResourceRef;
@@ -73,9 +74,15 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
           locationDataMap.put(header[i], data);
         }
         final Location location = parseLocation(locationDataMap);
-        if (location != null
-            && seen.add(location.getCity() + "\0" + location.getCountry().getCode())) {
-          locations.add(location);
+        if (location != null) {
+          final String admCode =
+              location.getAdministrativeArea() != null
+                  ? location.getAdministrativeArea().getCode()
+                  : "";
+          if (seen.add(
+              location.getCity() + "|" + admCode + "|" + location.getCountry().getCode())) {
+            locations.add(location);
+          }
         }
       }
     } catch (final IOException e) {
@@ -118,6 +125,19 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
       final String longitudeKey,
       final String altitudeKey)
       throws ParserException {
+    return getLocation(
+        locationDataMap, city, null, country, latitudeKey, longitudeKey, altitudeKey);
+  }
+
+  protected final Location getLocation(
+      final Map<String, String> locationDataMap,
+      final String city,
+      final AdministrativeArea administrativeArea,
+      final Country country,
+      final String latitudeKey,
+      final String longitudeKey,
+      final String altitudeKey)
+      throws ParserException {
     final Latitude latitude =
         new Latitude(Angle.fromDegrees(getDouble(locationDataMap, latitudeKey)));
     final Longitude longitude =
@@ -130,7 +150,7 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
         DefaultTimezones.attemptTimeZoneMatch(city, country, pointLocation.getLongitude());
 
     try {
-      return new Location(city, country, timeZoneId, pointLocation);
+      return new Location(city, administrativeArea, country, timeZoneId, pointLocation);
     } catch (final IllegalArgumentException e) {
       throw new ParserException("Could not get location", e);
     }

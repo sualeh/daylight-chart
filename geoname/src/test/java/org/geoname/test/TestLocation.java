@@ -79,7 +79,7 @@ public class TestLocation {
   @Test
   public void location() throws ParserException, FormatterException {
 
-    final String locationString = "Aberdeen;GB;Europe/London;+5710-00204/";
+    final String locationString = "Aberdeen;;GB;Europe/London;+5710-00204/";
     final Location location = LocationsListParser.parseLocation(locationString);
 
     assertThat(LocationFormatter.formatLocation(location), is(locationString));
@@ -97,7 +97,7 @@ public class TestLocation {
   public void locationsParserClosesInputStream() throws ParserException {
     final CloseTrackingInputStream dataStream =
         new CloseTrackingInputStream(
-            "# comment%nAberdeen;GB;Europe/London;+5710-00204/%n"
+            "# comment%nAberdeen;;GB;Europe/London;+5710-00204/%n"
                 .formatted()
                 .getBytes(StandardCharsets.UTF_8));
     final ResourceRef ref =

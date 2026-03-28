@@ -34,7 +34,7 @@ import us.fatehi.pointlocation6709.format.PointLocationFormatter;
  */
 public final class Location implements Serializable, Comparable<Location> {
 
-  @Serial private static final long serialVersionUID = 7929385835483597186L;
+  @Serial private static final long serialVersionUID = 7929385835483597187L;
 
   private static final Logger LOGGER = Logger.getLogger(Location.class.getName());
 
@@ -48,6 +48,7 @@ public final class Location implements Serializable, Comparable<Location> {
               new Latitude(Angle.fromDegrees(0)), new Longitude(Angle.fromDegrees(0))));
 
   private final String city;
+  private final AdministrativeArea administrativeArea;
   private final Country country;
   private final PointLocation pointLocation;
 
@@ -62,7 +63,12 @@ public final class Location implements Serializable, Comparable<Location> {
    * @param location Location to copy the value from.
    */
   public Location(final Location location) {
-    this(location.city, location.country, location.timeZoneId, location.pointLocation);
+    this(
+        location.city,
+        location.administrativeArea,
+        location.country,
+        location.timeZoneId,
+        location.pointLocation);
   }
 
   /**
@@ -78,11 +84,31 @@ public final class Location implements Serializable, Comparable<Location> {
       final Country country,
       final String timeZoneId,
       final PointLocation pointLocation) {
+    this(city, null, country, timeZoneId, pointLocation);
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param city City
+   * @param administrativeArea Administrative area (optional, may be null)
+   * @param country Country
+   * @param timeZoneId Timezone
+   * @param pointLocation Point location
+   */
+  public Location(
+      final String city,
+      final AdministrativeArea administrativeArea,
+      final Country country,
+      final String timeZoneId,
+      final PointLocation pointLocation) {
 
     if (city == null) {
       throw new IllegalArgumentException("City needs to be specified");
     }
     this.city = city.trim();
+
+    this.administrativeArea = administrativeArea;
 
     if (country == null) {
       throw new IllegalArgumentException("Country needs to be specified");
@@ -131,6 +157,13 @@ public final class Location implements Serializable, Comparable<Location> {
     } else if (!city.equals(other.city)) {
       return false;
     }
+    if (administrativeArea == null) {
+      if (other.administrativeArea != null) {
+        return false;
+      }
+    } else if (!administrativeArea.equals(other.administrativeArea)) {
+      return false;
+    }
     if (country == null) {
       if (other.country != null) {
         return false;
@@ -153,6 +186,15 @@ public final class Location implements Serializable, Comparable<Location> {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Administrative area (state, province, region, etc.).
+   *
+   * @return Administrative area, or {@code null} if not available.
+   */
+  public AdministrativeArea getAdministrativeArea() {
+    return administrativeArea;
   }
 
   /**
@@ -214,6 +256,7 @@ public final class Location implements Serializable, Comparable<Location> {
     final int prime = 31;
     int result = 1;
     result = prime * result + (city == null ? 0 : city.hashCode());
+    result = prime * result + (administrativeArea == null ? 0 : administrativeArea.hashCode());
     result = prime * result + (country == null ? 0 : country.hashCode());
     result = prime * result + (pointLocation == null ? 0 : pointLocation.hashCode());
     result = prime * result + (timeZoneId == null ? 0 : timeZoneId.hashCode());
@@ -249,6 +292,15 @@ public final class Location implements Serializable, Comparable<Location> {
     final StringBuilder descriptionBuilder = new StringBuilder();
     if (city.length() > 0) {
       descriptionBuilder.append(city);
+    }
+    if (administrativeArea != null) {
+      final String adminName = administrativeArea.getName();
+      if (adminName != null && !adminName.isEmpty()) {
+        if (descriptionBuilder.length() > 0) {
+          descriptionBuilder.append(", ");
+        }
+        descriptionBuilder.append(adminName);
+      }
     }
     if (country != Country.UNKNOWN) {
       if (descriptionBuilder.length() > 0) {

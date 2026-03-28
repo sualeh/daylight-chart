@@ -43,10 +43,14 @@ public final class LocationFormatter {
 
     final String city = location.getCity();
     final Country country = location.getCountry();
+    final String admCode =
+        location.getAdministrativeArea() != null ? location.getAdministrativeArea().getCode() : "";
 
     final StringBuffer representation =
         new StringBuffer()
             .append(city)
+            .append(";")
+            .append(admCode)
             .append(";")
             .append(country.getCode())
             .append(";")

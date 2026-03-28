@@ -33,81 +33,81 @@ public class RiseSetUtilityTest {
   @Test
   public void shouldMatchBaselineRiseAndSetAcrossWorldLocations() throws ParserException {
     assertRiseAndSet(
-        "Boston, MA;US;America/New_York;+4232-07104/",
+        "Boston;US-MA;US;America/New_York;+4232-07104/",
         LocalDate.of(2024, 3, 20),
         LocalTime.of(6, 46, 28),
         LocalTime.of(18, 57, 16));
     assertRiseAndSet(
-        "Boston, MA;US;America/New_York;+4232-07104/",
+        "Boston;US-MA;US;America/New_York;+4232-07104/",
         LocalDate.of(2024, 6, 21),
         LocalTime.of(5, 6, 55),
         LocalTime.of(20, 25, 41));
     assertRiseAndSet(
-        "Boston, MA;US;America/New_York;+4232-07104/",
+        "Boston;US-MA;US;America/New_York;+4232-07104/",
         LocalDate.of(2024, 12, 21),
         LocalTime.of(7, 10, 49),
         LocalTime.of(16, 14, 34));
 
     assertRiseAndSet(
-        "London;GB;Europe/London;+5130-00010/",
+        "London;;GB;Europe/London;+5130-00010/",
         LocalDate.of(2024, 3, 20),
         LocalTime.of(6, 2, 25),
         LocalTime.of(18, 14, 43));
     assertRiseAndSet(
-        "London;GB;Europe/London;+5130-00010/",
+        "London;;GB;Europe/London;+5130-00010/",
         LocalDate.of(2024, 6, 21),
         LocalTime.of(4, 43, 15),
         LocalTime.of(21, 22, 1));
     assertRiseAndSet(
-        "London;GB;Europe/London;+5130-00010/",
+        "London;;GB;Europe/London;+5130-00010/",
         LocalDate.of(2024, 12, 21),
         LocalTime.of(8, 4, 3),
         LocalTime.of(15, 53, 59));
 
     assertRiseAndSet(
-        "Sydney;AU;Australia/Sydney;-3352+15113/",
+        "Sydney;;AU;Australia/Sydney;-3352+15113/",
         LocalDate.of(2024, 3, 20),
         LocalTime.of(6, 58, 23),
         LocalTime.of(19, 7, 31));
     assertRiseAndSet(
-        "Sydney;AU;Australia/Sydney;-3352+15113/",
+        "Sydney;;AU;Australia/Sydney;-3352+15113/",
         LocalDate.of(2024, 6, 21),
         LocalTime.of(7, 0, 3),
         LocalTime.of(16, 53, 40));
     assertRiseAndSet(
-        "Sydney;AU;Australia/Sydney;-3352+15113/",
+        "Sydney;;AU;Australia/Sydney;-3352+15113/",
         LocalDate.of(2024, 12, 21),
         LocalTime.of(5, 41, 7),
         LocalTime.of(20, 5, 3));
 
     assertRiseAndSet(
-        "Nairobi;KE;Africa/Nairobi;-0117+03649/",
+        "Nairobi;;KE;Africa/Nairobi;-0117+03649/",
         LocalDate.of(2024, 3, 20),
         LocalTime.of(6, 36, 37),
         LocalTime.of(18, 43, 34));
     assertRiseAndSet(
-        "Nairobi;KE;Africa/Nairobi;-0117+03649/",
+        "Nairobi;;KE;Africa/Nairobi;-0117+03649/",
         LocalDate.of(2024, 6, 21),
         LocalTime.of(6, 32, 57),
         LocalTime.of(18, 36, 23));
     assertRiseAndSet(
-        "Nairobi;KE;Africa/Nairobi;-0117+03649/",
+        "Nairobi;;KE;Africa/Nairobi;-0117+03649/",
         LocalDate.of(2024, 12, 21),
         LocalTime.of(6, 24, 46),
         LocalTime.of(18, 37, 16));
 
     assertRiseAndSet(
-        "Reykjavik;IS;Atlantic/Reykjavik;+6409-02158/",
+        "Reykjavik;;IS;Atlantic/Reykjavik;+6409-02158/",
         LocalDate.of(2024, 3, 20),
         LocalTime.of(7, 26, 44),
         LocalTime.of(19, 45, 16));
     assertRiseAndSet(
-        "Reykjavik;IS;Atlantic/Reykjavik;+6409-02158/",
+        "Reykjavik;;IS;Atlantic/Reykjavik;+6409-02158/",
         LocalDate.of(2024, 6, 21),
         LocalTime.of(2, 55, 23),
         LocalTime.of(0, 4, 5));
     assertRiseAndSet(
-        "Reykjavik;IS;Atlantic/Reykjavik;+6409-02158/",
+        "Reykjavik;;IS;Atlantic/Reykjavik;+6409-02158/",
         LocalDate.of(2024, 12, 21),
         LocalTime.of(11, 22, 31),
         LocalTime.of(15, 29, 58));
