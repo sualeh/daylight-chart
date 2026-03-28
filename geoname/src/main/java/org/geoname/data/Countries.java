@@ -28,17 +28,18 @@ import org.geoname.parser.UnicodeReader;
  */
 public final class Countries {
 
-  private static final Map<String, Country> iso3166CountryCodeMap;
+  private static final Map<String, Country> iso3166_alpha2_CountryCodeMap;
+  private static final Map<String, Country> iso3166_alpha3_CountryCodeMap;
   private static final Map<String, Country> fips10CountryCodeMap;
   private static final Map<String, Country> countryNameMap = new HashMap<>();
 
   /** Loads data from internal database. */
   static {
-    iso3166CountryCodeMap = readISOCountryData("iso_countries.data");
+    iso3166_alpha2_CountryCodeMap = readISOCountryData("iso_countries_alpha2.data");
+    iso3166_alpha3_CountryCodeMap = readISOCountryData("iso_countries_alpha3.data");
     fips10CountryCodeMap = readFips10CountryData("fips10_countries.data");
 
-    final Collection<Country> countries = new HashSet<>();
-    countries.addAll(iso3166CountryCodeMap.values());
+    final Collection<Country> countries = new HashSet<>(iso3166_alpha2_CountryCodeMap.values());
     countries.addAll(fips10CountryCodeMap.values());
 
     for (final Country country : countries) {
@@ -52,7 +53,7 @@ public final class Countries {
    * @return All countries.
    */
   public static List<Country> getAllCountries() {
-    final ArrayList<Country> countries = new ArrayList<>(iso3166CountryCodeMap.values());
+    final ArrayList<Country> countries = new ArrayList<>(iso3166_alpha2_CountryCodeMap.values());
     Collections.sort(countries);
     return countries;
   }
@@ -68,7 +69,7 @@ public final class Countries {
     if (countryString == null) {
       country = null;
     } else if (countryString.length() == 2) {
-      if (iso3166CountryCodeMap.containsKey(countryString)) {
+      if (iso3166_alpha2_CountryCodeMap.containsKey(countryString)) {
         country = lookupIso3166CountryCode2(countryString);
       } else {
         country = lookupFips10CountryCode(countryString);
@@ -115,7 +116,17 @@ public final class Countries {
    * @return Country ojbect, or null
    */
   public static Country lookupIso3166CountryCode2(final String iso3166CountryCode2) {
-    return iso3166CountryCodeMap.get(iso3166CountryCode2);
+    return iso3166_alpha2_CountryCodeMap.get(iso3166CountryCode2);
+  }
+
+  /**
+   * Looks up a country from the two-letter ISO 3166 country code.
+   *
+   * @param iso3166CountryCode3 ISO 3166 country code
+   * @return Country ojbect, or null
+   */
+  public static Country lookupIso3166CountryCode3(final String iso3166CountryCode3) {
+    return iso3166_alpha3_CountryCodeMap.get(iso3166CountryCode3);
   }
 
   private static Map<String, Country> readFips10CountryData(final String dataResource) {
@@ -135,8 +146,8 @@ public final class Countries {
                 final String iso3166CountryCode = fields[1];
                 final String fips10CountryCode = fields[0];
                 final Country country;
-                if (iso3166CountryCodeMap.containsKey(iso3166CountryCode)) {
-                  country = iso3166CountryCodeMap.get(iso3166CountryCode);
+                if (iso3166_alpha2_CountryCodeMap.containsKey(iso3166CountryCode)) {
+                  country = iso3166_alpha2_CountryCodeMap.get(iso3166CountryCode);
                 } else {
                   final String countryName = fields[2];
                   if (iso3166CountryCode.length() == 2) {

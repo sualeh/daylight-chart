@@ -59,8 +59,8 @@ public class TestGeoNameFiles {
 
   @Test
   public void GNSCountries() throws ParserException, IOException, URISyntaxException {
-    parseGNSCountryFile("uz.zip", 3756);
-    parseGNSCountryFile("lo.zip", 4969);
+    parseGNSCountryFile("Uzbekistan.zip", 7364);
+    parseGNSCountryFile("Slovakia.zip", 4970);
   }
 
   private void parseGNISUSStates(final String state, final String date, final int numLocations)

@@ -22,6 +22,14 @@ import org.geoname.parser.resources.ResourceRef;
  */
 public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser {
 
+  private static final String LONGITUDE_DECIMAL_DEGREES = "long_dd";
+  private static final String LATITUDE_DECIMAL_DEGREES = "lat_dd";
+  private static final String FULL_NAME = "full_name";
+  private static final String FIRST_ORDER_ADMINISTRATIVE_SUBDIVISION_CODE = "adm1";
+  private static final String COUNTRY_CODE = "cc_ft";
+  private static final String NAME_TYPE = "nt";
+  private static final String FEATURE_CLASSIFICATION_CODE = "fc";
+
   public GNSCountryFileParser(final ResourceRef resourceRef) throws ParserException {
     super(resourceRef, "\t");
   }
@@ -32,15 +40,18 @@ public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser
       return null;
     }
 
-    final String featureClassification = locationDataMap.get("FC");
-    final String nameType = locationDataMap.get("NT");
+    final String featureClassification = locationDataMap.get(FEATURE_CLASSIFICATION_CODE);
+    final String nameType = locationDataMap.get(NAME_TYPE);
     if (!"P".equals(featureClassification) || !"C".equals(nameType) && !"N".equals(nameType)) {
+      // Skip populated places that have conventional or native names
       return null;
     }
     try {
-      final Country country = Countries.lookupFips10CountryCode(locationDataMap.get("CC1"));
+      final String alpha3CountryCode = locationDataMap.get(COUNTRY_CODE);
+      final Country country = Countries.lookupIso3166CountryCode3(alpha3CountryCode);
 
-      final int fips10AdministrationDivisionCode = getInteger(locationDataMap, "ADM1", 0);
+      final int fips10AdministrationDivisionCode =
+          getInteger(locationDataMap, FIRST_ORDER_ADMINISTRATIVE_SUBDIVISION_CODE, 0);
       final String fips10AdministrationDivisionName;
       if (fips10AdministrationDivisionCode > 0) {
         fips10AdministrationDivisionName =
@@ -50,19 +61,21 @@ public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser
         fips10AdministrationDivisionName = null;
       }
 
-      String city;
-      if (locationDataMap.containsKey("FULL_NAME_RO")) {
-        city = locationDataMap.get("FULL_NAME_RO");
-      } else if (locationDataMap.containsKey("FULL_NAME")) {
-        city = locationDataMap.get("FULL_NAME");
-      } else {
+      if (!locationDataMap.containsKey(FULL_NAME)) {
         return null;
       }
+      final StringBuilder city = new StringBuilder().append(locationDataMap.get(FULL_NAME));
       if (fips10AdministrationDivisionName != null) {
-        city = city + ", " + fips10AdministrationDivisionName;
+        city.append(", ").append(fips10AdministrationDivisionName);
       }
 
-      return getLocation(locationDataMap, city, country, "LAT", "LONG", "ELEV");
+      return getLocation(
+          locationDataMap,
+          city.toString(),
+          country,
+          LATITUDE_DECIMAL_DEGREES,
+          LONGITUDE_DECIMAL_DEGREES,
+          "elev");
     } catch (final ParserException e) {
       return null;
     }
