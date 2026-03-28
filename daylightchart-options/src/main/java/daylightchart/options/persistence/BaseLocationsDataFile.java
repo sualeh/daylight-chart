@@ -83,7 +83,7 @@ abstract class BaseLocationsDataFile extends BaseDataFile<LocationFileType, Coll
           try (FileSystem fs = FileSystems.newFileSystem(file, Map.of())) {
             Files.walk(fs.getPath("/"))
                 .filter(Files::isRegularFile)
-                .map(entry -> ResourceRefs.ofJarEntry(file, entry.toString()))
+                .map(entry -> ResourceRefs.ofZipEntry(file, entry.toString()))
                 .forEach(refs::add);
           }
           break;

@@ -72,7 +72,7 @@ public class TestGeoNameFiles {
     Collection<Location> locations = new ArrayList<>();
     final String entryName = firstZipEntryName(zipPath);
     if (entryName != null) {
-      final ResourceRef ref = ResourceRefs.ofJarEntry(zipPath, entryName);
+      final ResourceRef ref = ResourceRefs.ofZipEntry(zipPath, entryName);
       locations = new GNISFileParser(ref).parseLocations();
     }
 
@@ -90,7 +90,7 @@ public class TestGeoNameFiles {
     Collection<Location> locations = new ArrayList<>();
     final String entryName = firstZipEntryName(zipPath);
     if (entryName != null) {
-      final ResourceRef ref = ResourceRefs.ofJarEntry(zipPath, entryName);
+      final ResourceRef ref = ResourceRefs.ofZipEntry(zipPath, entryName);
       locations = new GNSCountryFileParser(ref).parseLocations();
     }
 
