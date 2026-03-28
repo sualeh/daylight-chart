@@ -79,6 +79,15 @@ abstract class BaseLocationsDataFile extends BaseDataFile<LocationFileType, Coll
           refs.add(ResourceRefs.ofFile(file));
           break;
         case gns_country_file_zipped:
+          try (FileSystem fs = FileSystems.newFileSystem(file, Map.of())) {
+            final String zipStem = stem(file.getFileName().toString());
+            Files.walk(fs.getPath("/"))
+                .filter(Files::isRegularFile)
+                .filter(entry -> stem(entry.getFileName().toString()).equals(zipStem))
+                .map(entry -> ResourceRefs.ofZipEntry(file, entry.toString()))
+                .forEach(refs::add);
+          }
+          break;
         case gnis_state_file_zipped:
           try (FileSystem fs = FileSystems.newFileSystem(file, Map.of())) {
             Files.walk(fs.getPath("/"))
@@ -99,7 +108,7 @@ abstract class BaseLocationsDataFile extends BaseDataFile<LocationFileType, Coll
 
   @Override
   protected final void load(final ResourceRef... refs) {
-    data = new HashSet<Location>();
+    data = new HashSet<>();
     try {
       for (final ResourceRef ref : refs) {
         final LocationsParser locationsFileParser =
@@ -144,5 +153,11 @@ abstract class BaseLocationsDataFile extends BaseDataFile<LocationFileType, Coll
     } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not save locations to " + file, e);
     }
+  }
+
+  /** Returns the filename stem — the name without its last extension. */
+  private static String stem(final String filename) {
+    final int dot = filename.lastIndexOf('.');
+    return dot > 0 ? filename.substring(0, dot) : filename;
   }
 }
