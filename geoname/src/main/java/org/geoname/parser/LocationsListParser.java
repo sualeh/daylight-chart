@@ -66,7 +66,7 @@ public final class LocationsListParser implements LocationsParser {
     if (representation == null || representation.isEmpty()) {
       throw new ParserException("No location provided");
     }
-    try (CSVParser csvParser = new CSVParser(new StringReader(representation), RECORD_FORMAT)) {
+    try (CSVParser csvParser = RECORD_FORMAT.parse(new StringReader(representation))) {
       final List<CSVRecord> records = csvParser.getRecords();
       if (records.isEmpty()) {
         throw new ParserException("Invalid location format: " + representation);
@@ -112,16 +112,16 @@ public final class LocationsListParser implements LocationsParser {
   public Collection<Location> parseLocations() throws ParserException {
     final List<Location> locations = new ArrayList<>();
     try (InputStream stream = resourceRef.openStream();
-        CSVParser csvParser = new CSVParser(new UnicodeReader(stream, "UTF-8"), FILE_FORMAT)) {
+        CSVParser csvParser = FILE_FORMAT.parse(new UnicodeReader(stream, "UTF-8"))) {
       final Set<String> seen = new HashSet<>();
       for (final CSVRecord record : csvParser) {
-        final Location location = toLocation(record, record.toString());
-        final String admCode =
-            location.getAdministrativeArea() != null
-                ? location.getAdministrativeArea().getCode()
-                : "";
-        if (seen.add(location.getCity() + "|" + admCode + "|" + location.getCountry().getCode())) {
-          locations.add(location);
+        try {
+          final Location location = toLocation(record, record.toString());
+          if (seen.add(location.deduplicationKey())) {
+            locations.add(location);
+          }
+        } catch (final ParserException e) {
+          LOGGER.log(Level.WARNING, "Skipping invalid location record: " + record, e);
         }
       }
     } catch (final IOException e) {

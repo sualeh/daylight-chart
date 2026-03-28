@@ -189,6 +189,18 @@ public final class Location implements Serializable, Comparable<Location> {
   }
 
   /**
+   * Returns a composite key suitable for deduplication. The key is {@code
+   * city|adminCode|countryCode}, where {@code adminCode} is the administrative area code or an
+   * empty string when there is none.
+   *
+   * @return a stable string key
+   */
+  public String deduplicationKey() {
+    final String admCode = administrativeArea != null ? administrativeArea.getCode() : "";
+    return city + "|" + admCode + "|" + country.getCode();
+  }
+
+  /**
    * Administrative area (state, province, region, etc.).
    *
    * @return Administrative area, or {@code null} if not available.

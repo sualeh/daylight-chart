@@ -18,6 +18,7 @@ import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.geoname.parser.UnicodeReader;
 
 /**
  * In-memory database of US states.
@@ -42,10 +43,9 @@ public final class USStates implements Serializable {
             .setIgnoreEmptyLines(true)
             .get();
     try (CSVParser csvParser =
-        new CSVParser(
-            new org.geoname.parser.UnicodeReader(
-                USStates.class.getClassLoader().getResourceAsStream("us.states.data"), "UTF-8"),
-            format)) {
+        format.parse(
+            new UnicodeReader(
+                USStates.class.getClassLoader().getResourceAsStream("us.states.data"), "UTF-8"))) {
       for (final CSVRecord record : csvParser) {
         final String number = record.get("number");
         final String abbreviation = record.get("abbreviation");

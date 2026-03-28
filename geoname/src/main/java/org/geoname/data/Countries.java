@@ -139,10 +139,9 @@ public final class Countries {
             .setIgnoreEmptyLines(true)
             .get();
     try (CSVParser csvParser =
-        new CSVParser(
+        format.parse(
             new UnicodeReader(
-                Countries.class.getClassLoader().getResourceAsStream(dataResource), "UTF-8"),
-            format)) {
+                Countries.class.getClassLoader().getResourceAsStream(dataResource), "UTF-8"))) {
       for (final CSVRecord record : csvParser) {
         final String fips10CountryCode = record.get("fips_code");
         final String iso3166CountryCode = record.get("iso_code");
@@ -185,10 +184,9 @@ public final class Countries {
             .setIgnoreEmptyLines(true)
             .get();
     try (CSVParser csvParser =
-        new CSVParser(
+        format.parse(
             new UnicodeReader(
-                Countries.class.getClassLoader().getResourceAsStream(dataResource), "UTF-8"),
-            format)) {
+                Countries.class.getClassLoader().getResourceAsStream(dataResource), "UTF-8"))) {
       for (final CSVRecord record : csvParser) {
         final String code = record.get("code");
         final String name = record.get("name");

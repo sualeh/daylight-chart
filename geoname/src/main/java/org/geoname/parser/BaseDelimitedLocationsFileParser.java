@@ -10,11 +10,12 @@ package org.geoname.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
+import java.util.Set;import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -51,7 +52,7 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
    */
   @Override
   public final Collection<Location> parseLocations() throws ParserException {
-    final Set<Location> locations = new HashSet<>();
+    final List<Location> locations = new ArrayList<>();
     final CSVFormat format =
         CSVFormat.DEFAULT
             .builder()
@@ -62,18 +63,13 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
             .setIgnoreEmptyLines(true)
             .get();
     try (InputStream stream = resourceRef.openStream();
-        CSVParser csvParser = new CSVParser(new UnicodeReader(stream, "UTF-8"), format)) {
+        CSVParser csvParser = format.parse(new UnicodeReader(stream, "UTF-8"))) {
       final Set<String> seen = new HashSet<>();
       for (final CSVRecord record : csvParser) {
         final Map<String, String> locationDataMap = record.toMap();
         final Location location = parseLocation(locationDataMap);
         if (location != null) {
-          final String admCode =
-              location.getAdministrativeArea() != null
-                  ? location.getAdministrativeArea().getCode()
-                  : "";
-          if (seen.add(
-              location.getCity() + "|" + admCode + "|" + location.getCountry().getCode())) {
+          if (seen.add(location.deduplicationKey())) {
             locations.add(location);
           }
         }
@@ -91,7 +87,7 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
     double doubleValue = defaultValue;
     try {
       doubleValue = getDouble(locationDataMap, key);
-    } catch (final Exception e) {
+    } catch (final ParserException e) {
       doubleValue = defaultValue;
     }
     return doubleValue;

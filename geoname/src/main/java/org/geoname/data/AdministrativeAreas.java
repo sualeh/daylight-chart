@@ -69,11 +69,10 @@ public final class AdministrativeAreas {
 
   private static void loadFips10() {
     try (CSVParser csvParser =
-        new CSVParser(
+        FIPS10_FORMAT.parse(
             new UnicodeReader(
                 AdministrativeAreas.class.getClassLoader().getResourceAsStream("fips10.data"),
-                "UTF-8"),
-            FIPS10_FORMAT)) {
+                "UTF-8"))) {
       for (final CSVRecord record : csvParser) {
         final String code = record.get("code").trim();
         final String type = record.get("type").trim();
@@ -90,11 +89,10 @@ public final class AdministrativeAreas {
 
   private static void loadIso3166() {
     try (CSVParser csvParser =
-        new CSVParser(
+        ISO_FORMAT.parse(
             new UnicodeReader(
                 AdministrativeAreas.class.getClassLoader().getResourceAsStream("iso_adm.data"),
-                "UTF-8"),
-            ISO_FORMAT)) {
+                "UTF-8"))) {
       for (final CSVRecord record : csvParser) {
         final String countryCode = record.get("country_code").trim();
         final String regionName = record.get("region_name").trim();

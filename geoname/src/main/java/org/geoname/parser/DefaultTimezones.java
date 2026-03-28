@@ -68,13 +68,12 @@ public final class DefaultTimezones {
             .setIgnoreEmptyLines(true)
             .get();
     try (CSVParser csvParser =
-        new CSVParser(
+        format.parse(
             new org.geoname.parser.UnicodeReader(
                 DefaultTimezones.class
                     .getClassLoader()
                     .getResourceAsStream("default.timezones.data"),
-                "UTF-8"),
-            format)) {
+                "UTF-8"))) {
       for (final CSVRecord record : csvParser) {
         final String iso3166CountryCode2 = record.get("country_code");
         final String timezoneId = record.get("timezone");
