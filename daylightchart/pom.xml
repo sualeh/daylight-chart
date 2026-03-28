@@ -65,7 +65,7 @@
     <dependency>
       <groupId>us.fatehi</groupId>
       <artifactId>pointlocation6709</artifactId>
-      <version>4.1</version>
+      <version>5.0.1</version>
     </dependency>
     <dependency>
       <groupId>net.e175.klaus</groupId>
