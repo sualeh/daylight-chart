@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.geoname.data.Country;
 import org.geoname.data.Location;
+import org.geoname.parser.resources.ResourceRef;
 import us.fatehi.pointlocation6709.Angle;
 import us.fatehi.pointlocation6709.Latitude;
 import us.fatehi.pointlocation6709.Longitude;
@@ -29,15 +30,15 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
   private static final Logger LOGGER =
       Logger.getLogger(BaseDelimitedLocationsFileParser.class.getName());
 
-  private final InputStream stream;
+  private final ResourceRef resourceRef;
   private final String delimiter;
 
-  protected BaseDelimitedLocationsFileParser(final InputStream stream, final String delimiter)
+  protected BaseDelimitedLocationsFileParser(final ResourceRef resourceRef, final String delimiter)
       throws ParserException {
-    if (stream == null) {
+    if (resourceRef == null) {
       throw new ParserException("Cannot read locations");
     }
-    this.stream = stream;
+    this.resourceRef = resourceRef;
 
     if (delimiter == null) {
       throw new ParserException("No delimiter provided");
@@ -53,7 +54,8 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
   @Override
   public final Collection<Location> parseLocations() throws ParserException {
     final Set<Location> locations = new HashSet<>();
-    try (BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
+    try (InputStream stream = resourceRef.openStream();
+        BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
       final String[] header = readHeader(reader);
       final Map<String, String> locationDataMap = new HashMap<>();
       String line;

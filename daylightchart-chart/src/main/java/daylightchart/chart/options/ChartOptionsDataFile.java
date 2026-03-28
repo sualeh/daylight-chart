@@ -9,15 +9,14 @@
 package daylightchart.chart.options;
 
 import daylightchart.options.persistence.BaseDataFile;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.geoname.parser.UnicodeReader;
+import org.geoname.parser.resources.ResourceRef;
+import org.geoname.parser.resources.ResourceRefs;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 /** Persists chart options in a dedicated YAML file. */
@@ -36,22 +35,16 @@ final class ChartOptionsDataFile extends BaseDataFile<ChartOptionsFileType, Char
     if (!exists()) {
       return;
     }
-
-    final Path file = getFile();
-    try {
-      load(Files.newInputStream(file));
-    } catch (final IOException e) {
-      LOGGER.log(Level.WARNING, "Could not open chart options file, " + file, e);
-    }
+    load(ResourceRefs.ofFile(getFile()));
   }
 
   @Override
-  protected void load(final InputStream... input) {
-    if (input == null || input.length == 0) {
+  protected void load(final ResourceRef... refs) {
+    if (refs == null || refs.length == 0) {
       return;
     }
 
-    try (Reader reader = new UnicodeReader(input[0], "UTF-8")) {
+    try (Reader reader = new UnicodeReader(refs[0].openStream(), "UTF-8")) {
       data = YAML_MAPPER.readValue(reader, ChartOptions.class);
     } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not read chart options", e);

@@ -10,7 +10,6 @@ package daylightchart.options.persistence;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -20,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.geoname.parser.resources.ResourceRef;
 
 /**
  * Represents a data file, with data.
@@ -124,7 +124,7 @@ public abstract class BaseDataFile<T extends FileType, D> extends BaseTypedFile<
   /** Loads data from the file. */
   protected abstract void load();
 
-  protected abstract void load(final InputStream... inputs);
+  protected abstract void load(final ResourceRef... refs);
 
   /**
    * Loads data from the file, falling back to a default that is usually loaded from an internal

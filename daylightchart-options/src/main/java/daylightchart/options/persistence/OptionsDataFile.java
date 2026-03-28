@@ -13,11 +13,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.geoname.parser.UnicodeReader;
+import org.geoname.parser.resources.ResourceRef;
+import org.geoname.parser.resources.ResourceRefs;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 /**
@@ -47,27 +48,19 @@ public final class OptionsDataFile extends BaseDataFile<OptionsFileType, Options
       LOGGER.log(Level.WARNING, "No options file provided");
       return;
     }
-    InputStream input;
-    final Path file = getFile();
-    try {
-      input = Files.newInputStream(file);
-    } catch (final IOException e) {
-      LOGGER.log(Level.WARNING, "Could not open options file, " + file, e);
-      return;
-    }
-
-    load(input);
+    load(ResourceRefs.ofFile(getFile()));
   }
 
   @Override
-  protected void load(final InputStream... input) {
-    if (input == null || input.length == 0) {
+  protected void load(final ResourceRef... refs) {
+    if (refs == null || refs.length == 0) {
       return;
     }
 
     Reader reader = null;
     try {
-      reader = new UnicodeReader(input[0], "UTF-8");
+      final InputStream input = refs[0].openStream();
+      reader = new UnicodeReader(input, "UTF-8");
       data = YAML_MAPPER.readValue(reader, Options.class);
     } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not read options", e);

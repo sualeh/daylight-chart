@@ -57,7 +57,7 @@ public final class Country implements Serializable, Comparable<Country> {
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || (getClass() != obj.getClass())) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final Country other = (Country) obj;

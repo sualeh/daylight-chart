@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import org.geoname.data.Countries;
 import org.geoname.data.Country;
 import org.geoname.data.Location;
+import org.geoname.parser.resources.ResourceRef;
 import us.fatehi.pointlocation6709.PointLocation;
 import us.fatehi.pointlocation6709.parse.PointLocationParser;
 
@@ -60,13 +61,13 @@ public final class LocationsListParser implements LocationsParser {
     }
   }
 
-  private final InputStream stream;
+  private final ResourceRef resourceRef;
 
-  public LocationsListParser(final InputStream stream) throws ParserException {
-    if (stream == null) {
+  public LocationsListParser(final ResourceRef resourceRef) throws ParserException {
+    if (resourceRef == null) {
       throw new ParserException("Cannot read locations");
     }
-    this.stream = stream;
+    this.resourceRef = resourceRef;
   }
 
   /**
@@ -78,7 +79,8 @@ public final class LocationsListParser implements LocationsParser {
   public Collection<Location> parseLocations() throws ParserException {
 
     final List<Location> locations = new ArrayList<>();
-    try (BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
+    try (InputStream stream = resourceRef.openStream();
+        BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
       String line;
       while ((line = reader.readLine()) != null) {
         line = line.trim();

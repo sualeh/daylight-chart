@@ -121,7 +121,7 @@ public final class Location implements Serializable, Comparable<Location> {
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || !(obj instanceof final Location other)) {
+    if (obj == null || !(obj instanceof final Location other)) {
       return false;
     }
     if (city == null) {

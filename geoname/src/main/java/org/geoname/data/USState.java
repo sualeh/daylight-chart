@@ -59,7 +59,7 @@ public final class USState implements Serializable, Comparable<USState> {
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || (getClass() != obj.getClass())) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final USState other = (USState) obj;

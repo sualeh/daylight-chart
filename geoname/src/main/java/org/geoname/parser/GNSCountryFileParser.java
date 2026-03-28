@@ -8,12 +8,12 @@
 
 package org.geoname.parser;
 
-import java.io.InputStream;
 import java.util.Map;
 import org.geoname.data.Countries;
 import org.geoname.data.Country;
 import org.geoname.data.FIPS10AdministrationDivisions;
 import org.geoname.data.Location;
+import org.geoname.parser.resources.ResourceRef;
 
 /**
  * Parses objects from strings.
@@ -22,8 +22,8 @@ import org.geoname.data.Location;
  */
 public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser {
 
-  public GNSCountryFileParser(final InputStream stream) throws ParserException {
-    super(stream, "\t");
+  public GNSCountryFileParser(final ResourceRef resourceRef) throws ParserException {
+    super(resourceRef, "\t");
   }
 
   @Override
@@ -34,7 +34,7 @@ public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser
 
     final String featureClassification = locationDataMap.get("FC");
     final String nameType = locationDataMap.get("NT");
-    if (!"P".equals(featureClassification) || (!"C".equals(nameType) && !"N".equals(nameType))) {
+    if (!"P".equals(featureClassification) || !"C".equals(nameType) && !"N".equals(nameType)) {
       return null;
     }
     try {

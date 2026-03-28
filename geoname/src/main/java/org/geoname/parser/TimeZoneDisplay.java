@@ -59,7 +59,7 @@ public final class TimeZoneDisplay implements Serializable, Comparable<TimeZoneD
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || (getClass() != obj.getClass())) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final TimeZoneDisplay other = (TimeZoneDisplay) obj;

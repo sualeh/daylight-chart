@@ -8,26 +8,26 @@
 
 package daylightchart.options.persistence;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Writer;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import org.geoname.data.Location;
 import org.geoname.parser.GNISFileParser;
 import org.geoname.parser.GNSCountryFileParser;
 import org.geoname.parser.LocationFormatter;
 import org.geoname.parser.LocationsListParser;
 import org.geoname.parser.LocationsParser;
+import org.geoname.parser.resources.ResourceRef;
+import org.geoname.parser.resources.ResourceRefs;
 
 /**
  * Represents a location file, with data.
@@ -69,48 +69,45 @@ abstract class BaseLocationsDataFile extends BaseDataFile<LocationFileType, Coll
       return;
     }
 
-    final List<InputStream> inputs = new ArrayList<InputStream>();
+    final List<ResourceRef> refs = new ArrayList<>();
     final Path file = getFile();
     try {
       switch (getFileType()) {
         case data:
         case gns_country_file:
         case gnis_state_file:
-          inputs.add(Files.newInputStream(file));
+          refs.add(ResourceRefs.ofFile(file));
           break;
         case gns_country_file_zipped:
         case gnis_state_file_zipped:
-          final ZipFile zipFile = new ZipFile(file.toFile());
-          for (final ZipEntry zipEntry : Collections.list(zipFile.entries())) {
-            inputs.add(zipFile.getInputStream(zipEntry));
+          try (FileSystem fs = FileSystems.newFileSystem(file, Map.of())) {
+            Files.walk(fs.getPath("/"))
+                .filter(Files::isRegularFile)
+                .map(entry -> ResourceRefs.ofJarEntry(file, entry.toString()))
+                .forEach(refs::add);
           }
           break;
       }
     } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not read locations from " + file, e);
       data = null;
+      return;
     }
 
-    load(inputs.toArray(new InputStream[inputs.size()]));
+    load(refs.toArray(new ResourceRef[0]));
   }
 
   @Override
-  protected final void load(final InputStream... inputs) {
+  protected final void load(final ResourceRef... refs) {
     data = new HashSet<Location>();
     try {
-      for (final InputStream inputStream : inputs) {
+      for (final ResourceRef ref : refs) {
         final LocationsParser locationsFileParser =
             switch (getFileType()) {
-              case data:
-                yield new LocationsListParser(inputStream);
-              case gns_country_file:
-              case gns_country_file_zipped:
-                yield new GNSCountryFileParser(inputStream);
-              case gnis_state_file:
-              case gnis_state_file_zipped:
-                yield new GNISFileParser(inputStream);
-              default:
-                yield null;
+              case data -> new LocationsListParser(ref);
+              case gns_country_file, gns_country_file_zipped -> new GNSCountryFileParser(ref);
+              case gnis_state_file, gnis_state_file_zipped -> new GNISFileParser(ref);
+              default -> null;
             };
         if (locationsFileParser != null) {
           data.addAll(locationsFileParser.parseLocations());
@@ -119,19 +116,9 @@ abstract class BaseLocationsDataFile extends BaseDataFile<LocationFileType, Coll
     } catch (final Exception e) {
       LOGGER.log(Level.WARNING, "Could not read locations", e);
       data = null;
-    } finally {
-      for (final InputStream inputStream : inputs) {
-        if (inputStream != null) {
-          try {
-            inputStream.close();
-          } catch (final IOException e) {
-            LOGGER.log(Level.WARNING, "Could not close input stream", e);
-          }
-        }
-      }
     }
 
-    if (data.isEmpty()) {
+    if (data != null && data.isEmpty()) {
       data = null;
     }
   }

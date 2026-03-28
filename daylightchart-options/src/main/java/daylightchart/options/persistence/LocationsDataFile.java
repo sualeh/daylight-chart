@@ -8,8 +8,8 @@
 
 package daylightchart.options.persistence;
 
-import java.io.InputStream;
 import java.nio.file.Path;
+import org.geoname.parser.resources.ResourceRefs;
 
 /**
  * Represents a location file, with data.
@@ -64,9 +64,7 @@ public final class LocationsDataFile extends BaseLocationsDataFile {
     load();
     // 2. Load from internal store
     if (data == null) {
-      final InputStream input =
-          Thread.currentThread().getContextClassLoader().getResourceAsStream(getFilename());
-      load(input);
+      load(ResourceRefs.ofClasspath(getFilename()));
     }
     // 3. If no locations are loaded, fail
     if (data == null) {

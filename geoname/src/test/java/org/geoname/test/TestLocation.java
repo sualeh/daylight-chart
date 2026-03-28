@@ -22,6 +22,8 @@ import org.geoname.parser.GNISFileParser;
 import org.geoname.parser.LocationFormatter;
 import org.geoname.parser.LocationsListParser;
 import org.geoname.parser.ParserException;
+import org.geoname.parser.resources.ResourceRef;
+import org.geoname.parser.resources.ResourceRefs;
 import org.junit.jupiter.api.Test;
 
 public class TestLocation {
@@ -52,8 +54,25 @@ public class TestLocation {
   @Test
   public void delimitedParserClosesInputStreamOnHeaderFailure() throws ParserException {
     final CloseTrackingInputStream dataStream = new CloseTrackingInputStream(new byte[0]);
+    final ResourceRef ref =
+        new ResourceRef() {
+          @Override
+          public String location() {
+            return "test:empty";
+          }
 
-    assertThrows(ParserException.class, () -> new GNISFileParser(dataStream).parseLocations());
+          @Override
+          public boolean exists() {
+            return true;
+          }
+
+          @Override
+          public InputStream openStream() {
+            return dataStream;
+          }
+        };
+
+    assertThrows(ParserException.class, () -> new GNISFileParser(ref).parseLocations());
     assertThat(dataStream.isClosed(), is(true));
   }
 
@@ -68,9 +87,8 @@ public class TestLocation {
 
   @Test
   public void locations() throws ParserException {
-    final InputStream dataStream =
-        this.getClass().getClassLoader().getResourceAsStream("locations.data");
-    final Collection<Location> locations = new LocationsListParser(dataStream).parseLocations();
+    final ResourceRef ref = ResourceRefs.ofClasspath("locations.data");
+    final Collection<Location> locations = new LocationsListParser(ref).parseLocations();
 
     assertThat(locations.size(), is(109));
   }
@@ -82,8 +100,25 @@ public class TestLocation {
             "# comment%nAberdeen;GB;Europe/London;+5710-00204/%n"
                 .formatted()
                 .getBytes(StandardCharsets.UTF_8));
+    final ResourceRef ref =
+        new ResourceRef() {
+          @Override
+          public String location() {
+            return "test:data";
+          }
 
-    final Collection<Location> locations = new LocationsListParser(dataStream).parseLocations();
+          @Override
+          public boolean exists() {
+            return true;
+          }
+
+          @Override
+          public InputStream openStream() {
+            return dataStream;
+          }
+        };
+
+    final Collection<Location> locations = new LocationsListParser(ref).parseLocations();
 
     assertThat(locations.size(), is(1));
     assertThat(dataStream.isClosed(), is(true));

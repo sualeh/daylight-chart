@@ -12,18 +12,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import org.geoname.data.Location;
 import org.geoname.parser.DefaultTimezones;
 import org.geoname.parser.GNISFileParser;
 import org.geoname.parser.GNSCountryFileParser;
 import org.geoname.parser.ParserException;
+import org.geoname.parser.resources.ResourceRef;
+import org.geoname.parser.resources.ResourceRefs;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -45,54 +51,62 @@ public class TestGeoNameFiles {
   }
 
   @Test
-  public void GNISUSStates() throws ParserException, IOException {
+  public void GNISUSStates() throws ParserException, IOException, URISyntaxException {
     final String date = "20100607";
     parseGNISUSStates("MA", date, 2422);
     parseGNISUSStates("HI", date, 541);
   }
 
   @Test
-  public void GNSCountries() throws ParserException, IOException {
+  public void GNSCountries() throws ParserException, IOException, URISyntaxException {
     parseGNSCountryFile("uz.zip", 3756);
     parseGNSCountryFile("lo.zip", 4969);
   }
 
   private void parseGNISUSStates(final String state, final String date, final int numLocations)
-      throws ParserException, IOException {
+      throws ParserException, IOException, URISyntaxException {
     final String filename = state + "_Features_" + date + ".zip";
-    Collection<Location> locations = new ArrayList<>();
+    final URL zipUrl = this.getClass().getClassLoader().getResource(filename);
+    final Path zipPath = Path.of(zipUrl.toURI());
 
-    final InputStream dataStream = this.getClass().getClassLoader().getResourceAsStream(filename);
-    final ZipInputStream zis = new ZipInputStream(dataStream);
-    final ZipEntry ze = zis.getNextEntry();
-    if (ze != null) {
-      final GNISFileParser parser = new GNISFileParser(zis);
-      locations = parser.parseLocations();
+    Collection<Location> locations = new ArrayList<>();
+    final String entryName = firstZipEntryName(zipPath);
+    if (entryName != null) {
+      final ResourceRef ref = ResourceRefs.ofJarEntry(zipPath, entryName);
+      locations = new GNISFileParser(ref).parseLocations();
     }
-    zis.close();
 
     assertThat(
-        "Number of locations in file %s:%s".formatted(filename, ze),
+        "Number of locations in file %s:%s".formatted(filename, entryName),
         locations.size(),
         is(numLocations));
   }
 
   private void parseGNSCountryFile(final String filename, final int numLocations)
-      throws ParserException, IOException {
-    Collection<Location> locations = new ArrayList<>();
+      throws ParserException, IOException, URISyntaxException {
+    final URL zipUrl = this.getClass().getClassLoader().getResource(filename);
+    final Path zipPath = Path.of(zipUrl.toURI());
 
-    final InputStream dataStream = this.getClass().getClassLoader().getResourceAsStream(filename);
-    final ZipInputStream zis = new ZipInputStream(dataStream);
-    final ZipEntry ze = zis.getNextEntry();
-    if (ze != null) {
-      final GNSCountryFileParser parser = new GNSCountryFileParser(zis);
-      locations = parser.parseLocations();
+    Collection<Location> locations = new ArrayList<>();
+    final String entryName = firstZipEntryName(zipPath);
+    if (entryName != null) {
+      final ResourceRef ref = ResourceRefs.ofJarEntry(zipPath, entryName);
+      locations = new GNSCountryFileParser(ref).parseLocations();
     }
-    zis.close();
 
     assertThat(
-        "Number of locations in file %s:%s".formatted(filename, ze),
+        "Number of locations in file %s:%s".formatted(filename, entryName),
         locations.size(),
         is(numLocations));
+  }
+
+  private static String firstZipEntryName(final Path zipPath) throws IOException {
+    try (FileSystem fs = FileSystems.newFileSystem(zipPath, Map.of())) {
+      return Files.walk(fs.getPath("/"))
+          .filter(Files::isRegularFile)
+          .findFirst()
+          .map(Path::toString)
+          .orElse(null);
+    }
   }
 }

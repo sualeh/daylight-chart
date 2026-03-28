@@ -253,7 +253,7 @@ public final class DefaultTimezones {
    */
   private static String findBestTimeZoneId(final String city, final Country country) {
 
-    if (city == null || city.length() == 0 || (country == null)) {
+    if (city == null || city.length() == 0 || country == null) {
       return null;
     }
 
