@@ -9,6 +9,8 @@
 package org.geoname.parser;
 
 import java.util.Map;
+import org.geoname.data.AdministrativeArea;
+import org.geoname.data.AdministrativeAreas;
 import org.geoname.data.Countries;
 import org.geoname.data.Country;
 import org.geoname.data.Location;
@@ -24,7 +26,7 @@ public final class GNISFileParser extends BaseDelimitedLocationsFileParser {
   private static final Country usa = Countries.lookupCountry("US");
 
   public GNISFileParser(final ResourceRef resourceRef) throws ParserException {
-    super(resourceRef, "\\|");
+    super(resourceRef, '|');
   }
 
   @Override
@@ -38,11 +40,12 @@ public final class GNISFileParser extends BaseDelimitedLocationsFileParser {
       return null;
     }
     try {
-      // City name is in the form: city, state
-      final String city =
-          locationDataMap.get("FEATURE_NAME") + ", " + locationDataMap.get("STATE_ALPHA");
+      final String city = locationDataMap.get("FEATURE_NAME");
+      final AdministrativeArea adminArea =
+          AdministrativeAreas.lookupAdministrativeArea("US-" + locationDataMap.get("STATE_ALPHA"));
 
-      return getLocation(locationDataMap, city, usa, "PRIM_LAT_DEC", "PRIM_LONG_DEC", "ELEVATION");
+      return getLocation(
+          locationDataMap, city, adminArea, usa, "PRIM_LAT_DEC", "PRIM_LONG_DEC", "ELEVATION");
     } catch (final ParserException e) {
       return null;
     }

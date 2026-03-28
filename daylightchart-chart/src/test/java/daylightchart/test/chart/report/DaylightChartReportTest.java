@@ -30,7 +30,7 @@ class DaylightChartReportTest {
   void shouldCreateReportFileNameAndImage() throws Exception {
     final ChartOptionsService chartOptionsService = new ChartOptionsService();
     final Location location =
-        LocationsListParser.parseLocation("Boston, MA;US;America/New_York;+4232-07104/");
+        LocationsListParser.parseLocation("Boston;US-MA;US;America/New_York;+4232-07104/");
     final DaylightChartReport report =
         new DaylightChartReport(
             location, new Options(), chartOptionsService.createDefaultChartOptions());

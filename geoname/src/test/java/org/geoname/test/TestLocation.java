@@ -10,7 +10,6 @@ package org.geoname.test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -52,7 +51,7 @@ public class TestLocation {
   }
 
   @Test
-  public void delimitedParserClosesInputStreamOnHeaderFailure() throws ParserException {
+  public void delimitedParserClosesInputStreamAfterParsing() throws ParserException {
     final CloseTrackingInputStream dataStream = new CloseTrackingInputStream(new byte[0]);
     final ResourceRef ref =
         new ResourceRef() {
@@ -72,14 +71,15 @@ public class TestLocation {
           }
         };
 
-    assertThrows(ParserException.class, () -> new GNISFileParser(ref).parseLocations());
+    // Commons CSV handles empty input gracefully (0 records, no exception)
+    new GNISFileParser(ref).parseLocations();
     assertThat(dataStream.isClosed(), is(true));
   }
 
   @Test
   public void location() throws ParserException, FormatterException {
 
-    final String locationString = "Aberdeen;GB;Europe/London;+5710-00204/";
+    final String locationString = "Aberdeen;;GB;Europe/London;+5710-00204/";
     final Location location = LocationsListParser.parseLocation(locationString);
 
     assertThat(LocationFormatter.formatLocation(location), is(locationString));
@@ -97,7 +97,7 @@ public class TestLocation {
   public void locationsParserClosesInputStream() throws ParserException {
     final CloseTrackingInputStream dataStream =
         new CloseTrackingInputStream(
-            "# comment%nAberdeen;GB;Europe/London;+5710-00204/%n"
+            "# comment%ncity;admin_code;country_code;timezone;coordinates%nAberdeen;;GB;Europe/London;+5710-00204/%n"
                 .formatted()
                 .getBytes(StandardCharsets.UTF_8));
     final ResourceRef ref =

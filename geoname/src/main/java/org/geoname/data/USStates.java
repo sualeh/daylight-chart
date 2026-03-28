@@ -8,15 +8,17 @@
 
 package org.geoname.data;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.geoname.parser.UnicodeReader;
 
 /**
  * In-memory database of US states.
@@ -33,41 +35,31 @@ public final class USStates implements Serializable {
 
   /** Loads data from internal database. */
   static {
-    BufferedReader reader = null;
-    try {
-      reader =
-          new BufferedReader(
-              new InputStreamReader(
-                  USStates.class.getClassLoader().getResourceAsStream("us.states.data")));
-
-      String line;
-      while ((line = reader.readLine()) != null) {
-
-        final String[] fields = line.split(",");
-
-        final boolean invalidNumberOfFields = fields.length != 3;
-        final boolean invalidHasNulls = fields[0] == null || fields[1] == null || fields[2] == null;
-        final boolean invalidLengths =
-            fields[1].length() != 2 && fields[1].length() != 0 || fields[2].length() == 0;
-        if (invalidNumberOfFields || invalidHasNulls || invalidLengths) {
-          throw new IllegalArgumentException("Invalid US state record: " + line);
+    final CSVFormat format =
+        CSVFormat.DEFAULT
+            .builder()
+            .setHeader()
+            .setSkipHeaderRecord(true)
+            .setIgnoreEmptyLines(true)
+            .get();
+    try (CSVParser csvParser =
+        format.parse(
+            new UnicodeReader(
+                USStates.class.getClassLoader().getResourceAsStream("us.states.data"), "UTF-8"))) {
+      for (final CSVRecord record : csvParser) {
+        final String number = record.get("number");
+        final String abbreviation = record.get("abbreviation");
+        final String name = record.get("name");
+        if (abbreviation == null || name == null || name.isEmpty()) {
+          throw new IllegalArgumentException("Invalid US state record: " + record);
         }
-
-        final USState state = new USState(fields[2], fields[1], Integer.parseInt(fields[0]));
+        final USState state = new USState(name, abbreviation, Integer.parseInt(number));
         alphaCodeMap.put(state.getFips5_2AlphaCode(), state);
         numericCodeMap.put(state.getFips5_2NumericCode(), state);
         stateNameMap.put(state.getName(), state);
       }
     } catch (final IOException e) {
       throw new IllegalStateException("Cannot read data from internal database", e);
-    } finally {
-      if (reader != null) {
-        try {
-          reader.close();
-        } catch (final IOException e) {
-          throw new IllegalStateException("Cannot read data from internal database", e);
-        }
-      }
     }
   }
 

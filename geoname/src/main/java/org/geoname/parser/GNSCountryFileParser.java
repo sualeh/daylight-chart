@@ -9,9 +9,10 @@
 package org.geoname.parser;
 
 import java.util.Map;
+import org.geoname.data.AdministrativeArea;
+import org.geoname.data.AdministrativeAreas;
 import org.geoname.data.Countries;
 import org.geoname.data.Country;
-import org.geoname.data.FIPS10AdministrationDivisions;
 import org.geoname.data.Location;
 import org.geoname.parser.resources.ResourceRef;
 
@@ -22,8 +23,16 @@ import org.geoname.parser.resources.ResourceRef;
  */
 public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser {
 
+  private static final String LONGITUDE_DECIMAL_DEGREES = "long_dd";
+  private static final String LATITUDE_DECIMAL_DEGREES = "lat_dd";
+  private static final String FULL_NAME = "full_name";
+  private static final String FIRST_ORDER_ADMINISTRATIVE_SUBDIVISION_CODE = "adm1";
+  private static final String COUNTRY_CODE = "cc_ft";
+  private static final String NAME_TYPE = "nt";
+  private static final String FEATURE_CLASSIFICATION_CODE = "fc";
+
   public GNSCountryFileParser(final ResourceRef resourceRef) throws ParserException {
-    super(resourceRef, "\t");
+    super(resourceRef, '\t');
   }
 
   @Override
@@ -32,37 +41,34 @@ public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser
       return null;
     }
 
-    final String featureClassification = locationDataMap.get("FC");
-    final String nameType = locationDataMap.get("NT");
+    final String featureClassification = locationDataMap.get(FEATURE_CLASSIFICATION_CODE);
+    final String nameType = locationDataMap.get(NAME_TYPE);
     if (!"P".equals(featureClassification) || !"C".equals(nameType) && !"N".equals(nameType)) {
+      // Skip populated places that have conventional or native names
       return null;
     }
     try {
-      final Country country = Countries.lookupFips10CountryCode(locationDataMap.get("CC1"));
+      final String alpha3CountryCode = locationDataMap.get(COUNTRY_CODE);
+      final Country country = Countries.lookupIso3166CountryCode3(alpha3CountryCode);
 
-      final int fips10AdministrationDivisionCode = getInteger(locationDataMap, "ADM1", 0);
-      final String fips10AdministrationDivisionName;
-      if (fips10AdministrationDivisionCode > 0) {
-        fips10AdministrationDivisionName =
-            FIPS10AdministrationDivisions.lookupFips10AdministrationDivisionName(
-                country, "%02d".formatted(fips10AdministrationDivisionCode));
-      } else {
-        fips10AdministrationDivisionName = null;
-      }
+      final String adminDivisionCode =
+          locationDataMap.get(FIRST_ORDER_ADMINISTRATIVE_SUBDIVISION_CODE);
+      final AdministrativeArea adminArea =
+          AdministrativeAreas.lookupAdministrativeArea(adminDivisionCode);
 
-      String city;
-      if (locationDataMap.containsKey("FULL_NAME_RO")) {
-        city = locationDataMap.get("FULL_NAME_RO");
-      } else if (locationDataMap.containsKey("FULL_NAME")) {
-        city = locationDataMap.get("FULL_NAME");
-      } else {
+      if (!locationDataMap.containsKey(FULL_NAME)) {
         return null;
       }
-      if (fips10AdministrationDivisionName != null) {
-        city = city + ", " + fips10AdministrationDivisionName;
-      }
+      final String city = locationDataMap.get(FULL_NAME);
 
-      return getLocation(locationDataMap, city, country, "LAT", "LONG", "ELEV");
+      return getLocation(
+          locationDataMap,
+          city,
+          adminArea,
+          country,
+          LATITUDE_DECIMAL_DEGREES,
+          LONGITUDE_DECIMAL_DEGREES,
+          "elev");
     } catch (final ParserException e) {
       return null;
     }

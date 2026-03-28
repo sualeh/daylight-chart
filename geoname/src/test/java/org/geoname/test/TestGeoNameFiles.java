@@ -53,14 +53,14 @@ public class TestGeoNameFiles {
   @Test
   public void GNISUSStates() throws ParserException, IOException, URISyntaxException {
     final String date = "20100607";
-    parseGNISUSStates("MA", date, 2422);
-    parseGNISUSStates("HI", date, 541);
+    parseGNISUSStates("MA", date, 2344);
+    parseGNISUSStates("HI", date, 520);
   }
 
   @Test
   public void GNSCountries() throws ParserException, IOException, URISyntaxException {
-    parseGNSCountryFile("uz.zip", 3756);
-    parseGNSCountryFile("lo.zip", 4969);
+    parseGNSCountryFile("Uzbekistan.zip", 6392);
+    parseGNSCountryFile("Slovakia.zip", 4830);
   }
 
   private void parseGNISUSStates(final String state, final String date, final int numLocations)
@@ -72,7 +72,7 @@ public class TestGeoNameFiles {
     Collection<Location> locations = new ArrayList<>();
     final String entryName = firstZipEntryName(zipPath);
     if (entryName != null) {
-      final ResourceRef ref = ResourceRefs.ofJarEntry(zipPath, entryName);
+      final ResourceRef ref = ResourceRefs.ofZipEntry(zipPath, entryName);
       locations = new GNISFileParser(ref).parseLocations();
     }
 
@@ -90,7 +90,7 @@ public class TestGeoNameFiles {
     Collection<Location> locations = new ArrayList<>();
     final String entryName = firstZipEntryName(zipPath);
     if (entryName != null) {
-      final ResourceRef ref = ResourceRefs.ofJarEntry(zipPath, entryName);
+      final ResourceRef ref = ResourceRefs.ofZipEntry(zipPath, entryName);
       locations = new GNSCountryFileParser(ref).parseLocations();
     }
 

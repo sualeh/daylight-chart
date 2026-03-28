@@ -8,9 +8,7 @@
 
 package org.geoname.parser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -29,6 +27,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.geoname.data.Countries;
 import org.geoname.data.Country;
 import org.geoname.data.USState;
@@ -58,28 +59,37 @@ public final class DefaultTimezones {
       defaultTimezones.put(country, new ArrayList<>());
     }
 
-    try (BufferedReader reader =
-        new BufferedReader(
-            new InputStreamReader(
+    final CSVFormat format =
+        CSVFormat.DEFAULT
+            .builder()
+            .setHeader()
+            .setSkipHeaderRecord(true)
+            .setCommentMarker('#')
+            .setIgnoreEmptyLines(true)
+            .get();
+    try (CSVParser csvParser =
+        format.parse(
+            new org.geoname.parser.UnicodeReader(
                 DefaultTimezones.class
                     .getClassLoader()
-                    .getResourceAsStream("default.timezones.data")))) {
-      reader
-          .lines()
-          .filter(line -> !line.startsWith("#"))
-          .map(line -> line.split(","))
-          .filter(fields -> fields.length == 2)
-          .filter(fields -> fields[0] != null && fields[1] != null)
-          .filter(fields -> fields[0].length() == 2 && !fields[1].isEmpty())
-          .forEach(
-              fields -> {
-                final String iso3166CountryCode2 = fields[0];
-                final String timezoneId = fields[1];
-                final ZoneId defaultZoneId = ZoneId.of(timezoneId);
-                final Country country = Countries.lookupIso3166CountryCode2(iso3166CountryCode2);
-                final List<String> defaultTimezonesForCountry = defaultTimezones.get(country);
-                defaultTimezonesForCountry.add(defaultZoneId.getId());
-              });
+                    .getResourceAsStream("default.timezones.data"),
+                "UTF-8"))) {
+      for (final CSVRecord record : csvParser) {
+        final String iso3166CountryCode2 = record.get("country_code");
+        final String timezoneId = record.get("timezone");
+        if (iso3166CountryCode2 == null
+            || timezoneId == null
+            || iso3166CountryCode2.length() != 2
+            || timezoneId.isEmpty()) {
+          continue;
+        }
+        final ZoneId defaultZoneId = ZoneId.of(timezoneId);
+        final Country country = Countries.lookupIso3166CountryCode2(iso3166CountryCode2);
+        final List<String> defaultTimezonesForCountry = defaultTimezones.get(country);
+        if (defaultTimezonesForCountry != null) {
+          defaultTimezonesForCountry.add(defaultZoneId.getId());
+        }
+      }
     } catch (final IOException e) {
       throw new IllegalStateException("Cannot read data from internal database", e);
     }

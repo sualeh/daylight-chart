@@ -53,13 +53,13 @@ public final class ResourceRefs {
   /**
    * Creates a {@link ResourceRef} for a single entry inside a zip or jar archive.
    *
-   * @param jarPath path to the zip/jar file on the file system; must not be {@code null}
+   * @param zipPath path to the zip file on the file system; must not be {@code null}
    * @param entryPath path of the entry within the archive, e.g. {@code "data/foo.txt"} or {@code
    *     "/data/foo.txt"}; must not be {@code null}
-   * @return a {@link ResourceRef} for the zip/jar entry
+   * @return a {@link ResourceRef} for the zip entry
    */
-  public static ResourceRef ofJarEntry(final Path jarPath, final String entryPath) {
-    return new ZipEntryResourceRef(jarPath, entryPath);
+  public static ResourceRef ofZipEntry(final Path zipPath, final String entryPath) {
+    return new ZipEntryResourceRef(zipPath, entryPath);
   }
 
   /**

@@ -44,7 +44,7 @@ class UserPreferencesServiceTest {
     service.initialize(Files.createTempDirectory("daylight-service-recent"));
 
     final Location location =
-        LocationsListParser.parseLocation("Boston, MA;US;America/New_York;+4232-07104/");
+        LocationsListParser.parseLocation("Boston;US-MA;US;America/New_York;+4232-07104/");
     service.addRecentLocation(location);
 
     assertThat(service.getRecentLocations().contains(location), is(true));

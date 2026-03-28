@@ -8,16 +8,19 @@
 
 package org.geoname.parser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
+import java.util.Set;import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.geoname.data.AdministrativeArea;
 import org.geoname.data.Country;
 import org.geoname.data.Location;
 import org.geoname.parser.resources.ResourceRef;
@@ -31,18 +34,14 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
       Logger.getLogger(BaseDelimitedLocationsFileParser.class.getName());
 
   private final ResourceRef resourceRef;
-  private final String delimiter;
+  private final char delimiter;
 
-  protected BaseDelimitedLocationsFileParser(final ResourceRef resourceRef, final String delimiter)
+  protected BaseDelimitedLocationsFileParser(final ResourceRef resourceRef, final char delimiter)
       throws ParserException {
     if (resourceRef == null) {
       throw new ParserException("Cannot read locations");
     }
     this.resourceRef = resourceRef;
-
-    if (delimiter == null) {
-      throw new ParserException("No delimiter provided");
-    }
     this.delimiter = delimiter;
   }
 
@@ -53,27 +52,26 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
    */
   @Override
   public final Collection<Location> parseLocations() throws ParserException {
-    final Set<Location> locations = new HashSet<>();
+    final List<Location> locations = new ArrayList<>();
+    final CSVFormat format =
+        CSVFormat.DEFAULT
+            .builder()
+            .setDelimiter(delimiter)
+            .setQuote(null)
+            .setHeader()
+            .setSkipHeaderRecord(true)
+            .setIgnoreEmptyLines(true)
+            .get();
     try (InputStream stream = resourceRef.openStream();
-        BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
-      final String[] header = readHeader(reader);
-      final Map<String, String> locationDataMap = new HashMap<>();
-      String line;
-      while ((line = reader.readLine()) != null) {
-        final String[] fields = line.split(delimiter);
-        locationDataMap.clear();
-        for (int i = 0; i < header.length; i++) {
-          final String data;
-          if (fields.length > i) {
-            data = fields[i];
-          } else {
-            data = null;
-          }
-          locationDataMap.put(header[i], data);
-        }
+        CSVParser csvParser = format.parse(new UnicodeReader(stream, "UTF-8"))) {
+      final Set<String> seen = new HashSet<>();
+      for (final CSVRecord record : csvParser) {
+        final Map<String, String> locationDataMap = record.toMap();
         final Location location = parseLocation(locationDataMap);
         if (location != null) {
-          locations.add(location);
+          if (seen.add(location.deduplicationKey())) {
+            locations.add(location);
+          }
         }
       }
     } catch (final IOException e) {
@@ -89,7 +87,7 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
     double doubleValue = defaultValue;
     try {
       doubleValue = getDouble(locationDataMap, key);
-    } catch (final Exception e) {
+    } catch (final ParserException e) {
       doubleValue = defaultValue;
     }
     return doubleValue;
@@ -116,6 +114,19 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
       final String longitudeKey,
       final String altitudeKey)
       throws ParserException {
+    return getLocation(
+        locationDataMap, city, null, country, latitudeKey, longitudeKey, altitudeKey);
+  }
+
+  protected final Location getLocation(
+      final Map<String, String> locationDataMap,
+      final String city,
+      final AdministrativeArea administrativeArea,
+      final Country country,
+      final String latitudeKey,
+      final String longitudeKey,
+      final String altitudeKey)
+      throws ParserException {
     final Latitude latitude =
         new Latitude(Angle.fromDegrees(getDouble(locationDataMap, latitudeKey)));
     final Longitude longitude =
@@ -128,7 +139,7 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
         DefaultTimezones.attemptTimeZoneMatch(city, country, pointLocation.getLongitude());
 
     try {
-      return new Location(city, country, timeZoneId, pointLocation);
+      return new Location(city, administrativeArea, country, timeZoneId, pointLocation);
     } catch (final IllegalArgumentException e) {
       throw new ParserException("Could not get location", e);
     }
@@ -146,23 +157,6 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
       return Double.parseDouble(locationDataMap.get(key));
     } catch (final NumberFormatException e) {
       throw new ParserException("Bad value for key " + key, e);
-    }
-  }
-
-  private String[] readHeader(final BufferedReader reader) throws ParserException {
-    try {
-      String[] header = null;
-      final String line = reader.readLine();
-      if (line != null) {
-        header = line.split(delimiter);
-      }
-      if (header == null || header.length == 0) {
-        throw new ParserException("No header row provided");
-      }
-      LOGGER.log(Level.FINE, "Loaded header");
-      return header;
-    } catch (final IOException e) {
-      throw new ParserException("Could not load locations", e);
     }
   }
 }

@@ -182,7 +182,7 @@ public class TestResourceRef {
   public void zipEntryExists() throws IOException {
     final Path zipFile = createTempZip("hello.txt", "Hello World");
 
-    final ResourceRef ref = ResourceRefs.ofJarEntry(zipFile, "hello.txt");
+    final ResourceRef ref = ResourceRefs.ofZipEntry(zipFile, "hello.txt");
     assertThat(ref.exists(), is(true));
   }
 
@@ -190,7 +190,7 @@ public class TestResourceRef {
   public void zipEntryMissing() throws IOException {
     final Path zipFile = createTempZip("hello.txt", "Hello World");
 
-    final ResourceRef ref = ResourceRefs.ofJarEntry(zipFile, "not-there.txt");
+    final ResourceRef ref = ResourceRefs.ofZipEntry(zipFile, "not-there.txt");
     assertThat(ref.exists(), is(false));
   }
 
@@ -198,7 +198,7 @@ public class TestResourceRef {
   public void zipEntryLocation() throws IOException {
     final Path zipFile = createTempZip("entry.txt", "data");
 
-    final ResourceRef ref = ResourceRefs.ofJarEntry(zipFile, "entry.txt");
+    final ResourceRef ref = ResourceRefs.ofZipEntry(zipFile, "entry.txt");
     assertThat(ref.location(), startsWith("jar:file:"));
     assertThat(ref.location(), containsString("!/entry.txt"));
   }
@@ -207,7 +207,7 @@ public class TestResourceRef {
   public void zipEntryConstructorDoesNotOpenStream() throws IOException {
     final Path zipFile = createTempZip("entry.txt", "data");
     // Must not throw, no stream opened
-    final ResourceRef ref = ResourceRefs.ofJarEntry(zipFile, "missing.txt");
+    final ResourceRef ref = ResourceRefs.ofZipEntry(zipFile, "missing.txt");
     assertThat(ref, is(notNullValue()));
   }
 
@@ -215,7 +215,7 @@ public class TestResourceRef {
   public void zipEntryOpenStreamReadsData() throws IOException {
     final Path zipFile = createTempZip("entry.txt", "Zip content");
 
-    final ResourceRef ref = ResourceRefs.ofJarEntry(zipFile, "entry.txt");
+    final ResourceRef ref = ResourceRefs.ofZipEntry(zipFile, "entry.txt");
     try (InputStream is = ref.openStream()) {
       final String content = new String(is.readAllBytes(), StandardCharsets.UTF_8);
       assertThat(content, is("Zip content"));
@@ -227,8 +227,8 @@ public class TestResourceRef {
     final Path zipFile = createTempZip("entry.txt", "Normalized");
 
     // Both with and without leading slash should resolve the same entry
-    final ResourceRef refWithSlash = ResourceRefs.ofJarEntry(zipFile, "/entry.txt");
-    final ResourceRef refWithoutSlash = ResourceRefs.ofJarEntry(zipFile, "entry.txt");
+    final ResourceRef refWithSlash = ResourceRefs.ofZipEntry(zipFile, "/entry.txt");
+    final ResourceRef refWithoutSlash = ResourceRefs.ofZipEntry(zipFile, "entry.txt");
 
     assertThat(refWithSlash.exists(), is(true));
     assertThat(refWithoutSlash.exists(), is(true));
