@@ -11,7 +11,7 @@ package org.geoname.parser;
 import java.util.Map;
 import org.geoname.data.Countries;
 import org.geoname.data.Country;
-import org.geoname.data.FIPS10AdministrationDivisions;
+import org.geoname.data.ISOAdministrationDivisions;
 import org.geoname.data.Location;
 import org.geoname.parser.resources.ResourceRef;
 
@@ -50,23 +50,17 @@ public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser
       final String alpha3CountryCode = locationDataMap.get(COUNTRY_CODE);
       final Country country = Countries.lookupIso3166CountryCode3(alpha3CountryCode);
 
-      final int fips10AdministrationDivisionCode =
-          getInteger(locationDataMap, FIRST_ORDER_ADMINISTRATIVE_SUBDIVISION_CODE, 0);
-      final String fips10AdministrationDivisionName;
-      if (fips10AdministrationDivisionCode > 0) {
-        fips10AdministrationDivisionName =
-            FIPS10AdministrationDivisions.lookupFips10AdministrationDivisionName(
-                country, "%02d".formatted(fips10AdministrationDivisionCode));
-      } else {
-        fips10AdministrationDivisionName = null;
-      }
+      final String adminDivision = locationDataMap.get(FIRST_ORDER_ADMINISTRATIVE_SUBDIVISION_CODE);
+      final String adminDivisionName =
+          ISOAdministrationDivisions.lookupIsoRegionName(adminDivision);
 
       if (!locationDataMap.containsKey(FULL_NAME)) {
         return null;
       }
-      final StringBuilder city = new StringBuilder().append(locationDataMap.get(FULL_NAME));
-      if (fips10AdministrationDivisionName != null) {
-        city.append(", ").append(fips10AdministrationDivisionName);
+      final String fullName = locationDataMap.get(FULL_NAME);
+      final StringBuilder city = new StringBuilder().append(fullName);
+      if (adminDivisionName != null) {
+        city.append(", ").append(adminDivisionName);
       }
 
       return getLocation(
