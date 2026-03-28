@@ -8,10 +8,12 @@
 
 package org.geoname.data;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.geoname.parser.UnicodeReader;
 
 /**
@@ -24,6 +26,24 @@ import org.geoname.parser.UnicodeReader;
  * @author Sualeh Fatehi
  */
 public final class AdministrativeAreas {
+
+  private static final CSVFormat FIPS10_FORMAT =
+      CSVFormat.DEFAULT
+          .builder()
+          .setDelimiter(';')
+          .setHeader()
+          .setSkipHeaderRecord(true)
+          .setIgnoreEmptyLines(true)
+          .get();
+
+  private static final CSVFormat ISO_FORMAT =
+      CSVFormat.DEFAULT
+          .builder()
+          .setDelimiter(';')
+          .setHeader()
+          .setSkipHeaderRecord(true)
+          .setIgnoreEmptyLines(true)
+          .get();
 
   private static final Map<String, AdministrativeArea> administrativeAreaMap = new HashMap<>();
 
@@ -48,67 +68,50 @@ public final class AdministrativeAreas {
   }
 
   private static void loadFips10() {
-    try (BufferedReader reader =
-        new BufferedReader(
+    try (CSVParser csvParser =
+        new CSVParser(
             new UnicodeReader(
                 AdministrativeAreas.class.getClassLoader().getResourceAsStream("fips10.data"),
-                "UTF-8"))) {
-      reader
-          .lines()
-          .map(line -> line.split(";"))
-          .filter(fields -> fields.length == 3)
-          .filter(fields -> fields[0] != null && fields[0].length() == 4)
-          .forEach(
-              fields -> {
-                final String code = fields[0].trim();
-                final String type = fields[1].trim();
-                final String name = fields[2].trim();
-                if (!code.isEmpty() && !name.isEmpty()) {
-                  administrativeAreaMap.put(
-                      code,
-                      new AdministrativeArea(code, name, type, AdministrativeAreaSource.FIPS10));
-                }
-              });
+                "UTF-8"),
+            FIPS10_FORMAT)) {
+      for (final CSVRecord record : csvParser) {
+        final String code = record.get("code").trim();
+        final String type = record.get("type").trim();
+        final String name = record.get("name").trim();
+        if (code.length() == 4 && !name.isEmpty()) {
+          administrativeAreaMap.put(
+              code, new AdministrativeArea(code, name, type, AdministrativeAreaSource.FIPS10));
+        }
+      }
     } catch (final IOException e) {
       throw new IllegalStateException("Cannot read FIPS10 data from internal database", e);
     }
   }
 
   private static void loadIso3166() {
-    try (BufferedReader reader =
-        new BufferedReader(
+    try (CSVParser csvParser =
+        new CSVParser(
             new UnicodeReader(
                 AdministrativeAreas.class.getClassLoader().getResourceAsStream("iso_adm.data"),
-                "UTF-8"))) {
-      reader
-          .lines()
-          .map(line -> line.split(";"))
-          .filter(fields -> fields.length == 5)
-          .forEach(
-              fields -> {
-                final String countryCode = fields[0].trim();
-                final String regionName = unquote(fields[1]);
-                final String regionType = fields[2].trim();
-                final String regionalCode = unquote(fields[3]);
-                if (!countryCode.isEmpty() && !regionalCode.isEmpty() && !regionName.isEmpty()) {
-                  final String key = countryCode + "-" + regionalCode;
-                  administrativeAreaMap.put(
-                      key,
-                      new AdministrativeArea(
-                          key, regionName, regionType, AdministrativeAreaSource.ISO_3166_2));
-                }
-              });
+                "UTF-8"),
+            ISO_FORMAT)) {
+      for (final CSVRecord record : csvParser) {
+        final String countryCode = record.get("country_code").trim();
+        final String regionName = record.get("region_name").trim();
+        final String regionType = record.get("region_type").trim();
+        final String regionalCode = record.get("regional_code").trim();
+        if (!countryCode.isEmpty() && !regionalCode.isEmpty() && !regionName.isEmpty()) {
+          final String key = countryCode + "-" + regionalCode;
+          administrativeAreaMap.put(
+              key,
+              new AdministrativeArea(
+                  key, regionName, regionType, AdministrativeAreaSource.ISO_3166_2));
+        }
+      }
     } catch (final IOException e) {
       throw new IllegalStateException(
           "Cannot read ISO administrative data from internal database", e);
     }
-  }
-
-  private static String unquote(final String value) {
-    if (value == null) {
-      return "";
-    }
-    return value.trim().replace("\"", "");
   }
 
   private AdministrativeAreas() {}

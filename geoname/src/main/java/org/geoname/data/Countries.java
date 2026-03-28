@@ -8,10 +8,7 @@
 
 package org.geoname.data;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +16,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.geoname.parser.UnicodeReader;
 
 /**
@@ -131,37 +131,44 @@ public final class Countries {
 
   private static Map<String, Country> readFips10CountryData(final String dataResource) {
     final Map<String, Country> countryCodeMap = new HashMap<>();
-    try (final BufferedReader reader =
-        new BufferedReader(
+    final CSVFormat format =
+        CSVFormat.DEFAULT
+            .builder()
+            .setHeader()
+            .setSkipHeaderRecord(true)
+            .setIgnoreEmptyLines(true)
+            .get();
+    try (CSVParser csvParser =
+        new CSVParser(
             new UnicodeReader(
-                Countries.class.getClassLoader().getResourceAsStream(dataResource), "UTF-8"))) {
-      reader
-          .lines()
-          .map(line -> line.split(","))
-          .filter(fields -> fields.length == 3)
-          .filter(fields -> fields[0] != null & fields[1] != null)
-          .filter(fields -> fields[0].length() <= 2 && !fields[1].isEmpty())
-          .forEach(
-              fields -> {
-                final String iso3166CountryCode = fields[1];
-                final String fips10CountryCode = fields[0];
-                final Country country;
-                if (iso3166_alpha2_CountryCodeMap.containsKey(iso3166CountryCode)) {
-                  country = iso3166_alpha2_CountryCodeMap.get(iso3166CountryCode);
-                } else {
-                  final String countryName = fields[2];
-                  if (iso3166CountryCode.length() == 2) {
-                    country = new Country(iso3166CountryCode, countryName);
-                  } else if (fips10CountryCode.length() == 2) {
-                    country = new Country(fips10CountryCode, countryName);
-                  } else {
-                    country = null;
-                  }
-                }
-                if (country != null) {
-                  countryCodeMap.put(fips10CountryCode, country);
-                }
-              });
+                Countries.class.getClassLoader().getResourceAsStream(dataResource), "UTF-8"),
+            format)) {
+      for (final CSVRecord record : csvParser) {
+        final String fips10CountryCode = record.get("fips_code");
+        final String iso3166CountryCode = record.get("iso_code");
+        if (fips10CountryCode == null
+            || iso3166CountryCode == null
+            || fips10CountryCode.length() > 2
+            || iso3166CountryCode.isEmpty()) {
+          continue;
+        }
+        final Country country;
+        if (iso3166_alpha2_CountryCodeMap.containsKey(iso3166CountryCode)) {
+          country = iso3166_alpha2_CountryCodeMap.get(iso3166CountryCode);
+        } else {
+          final String countryName = record.get("country_name");
+          if (iso3166CountryCode.length() == 2) {
+            country = new Country(iso3166CountryCode, countryName);
+          } else if (fips10CountryCode.length() == 2) {
+            country = new Country(fips10CountryCode, countryName);
+          } else {
+            country = null;
+          }
+        }
+        if (country != null) {
+          countryCodeMap.put(fips10CountryCode, country);
+        }
+      }
     } catch (final IOException e) {
       throw new IllegalStateException("Cannot read data from internal database", e);
     }
@@ -170,19 +177,27 @@ public final class Countries {
 
   private static Map<String, Country> readISOCountryData(final String dataResource) {
     final Map<String, Country> countryCodeMap = new HashMap<>();
-    try (final BufferedReader reader =
-        new BufferedReader(
-            new InputStreamReader(
-                Countries.class.getClassLoader().getResourceAsStream(dataResource),
-                Charset.forName("UTF8")))) {
-      reader
-          .lines()
-          .map(line -> line.split(","))
-          .filter(fields -> fields.length == 2)
-          .filter(fields -> fields[0] != null && fields[1] != null)
-          .filter(fields -> fields[0].length() == 2 || !fields[1].isEmpty())
-          .map(fields -> new Country(fields[0], fields[1]))
-          .forEach(country -> countryCodeMap.put(country.getCode(), country));
+    final CSVFormat format =
+        CSVFormat.DEFAULT
+            .builder()
+            .setHeader()
+            .setSkipHeaderRecord(true)
+            .setIgnoreEmptyLines(true)
+            .get();
+    try (CSVParser csvParser =
+        new CSVParser(
+            new UnicodeReader(
+                Countries.class.getClassLoader().getResourceAsStream(dataResource), "UTF-8"),
+            format)) {
+      for (final CSVRecord record : csvParser) {
+        final String code = record.get("code");
+        final String name = record.get("name");
+        if (code == null || name == null || name.isEmpty()) {
+          continue;
+        }
+        final Country country = new Country(code, name);
+        countryCodeMap.put(country.getCode(), country);
+      }
     } catch (final IOException e) {
       throw new IllegalStateException("Cannot read data from internal database", e);
     }

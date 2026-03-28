@@ -26,7 +26,7 @@ public final class GNISFileParser extends BaseDelimitedLocationsFileParser {
   private static final Country usa = Countries.lookupCountry("US");
 
   public GNISFileParser(final ResourceRef resourceRef) throws ParserException {
-    super(resourceRef, "\\|");
+    super(resourceRef, '|');
   }
 
   @Override

@@ -32,7 +32,7 @@ public final class GNSCountryFileParser extends BaseDelimitedLocationsFileParser
   private static final String FEATURE_CLASSIFICATION_CODE = "fc";
 
   public GNSCountryFileParser(final ResourceRef resourceRef) throws ParserException {
-    super(resourceRef, "\t");
+    super(resourceRef, '\t');
   }
 
   @Override

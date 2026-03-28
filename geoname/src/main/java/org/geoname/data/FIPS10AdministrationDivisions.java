@@ -8,10 +8,12 @@
 
 package org.geoname.data;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.geoname.parser.UnicodeReader;
 
 /**
@@ -21,24 +23,33 @@ import org.geoname.parser.UnicodeReader;
  */
 public final class FIPS10AdministrationDivisions {
 
+  private static final CSVFormat FORMAT =
+      CSVFormat.DEFAULT
+          .builder()
+          .setDelimiter(';')
+          .setHeader()
+          .setSkipHeaderRecord(true)
+          .setIgnoreEmptyLines(true)
+          .get();
+
   private static final Map<String, String> fips10AdministrationDivisionMap = new HashMap<>();
 
   /** Loads data from internal database. */
   static {
-    try (BufferedReader reader =
-        new BufferedReader(
+    try (CSVParser csvParser =
+        new CSVParser(
             new UnicodeReader(
                 FIPS10AdministrationDivisions.class
                     .getClassLoader()
                     .getResourceAsStream("fips10.data"),
-                "UTF-8"))) {
-      reader
-          .lines()
-          .map(line -> line.split(";"))
-          .filter(fields -> fields.length == 3)
-          .filter(fields -> fields[0] != null && fields[1] != null && fields[2] != null)
-          .filter(fields -> fields[0].length() == 4)
-          .forEach(fields -> fips10AdministrationDivisionMap.put(fields[0], fields[2]));
+                "UTF-8"),
+            FORMAT)) {
+      for (final CSVRecord record : csvParser) {
+        final String code = record.get("code");
+        if (code != null && code.length() == 4) {
+          fips10AdministrationDivisionMap.put(code, record.get("name"));
+        }
+      }
     } catch (final IOException e) {
       throw new IllegalStateException("Cannot read data from internal database", e);
     }

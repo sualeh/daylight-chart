@@ -1,4 +1,4 @@
-COUNTRY SHORT CODE; REGION_NAME; REGION TYPE; REGIONAL CODE; REGIONAL NUMBER CODE
+﻿country_code;region_name;region_type;regional_code;regional_number_code
 AF;"Badakhshān";Province;"BDS";12267
 AF;"Baghlān";Province;"BGL";12268
 AF;"Balkh";Province;"BAL";12273

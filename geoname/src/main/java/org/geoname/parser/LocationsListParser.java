@@ -8,9 +8,9 @@
 
 package org.geoname.parser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.geoname.data.AdministrativeArea;
 import org.geoname.data.AdministrativeAreas;
 import org.geoname.data.Countries;
@@ -35,6 +38,23 @@ import us.fatehi.pointlocation6709.parse.PointLocationParser;
 public final class LocationsListParser implements LocationsParser {
   private static final Logger LOGGER = Logger.getLogger(LocationsListParser.class.getName());
 
+  private static final CSVFormat RECORD_FORMAT =
+      CSVFormat.DEFAULT
+          .builder()
+          .setDelimiter(';')
+          .setHeader("city", "admin_code", "country_code", "timezone", "coordinates")
+          .get();
+
+  private static final CSVFormat FILE_FORMAT =
+      CSVFormat.DEFAULT
+          .builder()
+          .setDelimiter(';')
+          .setHeader()
+          .setSkipHeaderRecord(true)
+          .setCommentMarker('#')
+          .setIgnoreEmptyLines(true)
+          .get();
+
   /**
    * Parses a string representation of a location.
    *
@@ -43,27 +63,32 @@ public final class LocationsListParser implements LocationsParser {
    * @throws ParserException On a parse exception
    */
   public static Location parseLocation(final String representation) throws ParserException {
-    if (representation == null || representation.length() == 0) {
+    if (representation == null || representation.isEmpty()) {
       throw new ParserException("No location provided");
     }
-
-    final String[] fields = representation.split(";");
-    if (fields.length != 5) {
-      throw new ParserException("Invalid location format: " + representation);
+    try (CSVParser csvParser = new CSVParser(new StringReader(representation), RECORD_FORMAT)) {
+      final List<CSVRecord> records = csvParser.getRecords();
+      if (records.isEmpty()) {
+        throw new ParserException("Invalid location format: " + representation);
+      }
+      return toLocation(records.get(0), representation);
+    } catch (final IOException e) {
+      throw new ParserException("Invalid location: " + representation, e);
     }
+  }
 
+  private static Location toLocation(final CSVRecord record, final String representation)
+      throws ParserException {
     try {
-      final String city = fields[0];
-      final String admCode = fields[1].trim();
+      final String city = record.get("city");
+      final String admCode = record.get("admin_code").trim();
       final AdministrativeArea administrativeArea =
           admCode.isEmpty() ? null : AdministrativeAreas.lookupAdministrativeArea(admCode);
-      final Country country = Countries.lookupCountry(fields[2]);
-      final String timeZoneId = fields[3];
-      final PointLocation pointLocation = PointLocationParser.parsePointLocation(fields[4]);
-
-      final Location location =
-          new Location(city, administrativeArea, country, timeZoneId, pointLocation);
-      return location;
+      final Country country = Countries.lookupCountry(record.get("country_code"));
+      final String timeZoneId = record.get("timezone");
+      final PointLocation pointLocation =
+          PointLocationParser.parsePointLocation(record.get("coordinates"));
+      return new Location(city, administrativeArea, country, timeZoneId, pointLocation);
     } catch (final us.fatehi.pointlocation6709.parse.ParserException e) {
       throw new ParserException("Invalid location: " + representation, e);
     }
@@ -85,24 +110,18 @@ public final class LocationsListParser implements LocationsParser {
    */
   @Override
   public Collection<Location> parseLocations() throws ParserException {
-
     final List<Location> locations = new ArrayList<>();
     try (InputStream stream = resourceRef.openStream();
-        BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
+        CSVParser csvParser = new CSVParser(new UnicodeReader(stream, "UTF-8"), FILE_FORMAT)) {
       final Set<String> seen = new HashSet<>();
-      String line;
-      while ((line = reader.readLine()) != null) {
-        line = line.trim();
-        if (!line.startsWith("#")) {
-          final Location location = parseLocation(line);
-          final String admCode =
-              location.getAdministrativeArea() != null
-                  ? location.getAdministrativeArea().getCode()
-                  : "";
-          if (seen.add(
-              location.getCity() + "|" + admCode + "|" + location.getCountry().getCode())) {
-            locations.add(location);
-          }
+      for (final CSVRecord record : csvParser) {
+        final Location location = toLocation(record, record.toString());
+        final String admCode =
+            location.getAdministrativeArea() != null
+                ? location.getAdministrativeArea().getCode()
+                : "";
+        if (seen.add(location.getCity() + "|" + admCode + "|" + location.getCountry().getCode())) {
+          locations.add(location);
         }
       }
     } catch (final IOException e) {
