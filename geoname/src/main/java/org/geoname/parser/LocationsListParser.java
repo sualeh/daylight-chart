@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.geoname.data.Countries;
@@ -81,12 +83,15 @@ public final class LocationsListParser implements LocationsParser {
     final List<Location> locations = new ArrayList<>();
     try (InputStream stream = resourceRef.openStream();
         BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
+      final Set<String> seen = new HashSet<>();
       String line;
       while ((line = reader.readLine()) != null) {
         line = line.trim();
         if (!line.startsWith("#")) {
           final Location location = parseLocation(line);
-          locations.add(location);
+          if (seen.add(location.getCity() + "\0" + location.getCountry().getCode())) {
+            locations.add(location);
+          }
         }
       }
     } catch (final IOException e) {

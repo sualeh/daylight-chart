@@ -58,6 +58,7 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
         BufferedReader reader = new BufferedReader(new UnicodeReader(stream, "UTF-8"))) {
       final String[] header = readHeader(reader);
       final Map<String, String> locationDataMap = new HashMap<>();
+      final Set<String> seen = new HashSet<>();
       String line;
       while ((line = reader.readLine()) != null) {
         final String[] fields = line.split(delimiter);
@@ -72,7 +73,8 @@ abstract class BaseDelimitedLocationsFileParser implements LocationsParser {
           locationDataMap.put(header[i], data);
         }
         final Location location = parseLocation(locationDataMap);
-        if (location != null) {
+        if (location != null
+            && seen.add(location.getCity() + "\0" + location.getCountry().getCode())) {
           locations.add(location);
         }
       }

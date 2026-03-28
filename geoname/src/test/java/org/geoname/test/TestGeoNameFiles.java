@@ -53,14 +53,14 @@ public class TestGeoNameFiles {
   @Test
   public void GNISUSStates() throws ParserException, IOException, URISyntaxException {
     final String date = "20100607";
-    parseGNISUSStates("MA", date, 2422);
-    parseGNISUSStates("HI", date, 541);
+    parseGNISUSStates("MA", date, 2344);
+    parseGNISUSStates("HI", date, 520);
   }
 
   @Test
   public void GNSCountries() throws ParserException, IOException, URISyntaxException {
-    parseGNSCountryFile("Uzbekistan.zip", 7364);
-    parseGNSCountryFile("Slovakia.zip", 4970);
+    parseGNSCountryFile("Uzbekistan.zip", 6392);
+    parseGNSCountryFile("Slovakia.zip", 4830);
   }
 
   private void parseGNISUSStates(final String state, final String date, final int numLocations)
